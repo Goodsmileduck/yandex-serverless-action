@@ -9,6 +9,7 @@ LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>" \
   org.label-schema.vendor="Bo-Yi Wu" \
   org.label-schema.schema-version="1.0"
 
+ENV ZONE=ru-central1-a
 COPY --from=builder /go/bin/envsubst /bin/envsubst
 RUN apk add curl bash && \
   curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash && \
