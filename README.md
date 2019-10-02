@@ -22,7 +22,6 @@ jobs:
       env:
         SOURCE_DIR: '.'
         ZONE: 'ru-central1-a'
-        FUNCTION_ID: ${{ secrets.CLOUD_ID }}
         FUNCTION_NAME: 'handler'
         CLOUD_ID: ${{ secrets.CLOUD_ID }}
         FOLDER_ID: ${{ secrets.FOLDER_ID }}
