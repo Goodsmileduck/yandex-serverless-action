@@ -19,14 +19,17 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - uses: goodsmileduck/yandex-serverless-action@master
-      with:
-        args: --acl public-read --follow-symlinks --delete
       env:
-        SOURCE_DIR: './public'
-        ZONE: 'us-east-1'
-        S3_BUCKET: ${{ secrets.S3_BUCKET }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        SOURCE_DIR: '.'
+        ZONE: 'ru-central1-a'
+        FUNCTION_ID: ${{ secrets.CLOUD_ID }}
+        FUNCTION_NAME: 'handler'
+        CLOUD_ID: ${{ secrets.CLOUD_ID }}
+        FOLDER_ID: ${{ secrets.FOLDER_ID }}
+        TOKEN: ${{ secrets.TOKEN }}
+        BUCKET: ${{ secrets.BUCKET }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_KEY }}
 ```
 
 ### Configuration
@@ -35,10 +38,9 @@ The following settings must be passed as environment variables as shown in the e
 
 | Key | Value | Suggested Type | Required |
 | ------------- | ------------- | ------------- | ------------- |
-| `AWS_ACCESS_KEY_ID` | Your AWS Access Key. [More info here.](https://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html) | `secret` | **Yes** |
-| `AWS_SECRET_ACCESS_KEY` | Your AWS Secret Access Key. [More info here.](https://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html) | `secret` | **Yes** |
-| `AWS_S3_BUCKET` | The name of the bucket you're syncing to. For example, `jarv.is`. | `secret` | **Yes** |
-| `AWS_REGION` | The region where you created your bucket in. For example, `us-east-1`. [Full list of regions here.](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions) | `env` | **Yes** |
+| `ACCESS_KEY` | Your AWS Access Key. [More info here.](https://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html) | `secret` | **Yes** |
+| `SECRET_KEY` | Your AWS Secret Access Key. [More info here.](https://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html) | `secret` | **Yes** |
+| `BUCKET` | The name of the bucket you're syncing to. For example, `bucket`. | `secret` | **Yes** |
 | `SOURCE_DIR` | The local directory you wish to sync/upload to S3. For example, `./public`. Defaults to the root of your repository (`.`) if not provided. | `env` | No |
 
 
