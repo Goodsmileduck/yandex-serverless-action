@@ -4,9 +4,9 @@ RUN go get -u -v github.com/a8m/envsubst/cmd/envsubst
 
 FROM plugins/base:linux-amd64
 
-LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>" \
-  org.label-schema.name="Drone lambda" \
-  org.label-schema.vendor="Bo-Yi Wu" \
+LABEL maintainer="Serebrennikov Stanislav <goodsmileduck@gmail.com>" \
+  org.label-schema.name="Yandex Cloud function deploy" \
+  org.label-schema.vendor="Serebrennikov Stanislav" \
   org.label-schema.schema-version="1.0"
 
 ENV ZONE=ru-central1-a
