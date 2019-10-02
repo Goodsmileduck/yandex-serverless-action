@@ -37,7 +37,7 @@ envsubst < /config.tmpl > ~/.config/yandex-cloud/config.yaml
 envsubst < /credentials.tmpl > ~/.aws/credentials
 
 zip -r latest.zip ${SOURCE_DIR} 
-aws --endpoint-url=https://storage.yandexcloud.net s3 cp latest.zip s3://${BUCKET}/${FUNCTION_NAME}/latest.zip
+aws --endpoint-url=https://storage.yandexcloud.net s3 cp latest.zip s3://${BUCKET}/${FUNCTION_NAME}/${GITHUB_SHA}.zip
 
 yc serverless function version create --token ${TOKEN} \
   --function-name ${FUNCTION_NAME} \
@@ -48,4 +48,4 @@ yc serverless function version create --token ${TOKEN} \
   --execution-timeout ${TIMEOUT} \
   --entrypoint ${ENTRYPOINT} \
   --package-bucket-name ${BUCKET} \
-  --package-object-name ${FUNCTION_NAME}/latest.zip 
+  --package-object-name ${FUNCTION_NAME}/${GITHUB_SHA}.zip 
