@@ -18,4 +18,5 @@ RUN apk add curl bash python py-pip && \
 
 COPY config.tmpl /root/.config/yandex-cloud/config.tmpl
 COPY credentials.tmpl /root/.aws/credentials.tmpl
+COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
