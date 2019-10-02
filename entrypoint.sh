@@ -32,10 +32,10 @@ if [ -z "$SOURCE_DIR" ]; then
 fi
 mkdir -p ~/.aws
 mkdir -p ~/.config/yandex-cloud
-envsubst < /config.tmpl > /root/.config/yandex-cloud/config.yaml
-cat /root/.config/yandex-cloud/config.yaml
-envsubst < /credentials.tmpl > /root/.aws/credentials
-cat /root/.aws/credentials
+envsubst < /config.tmpl > ~/.config/yandex-cloud/config.yaml
+cat ~/.config/yandex-cloud/config.yaml
+envsubst < /credentials.tmpl > ~/.aws/credentials
+cat ~/.aws/credentials
 zip -r latest.zip ${SOURCE_DIR} 
 aws --endpoint-url=https://storage.yandexcloud.net s3 cp latest.zip s3://${BUCKET}/${FUNCTION_NAME}/latest.zip
 yc serverless function version create --function-id ${FUNCTION_ID} \
