@@ -39,5 +39,13 @@ envsubst < /credentials.tmpl > ~/.aws/credentials
 zip -r latest.zip ${SOURCE_DIR} 
 aws --endpoint-url=https://storage.yandexcloud.net s3 cp latest.zip s3://${BUCKET}/${FUNCTION_NAME}/latest.zip
 
-yc serverless function version create --token ${TOKEN} --function-name ${FUNCTION_NAME} --cloud-id ${CLOUD_ID}\
-   --folder-id ${FOLDER_ID} --runtime ${RUNTIME} --entrypoint ${ENTRYPOINT} --package-bucket-name ${BUCKET} --package-object-name latest.zip 
+yc serverless function version create --token ${TOKEN} \
+  --function-name ${FUNCTION_NAME} \
+  --cloud-id ${CLOUD_ID}\
+  --folder-id ${FOLDER_ID} \
+  --runtime ${RUNTIME} \
+  --memory ${MEMORY} \
+  --execution-timeout ${TIMEOUT} \
+  --entrypoint ${ENTRYPOINT} \
+  --package-bucket-name ${BUCKET} \
+  --package-object-name latest.zip 

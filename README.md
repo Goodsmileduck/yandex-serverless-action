@@ -41,6 +41,13 @@ The following settings must be passed as environment variables as shown in the e
 | `ACCESS_KEY` | Your AWS Access Key. [More info here.](https://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html) | `secret` | **Yes** |
 | `SECRET_KEY` | Your AWS Secret Access Key. [More info here.](https://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html) | `secret` | **Yes** |
 | `BUCKET` | The name of the bucket you're syncing to. For example, `bucket`. | `secret` | **Yes** |
+| `CLOUD_ID` | Yandex Cloud Id | `secret` | **Yes** |
+| `FOLDER_ID` | Folder Id in Yandex cloud where function created. | `secret` | **Yes** |
+| `TOKEN` | Token for access to yc cli. | `secret` | **Yes** |
+| `FUNCTION_NAME` | The name of function in Yandex Cloud | `env` | **Yes** |
+| `RUNTIME` | Runtime for function in Yandex Cloud | `env` | **Yes** |
+| `MEMORY` | Memory limit in megabytes for function in Yandex Cloud Default value is `128m`| `env` | No |
+| `TIMEOUT` | Execution timeout in seconds for function in Yandex Cloud. Default value is `5s` | `env` | No |
 | `SOURCE_DIR` | The local directory you wish to sync/upload to S3. For example, `./public`. Defaults to the root of your repository (`.`) if not provided. | `env` | No |
 
 

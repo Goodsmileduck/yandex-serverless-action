@@ -9,7 +9,10 @@ LABEL maintainer="Serebrennikov Stanislav <goodsmileduck@gmail.com>" \
   org.label-schema.vendor="Serebrennikov Stanislav" \
   org.label-schema.schema-version="1.0"
 
-ENV ZONE=ru-central1-a
+ENV ZONE=ru-central1-a \
+  MEMORY=128m \
+  TIMEOUT=5s
+
 COPY --from=builder /go/bin/envsubst /bin/envsubst
 RUN apk add curl bash python py-pip zip && \
   curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash && \
