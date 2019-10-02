@@ -3,7 +3,7 @@ description: 'Deploy new version of Serverless function to Yandex Cloud'
 author: 'Goodsmileduck'
 inputs: 
   CloudId:
-    description: 'Yandex Cloud ID'
+    description: 'Yandex Cloud ID. Can be passed in using {{ secrets.CLOUD_ID }}'
     default: ''
 runs:
   using: 'docker'
