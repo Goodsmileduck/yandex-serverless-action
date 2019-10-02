@@ -1,7 +1,17 @@
 set -e
 
+if [ -z "$FUNCTION_ID" ]; then
+  echo "FUNCTION_ID is not set. Quitting."
+  exit 1
+fi
+
+if [ -z "$FUNCTION_NAME" ]; then
+  echo "FUNCTION_NAME is not set. Quitting."
+  exit 1
+fi
+
 if [ -z "$BUCKET" ]; then
-  echo "AWS_S3_BUCKET is not set. Quitting."
+  echo "BUCKET is not set. Quitting."
   exit 1
 fi
 
@@ -25,4 +35,5 @@ envsubst < /root/.aws/credentials.tmpl > /root/.aws/credentials
 
 zip -r latest.zip ${SOURCE_DIR} 
 aws --endpoint-url=https://storage.yandexcloud.net s3 latest.zip ${BUCKET}/${FUNCTION_NAME}/latest.zip
-yc serverless function version create --function-id ${FUNCTION_ID} --package-bucket-name ${S3BUCKET} --package-object-name ${S3FILE}
+yc serverless function version create --function-id ${FUNCTION_ID} \
+  --function-name ${FUNCTION_NAME} --package-bucket-name ${BUCKET} --package-object-name latest.zip
