@@ -1,8 +1,9 @@
 name: 'Yandex Serverless Action'
 description: 'Deploy new version of Serverless function to Yandex Cloud'
 author: 'Goodsmileduck'
-color: blue
-icon: upload-cloud
+branding:
+  color: 'blue'
+  icon: 'upload-cloud'
 inputs: 
   CloudId:
     description: 'Yandex Cloud ID. Can be passed in using {{ secrets.CLOUD_ID }}'
