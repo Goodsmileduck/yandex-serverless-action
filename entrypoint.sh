@@ -48,4 +48,4 @@ yc serverless function version create --token ${TOKEN} \
   --execution-timeout ${TIMEOUT} \
   --entrypoint ${ENTRYPOINT} \
   --package-bucket-name ${BUCKET} \
-  --package-object-name latest.zip 
+  --package-object-name ${FUNCTION_NAME}/latest.zip 
