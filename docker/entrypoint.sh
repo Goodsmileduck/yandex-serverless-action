@@ -5,13 +5,13 @@ if [ -z "$BUCKET" ]; then
   exit 1
 fi
 
-if [ -z "$AWS_ACCESS_KEY_ID" ]; then
-  echo "AWS_ACCESS_KEY_ID is not set. Quitting."
+if [ -z "$ACCESS_KEY" ]; then
+  echo "ACCESS_KEY is not set. Quitting."
   exit 1
 fi
 
-if [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
-  echo "AWS_SECRET_ACCESS_KEY is not set. Quitting."
+if [ -z "$SECRET_KEY" ]; then
+  echo "SECRET_KEY is not set. Quitting."
   exit 1
 fi
 
