@@ -11,8 +11,9 @@ LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>" \
 
 ENV ZONE=ru-central1-a
 COPY --from=builder /go/bin/envsubst /bin/envsubst
-RUN apk add curl bash && \
+RUN apk add curl bash python py-pip && \
   curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash && \
+  pip install awscli && \
   ln -s /root/yandex-cloud/bin/yc /bin/yc
 
 COPY config.tmpl /root/.config/yandex-cloud/config.tmpl
