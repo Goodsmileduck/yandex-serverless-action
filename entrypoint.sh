@@ -33,11 +33,11 @@ fi
 mkdir -p ~/.aws
 mkdir -p ~/.config/yandex-cloud
 envsubst < /config.tmpl > ~/.config/yandex-cloud/config.yaml
-cat ~/.config/yandex-cloud/config.yaml
+
 envsubst < /credentials.tmpl > ~/.aws/credentials
-cat ~/.aws/credentials
+
 zip -r latest.zip ${SOURCE_DIR} 
 aws --endpoint-url=https://storage.yandexcloud.net s3 cp latest.zip s3://${BUCKET}/${FUNCTION_NAME}/latest.zip
-yc config set token ${TOKEN}
-yc serverless function version create --function-name ${FUNCTION_NAME} --cloud-id ${CLOUD_ID}\
-   --folder-id ${FOLDER_ID} --package-bucket-name ${BUCKET} --package-object-name latest.zip
+
+yc serverless function version create --token ${TOKEN} --function-name ${FUNCTION_NAME} --cloud-id ${CLOUD_ID}\
+   --folder-id ${FOLDER_ID} --runtime ${RUNTIME} --package-bucket-name ${BUCKET} --package-object-name latest.zip 
