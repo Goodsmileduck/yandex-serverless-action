@@ -23,6 +23,7 @@ jobs:
         SOURCE_DIR: '.'
         ZONE: 'ru-central1-a'
         FUNCTION_NAME: 'handler'
+        RUNTIME: 'python37'
         CLOUD_ID: ${{ secrets.CLOUD_ID }}
         FOLDER_ID: ${{ secrets.FOLDER_ID }}
         TOKEN: ${{ secrets.TOKEN }}
