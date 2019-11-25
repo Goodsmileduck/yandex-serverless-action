@@ -24,6 +24,7 @@ jobs:
         ZONE: 'ru-central1-a'
         FUNCTION_NAME: 'handler'
         RUNTIME: 'python37'
+        ENTRYPOINT: 'main.handler'
         CLOUD_ID: ${{ secrets.CLOUD_ID }}
         FOLDER_ID: ${{ secrets.FOLDER_ID }}
         TOKEN: ${{ secrets.TOKEN }}
@@ -43,6 +44,7 @@ The following settings must be passed as environment variables as shown in the e
 | `TOKEN` | Token for access to yc cli. | `secret` | **Yes** |
 | `FUNCTION_NAME` | The name of function in Yandex Cloud | `env` | **Yes** |
 | `RUNTIME` | Runtime for function in Yandex Cloud | `env` | **Yes** |
+| `ENTRYPOINT` | Entry point of function | `env` | **Yes** |
 | `MEMORY` | Memory limit in megabytes for function in Yandex Cloud Default value is `128m`| `env` | No |
 | `TIMEOUT` | Execution timeout in seconds for function in Yandex Cloud. Default value is `5s` | `env` | No |
 | `ACCESS_KEY` | Your Access Key. Required if code bigger than 5Mb | `secret` | No |
