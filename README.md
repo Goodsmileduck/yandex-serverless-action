@@ -4,6 +4,9 @@
 This action uploads code to object storage and update Serverless funstion in Yandex cloud.
 
 ## Usage
+### Requirements
+
+1. Create serverless function in Yandex Cloud
 
 ### `workflow.yml` Example
 
