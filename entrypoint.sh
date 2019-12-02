@@ -37,7 +37,7 @@ if [ -z "$BUCKET" ]; then
       --memory ${MEMORY} \
       --execution-timeout ${TIMEOUT} \
       --entrypoint ${ENTRYPOINT} \
-      --environment ${ENVIRONMENT} \
+      --environment "${ENVIRONMENT}" \
       --source-path ${GITHUB_SHA}.zip
   fi
 else
@@ -71,7 +71,7 @@ else
       --memory ${MEMORY} \
       --execution-timeout ${TIMEOUT} \
       --entrypoint ${ENTRYPOINT} \
-      --environment ${ENVIRONMENT} \
+      --environment "${ENVIRONMENT}" \
       --source-path ${GITHUB_SHA}.zip
   fi
 fi
