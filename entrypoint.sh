@@ -15,7 +15,7 @@ envsubst < /config.tmpl > ~/.config/yandex-cloud/config.yaml
 
 envsubst < /credentials.tmpl > ~/.aws/credentials
 
-zip -r ${GITHUB_SHA}.zip ${SOURCE_DIR}
+zip -r ${GITHUB_SHA}.zip ${SOURCE_DIR} -x *.git*
 
 if [ -z "$BUCKET" ]; then
   if [ -z "$ENVIRONMENT" ]; then
