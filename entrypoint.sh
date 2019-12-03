@@ -18,15 +18,28 @@ envsubst < /credentials.tmpl > ~/.aws/credentials
 zip -r ${GITHUB_SHA}.zip ${SOURCE_DIR}
 
 if [ -z "$BUCKET" ]; then
-  yc serverless function version create --token ${TOKEN} \
-    --function-name ${FUNCTION_NAME} \
-    --cloud-id ${CLOUD_ID}\
-    --folder-id ${FOLDER_ID} \
-    --runtime ${RUNTIME} \
-    --memory ${MEMORY} \
-    --execution-timeout ${TIMEOUT} \
-    --entrypoint ${ENTRYPOINT} \
-    --source-path ${GITHUB_SHA}.zip
+  if [ -z "$ENVIRONMENT" ]; then
+    yc serverless function version create --token ${TOKEN} \
+      --function-name ${FUNCTION_NAME} \
+      --cloud-id ${CLOUD_ID}\
+      --folder-id ${FOLDER_ID} \
+      --runtime ${RUNTIME} \
+      --memory ${MEMORY} \
+      --execution-timeout ${TIMEOUT} \
+      --entrypoint ${ENTRYPOINT} \
+      --source-path ${GITHUB_SHA}.zip
+  else
+    yc serverless function version create --token ${TOKEN} \
+      --function-name ${FUNCTION_NAME} \
+      --cloud-id ${CLOUD_ID}\
+      --folder-id ${FOLDER_ID} \
+      --runtime ${RUNTIME} \
+      --memory ${MEMORY} \
+      --execution-timeout ${TIMEOUT} \
+      --entrypoint ${ENTRYPOINT} \
+      --environment "${ENVIRONMENT}" \
+      --source-path ${GITHUB_SHA}.zip
+  fi
 else
   if [ -z "$ACCESS_KEY" ]; then
     echo "ACCESS_KEY is not set. Quitting."
@@ -39,15 +52,27 @@ else
   fi
   aws --endpoint-url=https://storage.yandexcloud.net s3 cp ${GITHUB_SHA}.zip s3://${BUCKET}/${FUNCTION_NAME}/${GITHUB_SHA}.zip
 
-  yc serverless function version create --token ${TOKEN} \
-    --function-name ${FUNCTION_NAME} \
-    --cloud-id ${CLOUD_ID}\
-    --folder-id ${FOLDER_ID} \
-    --runtime ${RUNTIME} \
-    --memory ${MEMORY} \
-    --execution-timeout ${TIMEOUT} \
-    --entrypoint ${ENTRYPOINT} \
-    --package-bucket-name ${BUCKET} \
-    --package-object-name ${FUNCTION_NAME}/${GITHUB_SHA}.zip 
+  if [ -z "$ENVIRONMENT" ]; then
+    yc serverless function version create --token ${TOKEN} \
+      --function-name ${FUNCTION_NAME} \
+      --cloud-id ${CLOUD_ID}\
+      --folder-id ${FOLDER_ID} \
+      --runtime ${RUNTIME} \
+      --memory ${MEMORY} \
+      --execution-timeout ${TIMEOUT} \
+      --entrypoint ${ENTRYPOINT} \
+      --source-path ${GITHUB_SHA}.zip
+  else
+    yc serverless function version create --token ${TOKEN} \
+      --function-name ${FUNCTION_NAME} \
+      --cloud-id ${CLOUD_ID}\
+      --folder-id ${FOLDER_ID} \
+      --runtime ${RUNTIME} \
+      --memory ${MEMORY} \
+      --execution-timeout ${TIMEOUT} \
+      --entrypoint ${ENTRYPOINT} \
+      --environment "${ENVIRONMENT}" \
+      --source-path ${GITHUB_SHA}.zip
+  fi
 fi
 
