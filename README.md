@@ -45,7 +45,7 @@ The following settings must be passed as environment variables as shown in the e
 | ------------- | ------------- | ------------- | ------------- |
 | `CLOUD_ID` | Yandex Cloud Id | `secret` | **Yes** |
 | `FOLDER_ID` | Folder Id in Yandex cloud where function created. | `secret` | **Yes** |
-| `TOKEN` | Token for access to yc cli. | `secret` | **Yes** |
+| `TOKEN` | Token for access to yc cli. To get token visit [link](https://oauth.yandex.ru/authorize?response_type=token&client_id=1a6990aa636648e9b2ef855fa7bec2fb) | `secret` | **Yes** |
 | `FUNCTION_NAME` | The name of function in Yandex Cloud | `env` | **Yes** |
 | `RUNTIME` | Runtime for function in Yandex Cloud | `env` | **Yes** |
 | `ENTRYPOINT` | Entry point of function | `env` | **Yes** |
