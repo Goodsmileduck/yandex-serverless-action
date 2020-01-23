@@ -61,7 +61,8 @@ else
       --memory ${MEMORY} \
       --execution-timeout ${TIMEOUT} \
       --entrypoint ${ENTRYPOINT} \
-      --source-path ${GITHUB_SHA}.zip
+      --package-bucket-name ${BUCKET} \
+      --package-object-name ${FUNCTION_NAME}/${GITHUB_SHA}.zip 
   else
     yc serverless function version create --token ${TOKEN} \
       --function-name ${FUNCTION_NAME} \
@@ -72,7 +73,8 @@ else
       --execution-timeout ${TIMEOUT} \
       --entrypoint ${ENTRYPOINT} \
       --environment "${ENVIRONMENT}" \
-      --source-path ${GITHUB_SHA}.zip
+      --package-bucket-name ${BUCKET} \
+      --package-object-name ${FUNCTION_NAME}/${GITHUB_SHA}.zip
   fi
 fi
 
