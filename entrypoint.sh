@@ -17,7 +17,7 @@ envsubst < /credentials.tmpl > ~/.aws/credentials
 
 HOME_DIR=$(pwd)
 pushd ${SOURCE_DIR}
-zip -r "${HOME_DIR}/${GITHUB_SHA}.zip" .\
+zip -r "${HOME_DIR}/${GITHUB_SHA}.zip" .
 popd
 
 if [ -z "$BUCKET" ]; then
