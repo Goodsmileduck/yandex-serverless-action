@@ -19,7 +19,7 @@ envsubst < /credentials.tmpl > ~/.aws/credentials
 HOME_DIR=$(pwd)
 pushd ${SOURCE_DIR}
 if [ ! -z "$EXCLUDE" ]; then
-  zip -r "${HOME_DIR}/${GITHUB_SHA}.zip" -x *.git* -x $EXCLUDE .
+  zip -r "${HOME_DIR}/${GITHUB_SHA}.zip" -x *.git* -x "${EXCLUDE}" .
 else
   zip -r "${HOME_DIR}/${GITHUB_SHA}.zip" -x *.git* .
 fi
