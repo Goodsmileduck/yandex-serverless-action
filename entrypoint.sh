@@ -15,12 +15,15 @@ envsubst < /config.tmpl > ~/.config/yandex-cloud/config.yaml
 
 envsubst < /credentials.tmpl > ~/.aws/credentials
 
-if [ ! -z "$EXCLUDE" ]; then
-  zip -r ${GITHUB_SHA}.zip ${SOURCE_DIR} -x *.git* -x $EXCLUDE
-else
-  zip -r ${GITHUB_SHA}.zip ${SOURCE_DIR} -x *.git* 
-fi
 
+HOME_DIR=$(pwd)
+pushd ${SOURCE_DIR}
+if [ ! -z "$EXCLUDE" ]; then
+  zip -r "${HOME_DIR}/${GITHUB_SHA}.zip" -x *.git* -x $EXCLUDE .
+else
+  zip -r "${HOME_DIR}/${GITHUB_SHA}.zip" -x *.git* .
+fi
+popd
 
 if [ -z "$BUCKET" ]; then
   if [ -z "$ENVIRONMENT" ]; then
@@ -66,7 +69,8 @@ else
       --memory ${MEMORY} \
       --execution-timeout ${TIMEOUT} \
       --entrypoint ${ENTRYPOINT} \
-      --source-path ${GITHUB_SHA}.zip
+      --package-bucket-name ${BUCKET} \
+      --package-object-name ${FUNCTION_NAME}/${GITHUB_SHA}.zip 
   else
     yc serverless function version create --token ${TOKEN} \
       --function-name ${FUNCTION_NAME} \
@@ -77,7 +81,10 @@ else
       --execution-timeout ${TIMEOUT} \
       --entrypoint ${ENTRYPOINT} \
       --environment "${ENVIRONMENT}" \
-      --source-path ${GITHUB_SHA}.zip
+      --package-bucket-name ${BUCKET} \
+      --package-object-name ${FUNCTION_NAME}/${GITHUB_SHA}.zip
   fi
 fi
 
+#remove package
+rm -f "${HOME_DIR}/${GITHUB_SHA}.zip"
