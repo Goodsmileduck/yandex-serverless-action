@@ -81,3 +81,5 @@ else
   fi
 fi
 
+#remove package
+rm -f "${HOME_DIR}/${GITHUB_SHA}.zip"
