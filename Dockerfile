@@ -14,7 +14,7 @@ ENV ZONE=ru-central1-a \
   TIMEOUT=5s
 
 COPY --from=builder /go/bin/envsubst /bin/envsubst
-RUN apk add curl bash python py-pip zip && \
+RUN apk add curl bash py-pip zip && \
   curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash && \
   pip install awscli && \
   ln -s /root/yandex-cloud/bin/yc /bin/yc
