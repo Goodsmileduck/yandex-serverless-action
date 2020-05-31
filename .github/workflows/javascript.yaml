@@ -1,0 +1,21 @@
+  
+name: Javascript action
+
+on: [push]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: goodsmileduck/yandex-serverless-action@javascript
+      with:
+        source: 'example'
+        zome: 'ru-central1-a'
+        function_id: 'hello'
+        runtime: 'python37'
+        entrypoint: handler.hello
+        environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
+        cloud_id: ${{ secrets.CLOUD_ID }}
+        folder_id: ${{ secrets.FOLDER_ID }}
+        iam_token: ${{ secrets.TOKEN }}
