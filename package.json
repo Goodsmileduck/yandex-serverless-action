@@ -4,9 +4,9 @@
   "description": "This action deploys new version of serverless function to Yandex Cloud.",
   "main": "dist/index.js",
   "scripts": {
-    "lint": "eslint index.js",
-    "package": "ncc build index.js -o dist",
-    "test": "eslint index.js && jest"
+    "lint": "eslint src/index.js",
+    "package": "ncc build src/index.js -o dist",
+    "test": "eslint src/index.js && jest"
   },
   "repository": {
     "type": "git",
