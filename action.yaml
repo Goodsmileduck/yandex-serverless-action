@@ -1,26 +1,26 @@
-name: 'Yandex Serverless Action'	
-description: 'Deploy new version of Serverless function to Yandex Cloud'	
-author: 'Goodsmileduck'	
-branding:	
-  color: 'blue'	
-  icon: 'upload-cloud'	
-inputs:	
-  source:	
-    description: 'Source directory for cloud function in git repo'	
-    default: '.'	
-    required: false	
-  cloud_id:	
-    description: 'Yandex Cloud ID. Can be passed in using {{ secrets.CLOUD_ID }}'	
-    default: ''	
-    required: false	
-  memory:	
-    description: 'Memory in Mb'	
-    default: '256'	
-    required: false	
-  environment:	
-    description: 'Env variables for function'	
-    default: ''	
-    required: false	
-runs:	
-  using: 'node12'	
-  main: 'dist/index.js' 
+name: 'Yandex Serverless Action'
+description: 'Deploy new version of Serverless function to Yandex Cloud'
+author: 'Goodsmileduck'
+branding:
+  color: 'blue'
+  icon: 'upload-cloud'
+inputs:
+  source:
+    description: 'Source directory for cloud function in git repo'
+    default: '.'
+    required: false
+  cloud_id:
+    description: 'Yandex Cloud ID. Can be passed in using {{ secrets.CLOUD_ID }}'
+    default: ''
+    required: false
+  memory:
+    description: 'Memory in Mb'
+    default: '256'
+    required: false
+  environment:
+    description: 'Env variables for function'
+    default: ''
+    required: false
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
