@@ -34,6 +34,7 @@ jobs:
         BUCKET: ${{ secrets.BUCKET }}
         ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        EXCLUDE: 'src/'
 ```
 
 ### Configuration
@@ -55,6 +56,7 @@ The following settings must be passed as environment variables as shown in the e
 | `SECRET_KEY` | Your Secret Access Key. Required if code bigger than 5Mb | `secret` | No |
 | `BUCKET` | The name of the bucket you're syncing to. For example, `bucket`. If wasn't set action will try to upload code directly. Required if code bigger than 5Mb| `secret` | No |
 | `SOURCE_DIR` | The local directory you wish to upload. For example, `./public`. Defaults to the root of your repository (`.`) if not provided. | `env` | No |
+| `EXCLUDE` | Explicitly exclude the specified files. Defaults empty if not provided. | `env` | No |
 
 
 ## License
