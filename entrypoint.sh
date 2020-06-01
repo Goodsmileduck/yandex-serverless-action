@@ -15,9 +15,14 @@ envsubst < /config.tmpl > ~/.config/yandex-cloud/config.yaml
 
 envsubst < /credentials.tmpl > ~/.aws/credentials
 
+
 HOME_DIR=$(pwd)
 pushd ${SOURCE_DIR}
-zip -r "${HOME_DIR}/${GITHUB_SHA}.zip" .
+if [ ! -z "$EXCLUDE" ]; then
+  zip -x *.git* -x "${EXCLUDE}" -r "${HOME_DIR}/${GITHUB_SHA}.zip" .
+else
+  zip -x *.git* -r "${HOME_DIR}/${GITHUB_SHA}.zip"  .
+fi
 popd
 
 if [ -z "$BUCKET" ]; then
