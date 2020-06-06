@@ -4,7 +4,6 @@
   "description": "This action deploys new version of serverless function to Yandex Cloud.",
   "main": "dist/index.js",
   "scripts": {
-    "postinstall": "npm rebuild grpc --target_arch=x64 --target_platform=linux --target_libc=glibc",
     "lint": "eslint src/index.ts",
     "package": "ncc build src/index.ts -o dist",
     "test": "eslint src/index.ts && jest"
