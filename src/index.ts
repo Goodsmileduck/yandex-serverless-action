@@ -1,4 +1,3 @@
-import * as archiver from "archiver";
 import * as core from "@actions/core";
 import * as fs from "fs";
 
@@ -6,6 +5,7 @@ import BufferListStream from "bl";
 import { FunctionService } from "yandex-cloud/api/serverless/functions/v1";
 import Long from "long";
 import { Session } from "yandex-cloud";
+import archiver from "archiver";
 
 function zipDirectory(source: string, out: fs.PathLike) {
     let buf: Buffer;
