@@ -35,8 +35,8 @@
     "typescript": "^3.9.5"
   },
   "binary": {
-    "module_name": "grpc_node.node",
-    "module_path": "node-v72-linux-x64-glibc",
+    "module_name": "grpc_node",
+    "module_path": "extension_binary/node-v72-linux-x64-glibc",
     "host": "test host"
   }
 }
