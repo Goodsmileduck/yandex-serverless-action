@@ -33,10 +33,5 @@
     "@zeit/ncc": "^0.22.3",
     "jest": "^26.0.1",
     "typescript": "^3.9.5"
-  },
-  "binary": {
-    "module_name": "grpc_node",
-    "module_path": "dist/extension_binary/node-v72-linux-x64-glibc",
-    "host": "https://node-precompiled-binaries.grpc.io/grpc/v1.24.3/"
   }
 }

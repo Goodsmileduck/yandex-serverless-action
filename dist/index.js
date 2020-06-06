@@ -21968,10 +21968,10 @@ function patch (fs) {
 var binary = __webpack_require__(707);
 var path = __webpack_require__(622);
 var binding_path =
-    binary.find(path.resolve(path.join(__dirname, '../package.json')));
+    __webpack_require__.ab + "/src/node/extension_binary/node-v72-linux-x64-glibc/grpc_node.node";
 var binding;
 try {
-  binding = __webpack_require__(555);
+  binding = __webpack_require__(356);
 } catch (e) {
   let fs = __webpack_require__(747);
   let searchPath = __webpack_require__.ab + "extension_binary";
@@ -27477,7 +27477,12 @@ function wideTruncate (str, target) {
 
 
 /***/ }),
-/* 356 */,
+/* 356 */
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+module.exports = require(__webpack_require__.ab + "src/node/extension_binary/node-v72-linux-x64-glibc/grpc_node.node")
+
+/***/ }),
 /* 357 */
 /***/ (function(module) {
 
@@ -40747,13 +40752,7 @@ exports.default = crc8;
 /* 552 */,
 /* 553 */,
 /* 554 */,
-/* 555 */
-/***/ (function(module) {
-
-module.exports = eval("require")("C:\\work\\Github\\yandex-serverless-action\\node_modules\\grpc\\src\\node\\extension_binary\\node-v72-win32-x64-unknown\\grpc_node.node");
-
-
-/***/ }),
+/* 555 */,
 /* 556 */,
 /* 557 */
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
