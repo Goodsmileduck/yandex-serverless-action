@@ -1,29 +1,33 @@
 import * as core from "@actions/core";
-import * as fs from "fs";
+import * as streamBuffers from "stream-buffers";
 
-import BufferListStream from "bl";
 import { FunctionService } from "yandex-cloud/api/serverless/functions/v1";
 import Long from "long";
 import { Session } from "yandex-cloud";
 import archiver from "archiver";
 
-function zipDirectory(source: string, out: fs.PathLike) {
-    let buf: Buffer;
+function zipDirectory(source: string) {
+    let outputStreamBuffer = new streamBuffers.WritableStreamBuffer({
+        initialSize: (1000 * 1024),   // start at 1000 kilobytes.
+        incrementAmount: (1000 * 1024) // grow by 1000 kilobytes each time buffer overflows.
+    });
 
     const archive = archiver("zip", { zlib: { level: 9 } });
-    archive.pipe(
-        new BufferListStream((err, data) => {
-            buf = data;
-        })
-    );
+
+    archive.pipe(outputStreamBuffer);
 
     return new Promise<Buffer>((resolve, reject) => {
         archive
             .directory(source, false)
             .finalize()
             .then(() => {
-                console.log("finalized", buf);
-                resolve(buf);
+                outputStreamBuffer.end(() => {
+                    let buffer = outputStreamBuffer.getContents();
+                    if (buffer == false)
+                        reject("buffer is false");
+
+                    resolve(buffer as Buffer);
+                });
             })
             .catch(err => {
                 reject(err);
@@ -48,7 +52,7 @@ async function run() {
         const inputExecutionTimeout = core.getInput("execution_timeout", { required: false });
         const inputEnvironment = core.getInput("environment", { required: false });
 
-        const fileContents = await zipDirectory(inputSource, "output.zip");
+        const fileContents = await zipDirectory(inputSource);
 
         // IAM token
         // Initialize SDK with your token
