@@ -5,6 +5,26 @@ branding:
   color: 'blue'
   icon: 'upload-cloud'
 inputs:
+  zone:
+    description: 'Zone for cloud function'
+    default: ''
+    required: true
+  function_id:
+    description: 'Function id'
+    default: ''
+    required: true
+  folder_id:
+    description: 'Folder id in cloud'
+    default: ''
+    required: true
+  runtime:
+    description: 'Runtime for function'
+    default: ''
+    required: true
+  entrypoint:
+    description: 'Entrypoint for function'
+    default: ''
+    required: true
   source:
     description: 'Source directory for cloud function in git repo'
     default: '.'
@@ -19,6 +39,14 @@ inputs:
     required: false
   environment:
     description: 'Env variables for function'
+    default: ''
+    required: false
+  iam_token:
+    description: 'Oauth token'
+    default: ''
+    required: false
+  execution_timeout:
+    description: 'Execution timeout'
     default: ''
     required: false
 runs:
