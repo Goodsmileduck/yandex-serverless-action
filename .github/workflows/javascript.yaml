@@ -8,10 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
     - uses: goodsmileduck/yandex-serverless-action@javascript
       with:
         source: 'example'
-        zome: 'ru-central1-a'
+        zone: 'ru-central1-a'
         function_id: 'hello'
         runtime: 'python37'
         entrypoint: handler.hello
@@ -19,3 +23,4 @@ jobs:
         cloud_id: ${{ secrets.CLOUD_ID }}
         folder_id: ${{ secrets.FOLDER_ID }}
         iam_token: ${{ secrets.TOKEN }}
+        execution_timeout: '600'
