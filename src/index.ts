@@ -1,9 +1,9 @@
+import * as cloud from "yandex-cloud";
 import * as core from "@actions/core";
 import * as streamBuffers from "stream-buffers";
 
 import { FunctionService } from "yandex-cloud/api/serverless/functions/v1";
 import Long from "long";
-import { Session } from "yandex-cloud";
 import archiver from "archiver";
 
 async function run() {
@@ -32,7 +32,7 @@ async function run() {
 
         // IAM token
         // Initialize SDK with your token
-        const session = new Session({ oauthToken: inputToken });
+        const session = new cloud.Session({ oauthToken: inputToken });
 
         core.info("Session created with token");
 
@@ -74,7 +74,6 @@ async function run() {
         core.setOutput("time", new Date().toTimeString());
     }
     catch (error) {
-        core.info(`Operation error ${error.message}`);
         core.setFailed(error.message);
     }
 }

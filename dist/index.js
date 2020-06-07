@@ -1565,7 +1565,7 @@ module.exports = function () {
 
 
 
-var clone = __webpack_require__(506);
+var clone = __webpack_require__(291);
 
 var grpc = __webpack_require__(253);
 
@@ -2885,7 +2885,17 @@ exports.createInsecure = ChannelCredentials.createInsecure;
 /* 69 */,
 /* 70 */,
 /* 71 */,
-/* 72 */,
+/* 72 */
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+"use strict";
+// full library entry point.
+
+
+module.exports = __webpack_require__(611);
+
+
+/***/ }),
 /* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3181,7 +3191,7 @@ var objectKeys = Object.keys || function (obj) {
 module.exports = Duplex;
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -4272,7 +4282,7 @@ exports.default = crc32;
 
 module.exports = Service;
 
-var util = __webpack_require__(729);
+var util = __webpack_require__(941);
 
 // Extends EventEmitter
 (Service.prototype = Object.create(util.EventEmitter.prototype)).constructor = Service;
@@ -4420,7 +4430,7 @@ Service.prototype.end = function end(endedByRPC) {
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 module.exports = (function() {
-  const $protobuf = __webpack_require__(835);
+  const $protobuf = __webpack_require__(72);
   const grpc = __webpack_require__(323);
   const registar = __webpack_require__(866);
   const util = __webpack_require__(949);
@@ -5145,236 +5155,313 @@ util.inherits(TrackerBase, EventEmitter)
 /***/ }),
 /* 114 */,
 /* 115 */,
-/* 116 */
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-module.exports = (function() {
-  const $protobuf = __webpack_require__(835);
-  const grpc = __webpack_require__(323);
-  const registar = __webpack_require__(866);
-  const util = __webpack_require__(949);
-  const yc = __webpack_require__(135);
-  const $Reader = $protobuf.Reader;
-  const $Writer = $protobuf.Writer;
-  const $util = $protobuf.util;
-  let root = {};
-  (function($root) {
-    $root.ApiEndpoint = (function() {
-      function ApiEndpoint(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      ApiEndpoint.prototype.id = '';
-      ApiEndpoint.prototype.address = '';
-      ApiEndpoint.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.id != null && m.hasOwnProperty('id')) w.uint32(10).string(m.id);
-        if (m.address != null && m.hasOwnProperty('address')) w.uint32(18).string(m.address);
-        return w;
-      };
-      ApiEndpoint.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.endpoint.ApiEndpoint();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.id = r.string();
-              break;
-            case 2:
-              m.address = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return ApiEndpoint;
-    })();
-  })(root);
-  (function($root) {
-    $root.ApiEndpointService = function(session) {
-      if (session === undefined) {
-        session = new yc.Session();
-      }
-      return session.client($root.ApiEndpointService.makeGrpcConstructor());
-    };
-    $root.ApiEndpointService.makeGrpcConstructor = () => {
-      let ctor = grpc.makeGenericClientConstructor({
-        get: {
-          path: '/yandex.cloud.endpoint.ApiEndpointService/Get',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.endpoint.GetApiEndpointRequest,
-          responseType: $root.api.endpoint.ApiEndpoint,
-          requestSerialize: r => {
-            return $root.api.endpoint.GetApiEndpointRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.endpoint.GetApiEndpointRequest.decode,
-          responseSerialize: r => {
-            return $root.api.endpoint.ApiEndpoint.encode(r).finish();
-          },
-          responseDeserialize: $root.api.endpoint.ApiEndpoint.decode
-        },
-        list: {
-          path: '/yandex.cloud.endpoint.ApiEndpointService/List',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.endpoint.ListApiEndpointsRequest,
-          responseType: $root.api.endpoint.ListApiEndpointsResponse,
-          requestSerialize: r => {
-            return $root.api.endpoint.ListApiEndpointsRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.endpoint.ListApiEndpointsRequest.decode,
-          responseSerialize: r => {
-            return $root.api.endpoint.ListApiEndpointsResponse.encode(r).finish();
-          },
-          responseDeserialize: $root.api.endpoint.ListApiEndpointsResponse.decode
-        }
-      });
-      ctor.__endpointId = 'endpoint';
-      return ctor;
-    };
-  })(root);
-  (function($root) {
-    $root.GetApiEndpointRequest = (function() {
-      function GetApiEndpointRequest(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      GetApiEndpointRequest.prototype.apiEndpointId = '';
-      GetApiEndpointRequest.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.apiEndpointId != null && m.hasOwnProperty('apiEndpointId')) w.uint32(10).string(m.apiEndpointId);
-        return w;
-      };
-      GetApiEndpointRequest.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.endpoint.GetApiEndpointRequest();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.apiEndpointId = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return GetApiEndpointRequest;
-    })();
-  })(root);
-  (function($root) {
-    $root.ListApiEndpointsRequest = (function() {
-      function ListApiEndpointsRequest(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      ListApiEndpointsRequest.prototype.pageSize = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
-      ListApiEndpointsRequest.prototype.pageToken = '';
-      ListApiEndpointsRequest.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.pageSize != null && m.hasOwnProperty('pageSize')) w.uint32(8).int64(m.pageSize);
-        if (m.pageToken != null && m.hasOwnProperty('pageToken')) w.uint32(18).string(m.pageToken);
-        return w;
-      };
-      ListApiEndpointsRequest.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.endpoint.ListApiEndpointsRequest();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.pageSize = r.int64();
-              break;
-            case 2:
-              m.pageToken = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return ListApiEndpointsRequest;
-    })();
-  })(root);
-  (function($root) {
-    $root.ListApiEndpointsResponse = (function() {
-      function ListApiEndpointsResponse(p) {
-        this.endpoints = [];
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      ListApiEndpointsResponse.prototype.endpoints = $util.emptyArray;
-      ListApiEndpointsResponse.prototype.nextPageToken = '';
-      ListApiEndpointsResponse.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.endpoints != null && m.endpoints.length) {
-          for (let i = 0; i < m.endpoints.length; ++i) $root.api.endpoint.ApiEndpoint.encode(m.endpoints[i], w.uint32(10).fork()).ldelim();
-        }
-        if (m.nextPageToken != null && m.hasOwnProperty('nextPageToken')) w.uint32(18).string(m.nextPageToken);
-        return w;
-      };
-      ListApiEndpointsResponse.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.endpoint.ListApiEndpointsResponse();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              if (!(m.endpoints && m.endpoints.length)) m.endpoints = [];
-              m.endpoints.push($root.api.endpoint.ApiEndpoint.decode(r, r.uint32()));
-              break;
-            case 2:
-              m.nextPageToken = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return ListApiEndpointsResponse;
-    })();
-  })(root);
-  registar.register('api.endpoint', root);
-  root.api = registar.lookup('api');
-  root.contrib = registar.lookup('contrib');
-  return root;
-})();
-
-
-/***/ }),
+/* 116 */,
 /* 117 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
-var Stream = __webpack_require__(413);
-if (process.env.READABLE_STREAM === 'disable' && Stream) {
-  module.exports = Stream;
-  exports = module.exports = Stream.Readable;
-  exports.Readable = Stream.Readable;
-  exports.Writable = Stream.Writable;
-  exports.Duplex = Stream.Duplex;
-  exports.Transform = Stream.Transform;
-  exports.PassThrough = Stream.PassThrough;
-  exports.Stream = Stream;
-} else {
-  exports = module.exports = __webpack_require__(466);
-  exports.Stream = Stream || exports;
-  exports.Readable = exports;
-  exports.Writable = __webpack_require__(169);
-  exports.Duplex = __webpack_require__(168);
-  exports.Transform = __webpack_require__(217);
-  exports.PassThrough = __webpack_require__(810);
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+var pathModule = __webpack_require__(622);
+var isWindows = process.platform === 'win32';
+var fs = __webpack_require__(747);
+
+// JavaScript implementation of realpath, ported from node pre-v6
+
+var DEBUG = process.env.NODE_DEBUG && /fs/.test(process.env.NODE_DEBUG);
+
+function rethrow() {
+  // Only enable in debug mode. A backtrace uses ~1000 bytes of heap space and
+  // is fairly slow to generate.
+  var callback;
+  if (DEBUG) {
+    var backtrace = new Error;
+    callback = debugCallback;
+  } else
+    callback = missingCallback;
+
+  return callback;
+
+  function debugCallback(err) {
+    if (err) {
+      backtrace.message = err.message;
+      err = backtrace;
+      missingCallback(err);
+    }
+  }
+
+  function missingCallback(err) {
+    if (err) {
+      if (process.throwDeprecation)
+        throw err;  // Forgot a callback but don't know where? Use NODE_DEBUG=fs
+      else if (!process.noDeprecation) {
+        var msg = 'fs: missing callback ' + (err.stack || err.message);
+        if (process.traceDeprecation)
+          console.trace(msg);
+        else
+          console.error(msg);
+      }
+    }
+  }
 }
+
+function maybeCallback(cb) {
+  return typeof cb === 'function' ? cb : rethrow();
+}
+
+var normalize = pathModule.normalize;
+
+// Regexp that finds the next partion of a (partial) path
+// result is [base_with_slash, base], e.g. ['somedir/', 'somedir']
+if (isWindows) {
+  var nextPartRe = /(.*?)(?:[\/\\]+|$)/g;
+} else {
+  var nextPartRe = /(.*?)(?:[\/]+|$)/g;
+}
+
+// Regex to find the device root, including trailing slash. E.g. 'c:\\'.
+if (isWindows) {
+  var splitRootRe = /^(?:[a-zA-Z]:|[\\\/]{2}[^\\\/]+[\\\/][^\\\/]+)?[\\\/]*/;
+} else {
+  var splitRootRe = /^[\/]*/;
+}
+
+exports.realpathSync = function realpathSync(p, cache) {
+  // make p is absolute
+  p = pathModule.resolve(p);
+
+  if (cache && Object.prototype.hasOwnProperty.call(cache, p)) {
+    return cache[p];
+  }
+
+  var original = p,
+      seenLinks = {},
+      knownHard = {};
+
+  // current character position in p
+  var pos;
+  // the partial path so far, including a trailing slash if any
+  var current;
+  // the partial path without a trailing slash (except when pointing at a root)
+  var base;
+  // the partial path scanned in the previous round, with slash
+  var previous;
+
+  start();
+
+  function start() {
+    // Skip over roots
+    var m = splitRootRe.exec(p);
+    pos = m[0].length;
+    current = m[0];
+    base = m[0];
+    previous = '';
+
+    // On windows, check that the root exists. On unix there is no need.
+    if (isWindows && !knownHard[base]) {
+      fs.lstatSync(base);
+      knownHard[base] = true;
+    }
+  }
+
+  // walk down the path, swapping out linked pathparts for their real
+  // values
+  // NB: p.length changes.
+  while (pos < p.length) {
+    // find the next part
+    nextPartRe.lastIndex = pos;
+    var result = nextPartRe.exec(p);
+    previous = current;
+    current += result[0];
+    base = previous + result[1];
+    pos = nextPartRe.lastIndex;
+
+    // continue if not a symlink
+    if (knownHard[base] || (cache && cache[base] === base)) {
+      continue;
+    }
+
+    var resolvedLink;
+    if (cache && Object.prototype.hasOwnProperty.call(cache, base)) {
+      // some known symbolic link.  no need to stat again.
+      resolvedLink = cache[base];
+    } else {
+      var stat = fs.lstatSync(base);
+      if (!stat.isSymbolicLink()) {
+        knownHard[base] = true;
+        if (cache) cache[base] = base;
+        continue;
+      }
+
+      // read the link if it wasn't read before
+      // dev/ino always return 0 on windows, so skip the check.
+      var linkTarget = null;
+      if (!isWindows) {
+        var id = stat.dev.toString(32) + ':' + stat.ino.toString(32);
+        if (seenLinks.hasOwnProperty(id)) {
+          linkTarget = seenLinks[id];
+        }
+      }
+      if (linkTarget === null) {
+        fs.statSync(base);
+        linkTarget = fs.readlinkSync(base);
+      }
+      resolvedLink = pathModule.resolve(previous, linkTarget);
+      // track this, if given a cache.
+      if (cache) cache[base] = resolvedLink;
+      if (!isWindows) seenLinks[id] = linkTarget;
+    }
+
+    // resolve the link, then start over
+    p = pathModule.resolve(resolvedLink, p.slice(pos));
+    start();
+  }
+
+  if (cache) cache[original] = p;
+
+  return p;
+};
+
+
+exports.realpath = function realpath(p, cache, cb) {
+  if (typeof cb !== 'function') {
+    cb = maybeCallback(cache);
+    cache = null;
+  }
+
+  // make p is absolute
+  p = pathModule.resolve(p);
+
+  if (cache && Object.prototype.hasOwnProperty.call(cache, p)) {
+    return process.nextTick(cb.bind(null, null, cache[p]));
+  }
+
+  var original = p,
+      seenLinks = {},
+      knownHard = {};
+
+  // current character position in p
+  var pos;
+  // the partial path so far, including a trailing slash if any
+  var current;
+  // the partial path without a trailing slash (except when pointing at a root)
+  var base;
+  // the partial path scanned in the previous round, with slash
+  var previous;
+
+  start();
+
+  function start() {
+    // Skip over roots
+    var m = splitRootRe.exec(p);
+    pos = m[0].length;
+    current = m[0];
+    base = m[0];
+    previous = '';
+
+    // On windows, check that the root exists. On unix there is no need.
+    if (isWindows && !knownHard[base]) {
+      fs.lstat(base, function(err) {
+        if (err) return cb(err);
+        knownHard[base] = true;
+        LOOP();
+      });
+    } else {
+      process.nextTick(LOOP);
+    }
+  }
+
+  // walk down the path, swapping out linked pathparts for their real
+  // values
+  function LOOP() {
+    // stop if scanned past end of path
+    if (pos >= p.length) {
+      if (cache) cache[original] = p;
+      return cb(null, p);
+    }
+
+    // find the next part
+    nextPartRe.lastIndex = pos;
+    var result = nextPartRe.exec(p);
+    previous = current;
+    current += result[0];
+    base = previous + result[1];
+    pos = nextPartRe.lastIndex;
+
+    // continue if not a symlink
+    if (knownHard[base] || (cache && cache[base] === base)) {
+      return process.nextTick(LOOP);
+    }
+
+    if (cache && Object.prototype.hasOwnProperty.call(cache, base)) {
+      // known symbolic link.  no need to stat again.
+      return gotResolvedLink(cache[base]);
+    }
+
+    return fs.lstat(base, gotStat);
+  }
+
+  function gotStat(err, stat) {
+    if (err) return cb(err);
+
+    // if not a symlink, skip to the next path part
+    if (!stat.isSymbolicLink()) {
+      knownHard[base] = true;
+      if (cache) cache[base] = base;
+      return process.nextTick(LOOP);
+    }
+
+    // stat & read the link if not read before
+    // call gotTarget as soon as the link target is known
+    // dev/ino always return 0 on windows, so skip the check.
+    if (!isWindows) {
+      var id = stat.dev.toString(32) + ':' + stat.ino.toString(32);
+      if (seenLinks.hasOwnProperty(id)) {
+        return gotTarget(null, seenLinks[id], base);
+      }
+    }
+    fs.stat(base, function(err) {
+      if (err) return cb(err);
+
+      fs.readlink(base, function(err, target) {
+        if (!isWindows) seenLinks[id] = target;
+        gotTarget(err, target);
+      });
+    });
+  }
+
+  function gotTarget(err, target, base) {
+    if (err) return cb(err);
+
+    var resolvedLink = pathModule.resolve(previous, target);
+    if (cache) cache[base] = resolvedLink;
+    gotResolvedLink(resolvedLink);
+  }
+
+  function gotResolvedLink(resolvedLink) {
+    // resolve the link, then start over
+    p = pathModule.resolve(resolvedLink, p.slice(pos));
+    start();
+  }
+};
 
 
 /***/ }),
@@ -5940,7 +6027,7 @@ module.exports.expand_commands = function(package_json, opts, commands) {
 };
 
 module.exports.get_napi_build_versions = function(package_json, opts, warnings) { // opts may be undefined
-	var log = __webpack_require__(851);
+	var log = __webpack_require__(533);
 	var napi_build_versions = [];
 	var supported_napi_version = module.exports.get_napi_version(opts ? opts.target : undefined);
 	// remove duplicates, verify each napi version can actaully be built
@@ -7409,7 +7496,7 @@ var objectKeys = Object.keys || function (obj) {
 module.exports = Duplex;
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -7567,7 +7654,7 @@ var Duplex;
 Writable.WritableState = WritableState;
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -10838,7 +10925,7 @@ const defaultEndpoints = [
 
 const grpc = __webpack_require__(323);
 const util = __webpack_require__(949);
-const grpcEndpoint = __webpack_require__(116);
+const grpcEndpoint = __webpack_require__(414);
 
 function zipEndpoints(ep) {
     let result = {};
@@ -11539,7 +11626,7 @@ module.exports = Transform;
 var Duplex = __webpack_require__(168);
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -20114,7 +20201,7 @@ module.exports = difference;
 "use strict";
 
 var util = __webpack_require__(669)
-var stream = __webpack_require__(117)
+var stream = __webpack_require__(712)
 var delegate = __webpack_require__(967)
 var Tracker = __webpack_require__(623)
 
@@ -21971,7 +22058,7 @@ var binding_path =
     __webpack_require__.ab + "/src/node/extension_binary/node-v72-linux-x64-glibc/grpc_node.node";
 var binding;
 try {
-  binding = __webpack_require__(356);
+  binding = __webpack_require__(729);
 } catch (e) {
   let fs = __webpack_require__(747);
   let searchPath = __webpack_require__.ab + "extension_binary";
@@ -22763,7 +22850,7 @@ var Duplex;
 Writable.WritableState = WritableState;
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -23657,598 +23744,1491 @@ Gauge.prototype._doRedraw = function () {
 /***/ }),
 /* 279 */,
 /* 280 */
-/***/ (function(module, __unusedexports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
+exports = module.exports = SemVer
 
-module.exports = Type;
-
-// extends Namespace
-var Namespace = __webpack_require__(884);
-((Type.prototype = Object.create(Namespace.prototype)).constructor = Type).className = "Type";
-
-var Enum      = __webpack_require__(976),
-    OneOf     = __webpack_require__(533),
-    Field     = __webpack_require__(290),
-    MapField  = __webpack_require__(757),
-    Service   = __webpack_require__(58),
-    Message   = __webpack_require__(692),
-    Reader    = __webpack_require__(468),
-    Writer    = __webpack_require__(613),
-    util      = __webpack_require__(663),
-    encoder   = __webpack_require__(469),
-    decoder   = __webpack_require__(187),
-    verifier  = __webpack_require__(283),
-    converter = __webpack_require__(223),
-    wrappers  = __webpack_require__(858);
-
-/**
- * Constructs a new reflected message type instance.
- * @classdesc Reflected message type.
- * @extends NamespaceBase
- * @constructor
- * @param {string} name Message name
- * @param {Object.<string,*>} [options] Declared options
- */
-function Type(name, options) {
-    Namespace.call(this, name, options);
-
-    /**
-     * Message fields.
-     * @type {Object.<string,Field>}
-     */
-    this.fields = {};  // toJSON, marker
-
-    /**
-     * Oneofs declared within this namespace, if any.
-     * @type {Object.<string,OneOf>}
-     */
-    this.oneofs = undefined; // toJSON
-
-    /**
-     * Extension ranges, if any.
-     * @type {number[][]}
-     */
-    this.extensions = undefined; // toJSON
-
-    /**
-     * Reserved ranges, if any.
-     * @type {Array.<number[]|string>}
-     */
-    this.reserved = undefined; // toJSON
-
-    /*?
-     * Whether this type is a legacy group.
-     * @type {boolean|undefined}
-     */
-    this.group = undefined; // toJSON
-
-    /**
-     * Cached fields by id.
-     * @type {Object.<number,Field>|null}
-     * @private
-     */
-    this._fieldsById = null;
-
-    /**
-     * Cached fields as an array.
-     * @type {Field[]|null}
-     * @private
-     */
-    this._fieldsArray = null;
-
-    /**
-     * Cached oneofs as an array.
-     * @type {OneOf[]|null}
-     * @private
-     */
-    this._oneofsArray = null;
-
-    /**
-     * Cached constructor.
-     * @type {Constructor<{}>}
-     * @private
-     */
-    this._ctor = null;
+var debug
+/* istanbul ignore next */
+if (typeof process === 'object' &&
+    process.env &&
+    process.env.NODE_DEBUG &&
+    /\bsemver\b/i.test(process.env.NODE_DEBUG)) {
+  debug = function () {
+    var args = Array.prototype.slice.call(arguments, 0)
+    args.unshift('SEMVER')
+    console.log.apply(console, args)
+  }
+} else {
+  debug = function () {}
 }
 
-Object.defineProperties(Type.prototype, {
+// Note: this is the semver.org version of the spec that it implements
+// Not necessarily the package version of this code.
+exports.SEMVER_SPEC_VERSION = '2.0.0'
 
-    /**
-     * Message fields by id.
-     * @name Type#fieldsById
-     * @type {Object.<number,Field>}
-     * @readonly
-     */
-    fieldsById: {
-        get: function() {
+var MAX_LENGTH = 256
+var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER ||
+  /* istanbul ignore next */ 9007199254740991
 
-            /* istanbul ignore if */
-            if (this._fieldsById)
-                return this._fieldsById;
+// Max safe segment length for coercion.
+var MAX_SAFE_COMPONENT_LENGTH = 16
 
-            this._fieldsById = {};
-            for (var names = Object.keys(this.fields), i = 0; i < names.length; ++i) {
-                var field = this.fields[names[i]],
-                    id = field.id;
+// The actual regexps go on exports.re
+var re = exports.re = []
+var src = exports.src = []
+var R = 0
 
-                /* istanbul ignore if */
-                if (this._fieldsById[id])
-                    throw Error("duplicate id " + id + " in " + this);
+// The following Regular Expressions can be used for tokenizing,
+// validating, and parsing SemVer version strings.
 
-                this._fieldsById[id] = field;
-            }
-            return this._fieldsById;
-        }
-    },
+// ## Numeric Identifier
+// A single `0`, or a non-zero digit followed by zero or more digits.
 
-    /**
-     * Fields of this message as an array for iteration.
-     * @name Type#fieldsArray
-     * @type {Field[]}
-     * @readonly
-     */
-    fieldsArray: {
-        get: function() {
-            return this._fieldsArray || (this._fieldsArray = util.toArray(this.fields));
-        }
-    },
+var NUMERICIDENTIFIER = R++
+src[NUMERICIDENTIFIER] = '0|[1-9]\\d*'
+var NUMERICIDENTIFIERLOOSE = R++
+src[NUMERICIDENTIFIERLOOSE] = '[0-9]+'
 
-    /**
-     * Oneofs of this message as an array for iteration.
-     * @name Type#oneofsArray
-     * @type {OneOf[]}
-     * @readonly
-     */
-    oneofsArray: {
-        get: function() {
-            return this._oneofsArray || (this._oneofsArray = util.toArray(this.oneofs));
-        }
-    },
+// ## Non-numeric Identifier
+// Zero or more digits, followed by a letter or hyphen, and then zero or
+// more letters, digits, or hyphens.
 
-    /**
-     * The registered constructor, if any registered, otherwise a generic constructor.
-     * Assigning a function replaces the internal constructor. If the function does not extend {@link Message} yet, its prototype will be setup accordingly and static methods will be populated. If it already extends {@link Message}, it will just replace the internal constructor.
-     * @name Type#ctor
-     * @type {Constructor<{}>}
-     */
-    ctor: {
-        get: function() {
-            return this._ctor || (this.ctor = Type.generateConstructor(this)());
-        },
-        set: function(ctor) {
+var NONNUMERICIDENTIFIER = R++
+src[NONNUMERICIDENTIFIER] = '\\d*[a-zA-Z-][a-zA-Z0-9-]*'
 
-            // Ensure proper prototype
-            var prototype = ctor.prototype;
-            if (!(prototype instanceof Message)) {
-                (ctor.prototype = new Message()).constructor = ctor;
-                util.merge(ctor.prototype, prototype);
-            }
+// ## Main Version
+// Three dot-separated numeric identifiers.
 
-            // Classes and messages reference their reflected type
-            ctor.$type = ctor.prototype.$type = this;
+var MAINVERSION = R++
+src[MAINVERSION] = '(' + src[NUMERICIDENTIFIER] + ')\\.' +
+                   '(' + src[NUMERICIDENTIFIER] + ')\\.' +
+                   '(' + src[NUMERICIDENTIFIER] + ')'
 
-            // Mix in static methods
-            util.merge(ctor, Message, true);
+var MAINVERSIONLOOSE = R++
+src[MAINVERSIONLOOSE] = '(' + src[NUMERICIDENTIFIERLOOSE] + ')\\.' +
+                        '(' + src[NUMERICIDENTIFIERLOOSE] + ')\\.' +
+                        '(' + src[NUMERICIDENTIFIERLOOSE] + ')'
 
-            this._ctor = ctor;
+// ## Pre-release Version Identifier
+// A numeric identifier, or a non-numeric identifier.
 
-            // Messages have non-enumerable default values on their prototype
-            var i = 0;
-            for (; i < /* initializes */ this.fieldsArray.length; ++i)
-                this._fieldsArray[i].resolve(); // ensures a proper value
+var PRERELEASEIDENTIFIER = R++
+src[PRERELEASEIDENTIFIER] = '(?:' + src[NUMERICIDENTIFIER] +
+                            '|' + src[NONNUMERICIDENTIFIER] + ')'
 
-            // Messages have non-enumerable getters and setters for each virtual oneof field
-            var ctorProperties = {};
-            for (i = 0; i < /* initializes */ this.oneofsArray.length; ++i)
-                ctorProperties[this._oneofsArray[i].resolve().name] = {
-                    get: util.oneOfGetter(this._oneofsArray[i].oneof),
-                    set: util.oneOfSetter(this._oneofsArray[i].oneof)
-                };
-            if (i)
-                Object.defineProperties(ctor.prototype, ctorProperties);
-        }
-    }
-});
+var PRERELEASEIDENTIFIERLOOSE = R++
+src[PRERELEASEIDENTIFIERLOOSE] = '(?:' + src[NUMERICIDENTIFIERLOOSE] +
+                                 '|' + src[NONNUMERICIDENTIFIER] + ')'
 
-/**
- * Generates a constructor function for the specified type.
- * @param {Type} mtype Message type
- * @returns {Codegen} Codegen instance
- */
-Type.generateConstructor = function generateConstructor(mtype) {
-    /* eslint-disable no-unexpected-multiline */
-    var gen = util.codegen(["p"], mtype.name);
-    // explicitly initialize mutable object/array fields so that these aren't just inherited from the prototype
-    for (var i = 0, field; i < mtype.fieldsArray.length; ++i)
-        if ((field = mtype._fieldsArray[i]).map) gen
-            ("this%s={}", util.safeProp(field.name));
-        else if (field.repeated) gen
-            ("this%s=[]", util.safeProp(field.name));
-    return gen
-    ("if(p)for(var ks=Object.keys(p),i=0;i<ks.length;++i)if(p[ks[i]]!=null)") // omit undefined or null
-        ("this[ks[i]]=p[ks[i]]");
-    /* eslint-enable no-unexpected-multiline */
-};
+// ## Pre-release Version
+// Hyphen, followed by one or more dot-separated pre-release version
+// identifiers.
 
-function clearCache(type) {
-    type._fieldsById = type._fieldsArray = type._oneofsArray = null;
-    delete type.encode;
-    delete type.decode;
-    delete type.verify;
-    return type;
+var PRERELEASE = R++
+src[PRERELEASE] = '(?:-(' + src[PRERELEASEIDENTIFIER] +
+                  '(?:\\.' + src[PRERELEASEIDENTIFIER] + ')*))'
+
+var PRERELEASELOOSE = R++
+src[PRERELEASELOOSE] = '(?:-?(' + src[PRERELEASEIDENTIFIERLOOSE] +
+                       '(?:\\.' + src[PRERELEASEIDENTIFIERLOOSE] + ')*))'
+
+// ## Build Metadata Identifier
+// Any combination of digits, letters, or hyphens.
+
+var BUILDIDENTIFIER = R++
+src[BUILDIDENTIFIER] = '[0-9A-Za-z-]+'
+
+// ## Build Metadata
+// Plus sign, followed by one or more period-separated build metadata
+// identifiers.
+
+var BUILD = R++
+src[BUILD] = '(?:\\+(' + src[BUILDIDENTIFIER] +
+             '(?:\\.' + src[BUILDIDENTIFIER] + ')*))'
+
+// ## Full Version String
+// A main version, followed optionally by a pre-release version and
+// build metadata.
+
+// Note that the only major, minor, patch, and pre-release sections of
+// the version string are capturing groups.  The build metadata is not a
+// capturing group, because it should not ever be used in version
+// comparison.
+
+var FULL = R++
+var FULLPLAIN = 'v?' + src[MAINVERSION] +
+                src[PRERELEASE] + '?' +
+                src[BUILD] + '?'
+
+src[FULL] = '^' + FULLPLAIN + '$'
+
+// like full, but allows v1.2.3 and =1.2.3, which people do sometimes.
+// also, 1.0.0alpha1 (prerelease without the hyphen) which is pretty
+// common in the npm registry.
+var LOOSEPLAIN = '[v=\\s]*' + src[MAINVERSIONLOOSE] +
+                 src[PRERELEASELOOSE] + '?' +
+                 src[BUILD] + '?'
+
+var LOOSE = R++
+src[LOOSE] = '^' + LOOSEPLAIN + '$'
+
+var GTLT = R++
+src[GTLT] = '((?:<|>)?=?)'
+
+// Something like "2.*" or "1.2.x".
+// Note that "x.x" is a valid xRange identifer, meaning "any version"
+// Only the first item is strictly required.
+var XRANGEIDENTIFIERLOOSE = R++
+src[XRANGEIDENTIFIERLOOSE] = src[NUMERICIDENTIFIERLOOSE] + '|x|X|\\*'
+var XRANGEIDENTIFIER = R++
+src[XRANGEIDENTIFIER] = src[NUMERICIDENTIFIER] + '|x|X|\\*'
+
+var XRANGEPLAIN = R++
+src[XRANGEPLAIN] = '[v=\\s]*(' + src[XRANGEIDENTIFIER] + ')' +
+                   '(?:\\.(' + src[XRANGEIDENTIFIER] + ')' +
+                   '(?:\\.(' + src[XRANGEIDENTIFIER] + ')' +
+                   '(?:' + src[PRERELEASE] + ')?' +
+                   src[BUILD] + '?' +
+                   ')?)?'
+
+var XRANGEPLAINLOOSE = R++
+src[XRANGEPLAINLOOSE] = '[v=\\s]*(' + src[XRANGEIDENTIFIERLOOSE] + ')' +
+                        '(?:\\.(' + src[XRANGEIDENTIFIERLOOSE] + ')' +
+                        '(?:\\.(' + src[XRANGEIDENTIFIERLOOSE] + ')' +
+                        '(?:' + src[PRERELEASELOOSE] + ')?' +
+                        src[BUILD] + '?' +
+                        ')?)?'
+
+var XRANGE = R++
+src[XRANGE] = '^' + src[GTLT] + '\\s*' + src[XRANGEPLAIN] + '$'
+var XRANGELOOSE = R++
+src[XRANGELOOSE] = '^' + src[GTLT] + '\\s*' + src[XRANGEPLAINLOOSE] + '$'
+
+// Coercion.
+// Extract anything that could conceivably be a part of a valid semver
+var COERCE = R++
+src[COERCE] = '(?:^|[^\\d])' +
+              '(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '})' +
+              '(?:\\.(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '}))?' +
+              '(?:\\.(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '}))?' +
+              '(?:$|[^\\d])'
+
+// Tilde ranges.
+// Meaning is "reasonably at or greater than"
+var LONETILDE = R++
+src[LONETILDE] = '(?:~>?)'
+
+var TILDETRIM = R++
+src[TILDETRIM] = '(\\s*)' + src[LONETILDE] + '\\s+'
+re[TILDETRIM] = new RegExp(src[TILDETRIM], 'g')
+var tildeTrimReplace = '$1~'
+
+var TILDE = R++
+src[TILDE] = '^' + src[LONETILDE] + src[XRANGEPLAIN] + '$'
+var TILDELOOSE = R++
+src[TILDELOOSE] = '^' + src[LONETILDE] + src[XRANGEPLAINLOOSE] + '$'
+
+// Caret ranges.
+// Meaning is "at least and backwards compatible with"
+var LONECARET = R++
+src[LONECARET] = '(?:\\^)'
+
+var CARETTRIM = R++
+src[CARETTRIM] = '(\\s*)' + src[LONECARET] + '\\s+'
+re[CARETTRIM] = new RegExp(src[CARETTRIM], 'g')
+var caretTrimReplace = '$1^'
+
+var CARET = R++
+src[CARET] = '^' + src[LONECARET] + src[XRANGEPLAIN] + '$'
+var CARETLOOSE = R++
+src[CARETLOOSE] = '^' + src[LONECARET] + src[XRANGEPLAINLOOSE] + '$'
+
+// A simple gt/lt/eq thing, or just "" to indicate "any version"
+var COMPARATORLOOSE = R++
+src[COMPARATORLOOSE] = '^' + src[GTLT] + '\\s*(' + LOOSEPLAIN + ')$|^$'
+var COMPARATOR = R++
+src[COMPARATOR] = '^' + src[GTLT] + '\\s*(' + FULLPLAIN + ')$|^$'
+
+// An expression to strip any whitespace between the gtlt and the thing
+// it modifies, so that `> 1.2.3` ==> `>1.2.3`
+var COMPARATORTRIM = R++
+src[COMPARATORTRIM] = '(\\s*)' + src[GTLT] +
+                      '\\s*(' + LOOSEPLAIN + '|' + src[XRANGEPLAIN] + ')'
+
+// this one has to use the /g flag
+re[COMPARATORTRIM] = new RegExp(src[COMPARATORTRIM], 'g')
+var comparatorTrimReplace = '$1$2$3'
+
+// Something like `1.2.3 - 1.2.4`
+// Note that these all use the loose form, because they'll be
+// checked against either the strict or loose comparator form
+// later.
+var HYPHENRANGE = R++
+src[HYPHENRANGE] = '^\\s*(' + src[XRANGEPLAIN] + ')' +
+                   '\\s+-\\s+' +
+                   '(' + src[XRANGEPLAIN] + ')' +
+                   '\\s*$'
+
+var HYPHENRANGELOOSE = R++
+src[HYPHENRANGELOOSE] = '^\\s*(' + src[XRANGEPLAINLOOSE] + ')' +
+                        '\\s+-\\s+' +
+                        '(' + src[XRANGEPLAINLOOSE] + ')' +
+                        '\\s*$'
+
+// Star ranges basically just allow anything at all.
+var STAR = R++
+src[STAR] = '(<|>)?=?\\s*\\*'
+
+// Compile to actual regexp objects.
+// All are flag-free, unless they were created above with a flag.
+for (var i = 0; i < R; i++) {
+  debug(i, src[i])
+  if (!re[i]) {
+    re[i] = new RegExp(src[i])
+  }
 }
 
-/**
- * Message type descriptor.
- * @interface IType
- * @extends INamespace
- * @property {Object.<string,IOneOf>} [oneofs] Oneof descriptors
- * @property {Object.<string,IField>} fields Field descriptors
- * @property {number[][]} [extensions] Extension ranges
- * @property {number[][]} [reserved] Reserved ranges
- * @property {boolean} [group=false] Whether a legacy group or not
- */
+exports.parse = parse
+function parse (version, options) {
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    }
+  }
 
-/**
- * Creates a message type from a message type descriptor.
- * @param {string} name Message name
- * @param {IType} json Message type descriptor
- * @returns {Type} Created message type
- */
-Type.fromJSON = function fromJSON(name, json) {
-    var type = new Type(name, json.options);
-    type.extensions = json.extensions;
-    type.reserved = json.reserved;
-    var names = Object.keys(json.fields),
-        i = 0;
-    for (; i < names.length; ++i)
-        type.add(
-            ( typeof json.fields[names[i]].keyType !== "undefined"
-            ? MapField.fromJSON
-            : Field.fromJSON )(names[i], json.fields[names[i]])
-        );
-    if (json.oneofs)
-        for (names = Object.keys(json.oneofs), i = 0; i < names.length; ++i)
-            type.add(OneOf.fromJSON(names[i], json.oneofs[names[i]]));
-    if (json.nested)
-        for (names = Object.keys(json.nested), i = 0; i < names.length; ++i) {
-            var nested = json.nested[names[i]];
-            type.add( // most to least likely
-                ( nested.id !== undefined
-                ? Field.fromJSON
-                : nested.fields !== undefined
-                ? Type.fromJSON
-                : nested.values !== undefined
-                ? Enum.fromJSON
-                : nested.methods !== undefined
-                ? Service.fromJSON
-                : Namespace.fromJSON )(names[i], nested)
-            );
+  if (version instanceof SemVer) {
+    return version
+  }
+
+  if (typeof version !== 'string') {
+    return null
+  }
+
+  if (version.length > MAX_LENGTH) {
+    return null
+  }
+
+  var r = options.loose ? re[LOOSE] : re[FULL]
+  if (!r.test(version)) {
+    return null
+  }
+
+  try {
+    return new SemVer(version, options)
+  } catch (er) {
+    return null
+  }
+}
+
+exports.valid = valid
+function valid (version, options) {
+  var v = parse(version, options)
+  return v ? v.version : null
+}
+
+exports.clean = clean
+function clean (version, options) {
+  var s = parse(version.trim().replace(/^[=v]+/, ''), options)
+  return s ? s.version : null
+}
+
+exports.SemVer = SemVer
+
+function SemVer (version, options) {
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    }
+  }
+  if (version instanceof SemVer) {
+    if (version.loose === options.loose) {
+      return version
+    } else {
+      version = version.version
+    }
+  } else if (typeof version !== 'string') {
+    throw new TypeError('Invalid Version: ' + version)
+  }
+
+  if (version.length > MAX_LENGTH) {
+    throw new TypeError('version is longer than ' + MAX_LENGTH + ' characters')
+  }
+
+  if (!(this instanceof SemVer)) {
+    return new SemVer(version, options)
+  }
+
+  debug('SemVer', version, options)
+  this.options = options
+  this.loose = !!options.loose
+
+  var m = version.trim().match(options.loose ? re[LOOSE] : re[FULL])
+
+  if (!m) {
+    throw new TypeError('Invalid Version: ' + version)
+  }
+
+  this.raw = version
+
+  // these are actually numbers
+  this.major = +m[1]
+  this.minor = +m[2]
+  this.patch = +m[3]
+
+  if (this.major > MAX_SAFE_INTEGER || this.major < 0) {
+    throw new TypeError('Invalid major version')
+  }
+
+  if (this.minor > MAX_SAFE_INTEGER || this.minor < 0) {
+    throw new TypeError('Invalid minor version')
+  }
+
+  if (this.patch > MAX_SAFE_INTEGER || this.patch < 0) {
+    throw new TypeError('Invalid patch version')
+  }
+
+  // numberify any prerelease numeric ids
+  if (!m[4]) {
+    this.prerelease = []
+  } else {
+    this.prerelease = m[4].split('.').map(function (id) {
+      if (/^[0-9]+$/.test(id)) {
+        var num = +id
+        if (num >= 0 && num < MAX_SAFE_INTEGER) {
+          return num
         }
-    if (json.extensions && json.extensions.length)
-        type.extensions = json.extensions;
-    if (json.reserved && json.reserved.length)
-        type.reserved = json.reserved;
-    if (json.group)
-        type.group = true;
-    if (json.comment)
-        type.comment = json.comment;
-    return type;
-};
+      }
+      return id
+    })
+  }
 
-/**
- * Converts this message type to a message type descriptor.
- * @param {IToJSONOptions} [toJSONOptions] JSON conversion options
- * @returns {IType} Message type descriptor
- */
-Type.prototype.toJSON = function toJSON(toJSONOptions) {
-    var inherited = Namespace.prototype.toJSON.call(this, toJSONOptions);
-    var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    return util.toObject([
-        "options"    , inherited && inherited.options || undefined,
-        "oneofs"     , Namespace.arrayToJSON(this.oneofsArray, toJSONOptions),
-        "fields"     , Namespace.arrayToJSON(this.fieldsArray.filter(function(obj) { return !obj.declaringField; }), toJSONOptions) || {},
-        "extensions" , this.extensions && this.extensions.length ? this.extensions : undefined,
-        "reserved"   , this.reserved && this.reserved.length ? this.reserved : undefined,
-        "group"      , this.group || undefined,
-        "nested"     , inherited && inherited.nested || undefined,
-        "comment"    , keepComments ? this.comment : undefined
-    ]);
-};
+  this.build = m[5] ? m[5].split('.') : []
+  this.format()
+}
 
-/**
- * @override
- */
-Type.prototype.resolveAll = function resolveAll() {
-    var fields = this.fieldsArray, i = 0;
-    while (i < fields.length)
-        fields[i++].resolve();
-    var oneofs = this.oneofsArray; i = 0;
-    while (i < oneofs.length)
-        oneofs[i++].resolve();
-    return Namespace.prototype.resolveAll.call(this);
-};
+SemVer.prototype.format = function () {
+  this.version = this.major + '.' + this.minor + '.' + this.patch
+  if (this.prerelease.length) {
+    this.version += '-' + this.prerelease.join('.')
+  }
+  return this.version
+}
 
-/**
- * @override
- */
-Type.prototype.get = function get(name) {
-    return this.fields[name]
-        || this.oneofs && this.oneofs[name]
-        || this.nested && this.nested[name]
-        || null;
-};
+SemVer.prototype.toString = function () {
+  return this.version
+}
 
-/**
- * Adds a nested object to this type.
- * @param {ReflectionObject} object Nested object to add
- * @returns {Type} `this`
- * @throws {TypeError} If arguments are invalid
- * @throws {Error} If there is already a nested object with this name or, if a field, when there is already a field with this id
- */
-Type.prototype.add = function add(object) {
+SemVer.prototype.compare = function (other) {
+  debug('SemVer.compare', this.version, this.options, other)
+  if (!(other instanceof SemVer)) {
+    other = new SemVer(other, this.options)
+  }
 
-    if (this.get(object.name))
-        throw Error("duplicate name '" + object.name + "' in " + this);
+  return this.compareMain(other) || this.comparePre(other)
+}
 
-    if (object instanceof Field && object.extend === undefined) {
-        // NOTE: Extension fields aren't actual fields on the declaring type, but nested objects.
-        // The root object takes care of adding distinct sister-fields to the respective extended
-        // type instead.
+SemVer.prototype.compareMain = function (other) {
+  if (!(other instanceof SemVer)) {
+    other = new SemVer(other, this.options)
+  }
 
-        // avoids calling the getter if not absolutely necessary because it's called quite frequently
-        if (this._fieldsById ? /* istanbul ignore next */ this._fieldsById[object.id] : this.fieldsById[object.id])
-            throw Error("duplicate id " + object.id + " in " + this);
-        if (this.isReservedId(object.id))
-            throw Error("id " + object.id + " is reserved in " + this);
-        if (this.isReservedName(object.name))
-            throw Error("name '" + object.name + "' is reserved in " + this);
+  return compareIdentifiers(this.major, other.major) ||
+         compareIdentifiers(this.minor, other.minor) ||
+         compareIdentifiers(this.patch, other.patch)
+}
 
-        if (object.parent)
-            object.parent.remove(object);
-        this.fields[object.name] = object;
-        object.message = this;
-        object.onAdd(this);
-        return clearCache(this);
+SemVer.prototype.comparePre = function (other) {
+  if (!(other instanceof SemVer)) {
+    other = new SemVer(other, this.options)
+  }
+
+  // NOT having a prerelease is > having one
+  if (this.prerelease.length && !other.prerelease.length) {
+    return -1
+  } else if (!this.prerelease.length && other.prerelease.length) {
+    return 1
+  } else if (!this.prerelease.length && !other.prerelease.length) {
+    return 0
+  }
+
+  var i = 0
+  do {
+    var a = this.prerelease[i]
+    var b = other.prerelease[i]
+    debug('prerelease compare', i, a, b)
+    if (a === undefined && b === undefined) {
+      return 0
+    } else if (b === undefined) {
+      return 1
+    } else if (a === undefined) {
+      return -1
+    } else if (a === b) {
+      continue
+    } else {
+      return compareIdentifiers(a, b)
     }
-    if (object instanceof OneOf) {
-        if (!this.oneofs)
-            this.oneofs = {};
-        this.oneofs[object.name] = object;
-        object.onAdd(this);
-        return clearCache(this);
+  } while (++i)
+}
+
+// preminor will bump the version up to the next minor release, and immediately
+// down to pre-release. premajor and prepatch work the same way.
+SemVer.prototype.inc = function (release, identifier) {
+  switch (release) {
+    case 'premajor':
+      this.prerelease.length = 0
+      this.patch = 0
+      this.minor = 0
+      this.major++
+      this.inc('pre', identifier)
+      break
+    case 'preminor':
+      this.prerelease.length = 0
+      this.patch = 0
+      this.minor++
+      this.inc('pre', identifier)
+      break
+    case 'prepatch':
+      // If this is already a prerelease, it will bump to the next version
+      // drop any prereleases that might already exist, since they are not
+      // relevant at this point.
+      this.prerelease.length = 0
+      this.inc('patch', identifier)
+      this.inc('pre', identifier)
+      break
+    // If the input is a non-prerelease version, this acts the same as
+    // prepatch.
+    case 'prerelease':
+      if (this.prerelease.length === 0) {
+        this.inc('patch', identifier)
+      }
+      this.inc('pre', identifier)
+      break
+
+    case 'major':
+      // If this is a pre-major version, bump up to the same major version.
+      // Otherwise increment major.
+      // 1.0.0-5 bumps to 1.0.0
+      // 1.1.0 bumps to 2.0.0
+      if (this.minor !== 0 ||
+          this.patch !== 0 ||
+          this.prerelease.length === 0) {
+        this.major++
+      }
+      this.minor = 0
+      this.patch = 0
+      this.prerelease = []
+      break
+    case 'minor':
+      // If this is a pre-minor version, bump up to the same minor version.
+      // Otherwise increment minor.
+      // 1.2.0-5 bumps to 1.2.0
+      // 1.2.1 bumps to 1.3.0
+      if (this.patch !== 0 || this.prerelease.length === 0) {
+        this.minor++
+      }
+      this.patch = 0
+      this.prerelease = []
+      break
+    case 'patch':
+      // If this is not a pre-release version, it will increment the patch.
+      // If it is a pre-release it will bump up to the same patch version.
+      // 1.2.0-5 patches to 1.2.0
+      // 1.2.0 patches to 1.2.1
+      if (this.prerelease.length === 0) {
+        this.patch++
+      }
+      this.prerelease = []
+      break
+    // This probably shouldn't be used publicly.
+    // 1.0.0 "pre" would become 1.0.0-0 which is the wrong direction.
+    case 'pre':
+      if (this.prerelease.length === 0) {
+        this.prerelease = [0]
+      } else {
+        var i = this.prerelease.length
+        while (--i >= 0) {
+          if (typeof this.prerelease[i] === 'number') {
+            this.prerelease[i]++
+            i = -2
+          }
+        }
+        if (i === -1) {
+          // didn't increment anything
+          this.prerelease.push(0)
+        }
+      }
+      if (identifier) {
+        // 1.2.0-beta.1 bumps to 1.2.0-beta.2,
+        // 1.2.0-beta.fooblz or 1.2.0-beta bumps to 1.2.0-beta.0
+        if (this.prerelease[0] === identifier) {
+          if (isNaN(this.prerelease[1])) {
+            this.prerelease = [identifier, 0]
+          }
+        } else {
+          this.prerelease = [identifier, 0]
+        }
+      }
+      break
+
+    default:
+      throw new Error('invalid increment argument: ' + release)
+  }
+  this.format()
+  this.raw = this.version
+  return this
+}
+
+exports.inc = inc
+function inc (version, release, loose, identifier) {
+  if (typeof (loose) === 'string') {
+    identifier = loose
+    loose = undefined
+  }
+
+  try {
+    return new SemVer(version, loose).inc(release, identifier).version
+  } catch (er) {
+    return null
+  }
+}
+
+exports.diff = diff
+function diff (version1, version2) {
+  if (eq(version1, version2)) {
+    return null
+  } else {
+    var v1 = parse(version1)
+    var v2 = parse(version2)
+    var prefix = ''
+    if (v1.prerelease.length || v2.prerelease.length) {
+      prefix = 'pre'
+      var defaultResult = 'prerelease'
     }
-    return Namespace.prototype.add.call(this, object);
-};
-
-/**
- * Removes a nested object from this type.
- * @param {ReflectionObject} object Nested object to remove
- * @returns {Type} `this`
- * @throws {TypeError} If arguments are invalid
- * @throws {Error} If `object` is not a member of this type
- */
-Type.prototype.remove = function remove(object) {
-    if (object instanceof Field && object.extend === undefined) {
-        // See Type#add for the reason why extension fields are excluded here.
-
-        /* istanbul ignore if */
-        if (!this.fields || this.fields[object.name] !== object)
-            throw Error(object + " is not a member of " + this);
-
-        delete this.fields[object.name];
-        object.parent = null;
-        object.onRemove(this);
-        return clearCache(this);
+    for (var key in v1) {
+      if (key === 'major' || key === 'minor' || key === 'patch') {
+        if (v1[key] !== v2[key]) {
+          return prefix + key
+        }
+      }
     }
-    if (object instanceof OneOf) {
+    return defaultResult // may be undefined
+  }
+}
 
-        /* istanbul ignore if */
-        if (!this.oneofs || this.oneofs[object.name] !== object)
-            throw Error(object + " is not a member of " + this);
+exports.compareIdentifiers = compareIdentifiers
 
-        delete this.oneofs[object.name];
-        object.parent = null;
-        object.onRemove(this);
-        return clearCache(this);
+var numeric = /^[0-9]+$/
+function compareIdentifiers (a, b) {
+  var anum = numeric.test(a)
+  var bnum = numeric.test(b)
+
+  if (anum && bnum) {
+    a = +a
+    b = +b
+  }
+
+  return a === b ? 0
+    : (anum && !bnum) ? -1
+    : (bnum && !anum) ? 1
+    : a < b ? -1
+    : 1
+}
+
+exports.rcompareIdentifiers = rcompareIdentifiers
+function rcompareIdentifiers (a, b) {
+  return compareIdentifiers(b, a)
+}
+
+exports.major = major
+function major (a, loose) {
+  return new SemVer(a, loose).major
+}
+
+exports.minor = minor
+function minor (a, loose) {
+  return new SemVer(a, loose).minor
+}
+
+exports.patch = patch
+function patch (a, loose) {
+  return new SemVer(a, loose).patch
+}
+
+exports.compare = compare
+function compare (a, b, loose) {
+  return new SemVer(a, loose).compare(new SemVer(b, loose))
+}
+
+exports.compareLoose = compareLoose
+function compareLoose (a, b) {
+  return compare(a, b, true)
+}
+
+exports.rcompare = rcompare
+function rcompare (a, b, loose) {
+  return compare(b, a, loose)
+}
+
+exports.sort = sort
+function sort (list, loose) {
+  return list.sort(function (a, b) {
+    return exports.compare(a, b, loose)
+  })
+}
+
+exports.rsort = rsort
+function rsort (list, loose) {
+  return list.sort(function (a, b) {
+    return exports.rcompare(a, b, loose)
+  })
+}
+
+exports.gt = gt
+function gt (a, b, loose) {
+  return compare(a, b, loose) > 0
+}
+
+exports.lt = lt
+function lt (a, b, loose) {
+  return compare(a, b, loose) < 0
+}
+
+exports.eq = eq
+function eq (a, b, loose) {
+  return compare(a, b, loose) === 0
+}
+
+exports.neq = neq
+function neq (a, b, loose) {
+  return compare(a, b, loose) !== 0
+}
+
+exports.gte = gte
+function gte (a, b, loose) {
+  return compare(a, b, loose) >= 0
+}
+
+exports.lte = lte
+function lte (a, b, loose) {
+  return compare(a, b, loose) <= 0
+}
+
+exports.cmp = cmp
+function cmp (a, op, b, loose) {
+  switch (op) {
+    case '===':
+      if (typeof a === 'object')
+        a = a.version
+      if (typeof b === 'object')
+        b = b.version
+      return a === b
+
+    case '!==':
+      if (typeof a === 'object')
+        a = a.version
+      if (typeof b === 'object')
+        b = b.version
+      return a !== b
+
+    case '':
+    case '=':
+    case '==':
+      return eq(a, b, loose)
+
+    case '!=':
+      return neq(a, b, loose)
+
+    case '>':
+      return gt(a, b, loose)
+
+    case '>=':
+      return gte(a, b, loose)
+
+    case '<':
+      return lt(a, b, loose)
+
+    case '<=':
+      return lte(a, b, loose)
+
+    default:
+      throw new TypeError('Invalid operator: ' + op)
+  }
+}
+
+exports.Comparator = Comparator
+function Comparator (comp, options) {
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
     }
-    return Namespace.prototype.remove.call(this, object);
-};
+  }
 
-/**
- * Tests if the specified id is reserved.
- * @param {number} id Id to test
- * @returns {boolean} `true` if reserved, otherwise `false`
- */
-Type.prototype.isReservedId = function isReservedId(id) {
-    return Namespace.isReservedId(this.reserved, id);
-};
+  if (comp instanceof Comparator) {
+    if (comp.loose === !!options.loose) {
+      return comp
+    } else {
+      comp = comp.value
+    }
+  }
 
-/**
- * Tests if the specified name is reserved.
- * @param {string} name Name to test
- * @returns {boolean} `true` if reserved, otherwise `false`
- */
-Type.prototype.isReservedName = function isReservedName(name) {
-    return Namespace.isReservedName(this.reserved, name);
-};
+  if (!(this instanceof Comparator)) {
+    return new Comparator(comp, options)
+  }
 
-/**
- * Creates a new message of this type using the specified properties.
- * @param {Object.<string,*>} [properties] Properties to set
- * @returns {Message<{}>} Message instance
- */
-Type.prototype.create = function create(properties) {
-    return new this.ctor(properties);
-};
+  debug('comparator', comp, options)
+  this.options = options
+  this.loose = !!options.loose
+  this.parse(comp)
 
-/**
- * Sets up {@link Type#encode|encode}, {@link Type#decode|decode} and {@link Type#verify|verify}.
- * @returns {Type} `this`
- */
-Type.prototype.setup = function setup() {
-    // Sets up everything at once so that the prototype chain does not have to be re-evaluated
-    // multiple times (V8, soft-deopt prototype-check).
+  if (this.semver === ANY) {
+    this.value = ''
+  } else {
+    this.value = this.operator + this.semver.version
+  }
 
-    var fullName = this.fullName,
-        types    = [];
-    for (var i = 0; i < /* initializes */ this.fieldsArray.length; ++i)
-        types.push(this._fieldsArray[i].resolve().resolvedType);
+  debug('comp', this)
+}
 
-    // Replace setup methods with type-specific generated functions
-    this.encode = encoder(this)({
-        Writer : Writer,
-        types  : types,
-        util   : util
-    });
-    this.decode = decoder(this)({
-        Reader : Reader,
-        types  : types,
-        util   : util
-    });
-    this.verify = verifier(this)({
-        types : types,
-        util  : util
-    });
-    this.fromObject = converter.fromObject(this)({
-        types : types,
-        util  : util
-    });
-    this.toObject = converter.toObject(this)({
-        types : types,
-        util  : util
-    });
+var ANY = {}
+Comparator.prototype.parse = function (comp) {
+  var r = this.options.loose ? re[COMPARATORLOOSE] : re[COMPARATOR]
+  var m = comp.match(r)
 
-    // Inject custom wrappers for common types
-    var wrapper = wrappers[fullName];
-    if (wrapper) {
-        var originalThis = Object.create(this);
-        // if (wrapper.fromObject) {
-            originalThis.fromObject = this.fromObject;
-            this.fromObject = wrapper.fromObject.bind(originalThis);
-        // }
-        // if (wrapper.toObject) {
-            originalThis.toObject = this.toObject;
-            this.toObject = wrapper.toObject.bind(originalThis);
-        // }
+  if (!m) {
+    throw new TypeError('Invalid comparator: ' + comp)
+  }
+
+  this.operator = m[1]
+  if (this.operator === '=') {
+    this.operator = ''
+  }
+
+  // if it literally is just '>' or '' then allow anything.
+  if (!m[2]) {
+    this.semver = ANY
+  } else {
+    this.semver = new SemVer(m[2], this.options.loose)
+  }
+}
+
+Comparator.prototype.toString = function () {
+  return this.value
+}
+
+Comparator.prototype.test = function (version) {
+  debug('Comparator.test', version, this.options.loose)
+
+  if (this.semver === ANY) {
+    return true
+  }
+
+  if (typeof version === 'string') {
+    version = new SemVer(version, this.options)
+  }
+
+  return cmp(version, this.operator, this.semver, this.options)
+}
+
+Comparator.prototype.intersects = function (comp, options) {
+  if (!(comp instanceof Comparator)) {
+    throw new TypeError('a Comparator is required')
+  }
+
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    }
+  }
+
+  var rangeTmp
+
+  if (this.operator === '') {
+    rangeTmp = new Range(comp.value, options)
+    return satisfies(this.value, rangeTmp, options)
+  } else if (comp.operator === '') {
+    rangeTmp = new Range(this.value, options)
+    return satisfies(comp.semver, rangeTmp, options)
+  }
+
+  var sameDirectionIncreasing =
+    (this.operator === '>=' || this.operator === '>') &&
+    (comp.operator === '>=' || comp.operator === '>')
+  var sameDirectionDecreasing =
+    (this.operator === '<=' || this.operator === '<') &&
+    (comp.operator === '<=' || comp.operator === '<')
+  var sameSemVer = this.semver.version === comp.semver.version
+  var differentDirectionsInclusive =
+    (this.operator === '>=' || this.operator === '<=') &&
+    (comp.operator === '>=' || comp.operator === '<=')
+  var oppositeDirectionsLessThan =
+    cmp(this.semver, '<', comp.semver, options) &&
+    ((this.operator === '>=' || this.operator === '>') &&
+    (comp.operator === '<=' || comp.operator === '<'))
+  var oppositeDirectionsGreaterThan =
+    cmp(this.semver, '>', comp.semver, options) &&
+    ((this.operator === '<=' || this.operator === '<') &&
+    (comp.operator === '>=' || comp.operator === '>'))
+
+  return sameDirectionIncreasing || sameDirectionDecreasing ||
+    (sameSemVer && differentDirectionsInclusive) ||
+    oppositeDirectionsLessThan || oppositeDirectionsGreaterThan
+}
+
+exports.Range = Range
+function Range (range, options) {
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    }
+  }
+
+  if (range instanceof Range) {
+    if (range.loose === !!options.loose &&
+        range.includePrerelease === !!options.includePrerelease) {
+      return range
+    } else {
+      return new Range(range.raw, options)
+    }
+  }
+
+  if (range instanceof Comparator) {
+    return new Range(range.value, options)
+  }
+
+  if (!(this instanceof Range)) {
+    return new Range(range, options)
+  }
+
+  this.options = options
+  this.loose = !!options.loose
+  this.includePrerelease = !!options.includePrerelease
+
+  // First, split based on boolean or ||
+  this.raw = range
+  this.set = range.split(/\s*\|\|\s*/).map(function (range) {
+    return this.parseRange(range.trim())
+  }, this).filter(function (c) {
+    // throw out any that are not relevant for whatever reason
+    return c.length
+  })
+
+  if (!this.set.length) {
+    throw new TypeError('Invalid SemVer Range: ' + range)
+  }
+
+  this.format()
+}
+
+Range.prototype.format = function () {
+  this.range = this.set.map(function (comps) {
+    return comps.join(' ').trim()
+  }).join('||').trim()
+  return this.range
+}
+
+Range.prototype.toString = function () {
+  return this.range
+}
+
+Range.prototype.parseRange = function (range) {
+  var loose = this.options.loose
+  range = range.trim()
+  // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
+  var hr = loose ? re[HYPHENRANGELOOSE] : re[HYPHENRANGE]
+  range = range.replace(hr, hyphenReplace)
+  debug('hyphen replace', range)
+  // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
+  range = range.replace(re[COMPARATORTRIM], comparatorTrimReplace)
+  debug('comparator trim', range, re[COMPARATORTRIM])
+
+  // `~ 1.2.3` => `~1.2.3`
+  range = range.replace(re[TILDETRIM], tildeTrimReplace)
+
+  // `^ 1.2.3` => `^1.2.3`
+  range = range.replace(re[CARETTRIM], caretTrimReplace)
+
+  // normalize spaces
+  range = range.split(/\s+/).join(' ')
+
+  // At this point, the range is completely trimmed and
+  // ready to be split into comparators.
+
+  var compRe = loose ? re[COMPARATORLOOSE] : re[COMPARATOR]
+  var set = range.split(' ').map(function (comp) {
+    return parseComparator(comp, this.options)
+  }, this).join(' ').split(/\s+/)
+  if (this.options.loose) {
+    // in loose mode, throw out any that are not valid comparators
+    set = set.filter(function (comp) {
+      return !!comp.match(compRe)
+    })
+  }
+  set = set.map(function (comp) {
+    return new Comparator(comp, this.options)
+  }, this)
+
+  return set
+}
+
+Range.prototype.intersects = function (range, options) {
+  if (!(range instanceof Range)) {
+    throw new TypeError('a Range is required')
+  }
+
+  return this.set.some(function (thisComparators) {
+    return thisComparators.every(function (thisComparator) {
+      return range.set.some(function (rangeComparators) {
+        return rangeComparators.every(function (rangeComparator) {
+          return thisComparator.intersects(rangeComparator, options)
+        })
+      })
+    })
+  })
+}
+
+// Mostly just for testing and legacy API reasons
+exports.toComparators = toComparators
+function toComparators (range, options) {
+  return new Range(range, options).set.map(function (comp) {
+    return comp.map(function (c) {
+      return c.value
+    }).join(' ').trim().split(' ')
+  })
+}
+
+// comprised of xranges, tildes, stars, and gtlt's at this point.
+// already replaced the hyphen ranges
+// turn into a set of JUST comparators.
+function parseComparator (comp, options) {
+  debug('comp', comp, options)
+  comp = replaceCarets(comp, options)
+  debug('caret', comp)
+  comp = replaceTildes(comp, options)
+  debug('tildes', comp)
+  comp = replaceXRanges(comp, options)
+  debug('xrange', comp)
+  comp = replaceStars(comp, options)
+  debug('stars', comp)
+  return comp
+}
+
+function isX (id) {
+  return !id || id.toLowerCase() === 'x' || id === '*'
+}
+
+// ~, ~> --> * (any, kinda silly)
+// ~2, ~2.x, ~2.x.x, ~>2, ~>2.x ~>2.x.x --> >=2.0.0 <3.0.0
+// ~2.0, ~2.0.x, ~>2.0, ~>2.0.x --> >=2.0.0 <2.1.0
+// ~1.2, ~1.2.x, ~>1.2, ~>1.2.x --> >=1.2.0 <1.3.0
+// ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0
+// ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0
+function replaceTildes (comp, options) {
+  return comp.trim().split(/\s+/).map(function (comp) {
+    return replaceTilde(comp, options)
+  }).join(' ')
+}
+
+function replaceTilde (comp, options) {
+  var r = options.loose ? re[TILDELOOSE] : re[TILDE]
+  return comp.replace(r, function (_, M, m, p, pr) {
+    debug('tilde', comp, _, M, m, p, pr)
+    var ret
+
+    if (isX(M)) {
+      ret = ''
+    } else if (isX(m)) {
+      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0'
+    } else if (isX(p)) {
+      // ~1.2 == >=1.2.0 <1.3.0
+      ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0'
+    } else if (pr) {
+      debug('replaceTilde pr', pr)
+      ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
+            ' <' + M + '.' + (+m + 1) + '.0'
+    } else {
+      // ~1.2.3 == >=1.2.3 <1.3.0
+      ret = '>=' + M + '.' + m + '.' + p +
+            ' <' + M + '.' + (+m + 1) + '.0'
     }
 
-    return this;
-};
+    debug('tilde return', ret)
+    return ret
+  })
+}
 
-/**
- * Encodes a message of this type. Does not implicitly {@link Type#verify|verify} messages.
- * @param {Message<{}>|Object.<string,*>} message Message instance or plain object
- * @param {Writer} [writer] Writer to encode to
- * @returns {Writer} writer
- */
-Type.prototype.encode = function encode_setup(message, writer) {
-    return this.setup().encode(message, writer); // overrides this method
-};
+// ^ --> * (any, kinda silly)
+// ^2, ^2.x, ^2.x.x --> >=2.0.0 <3.0.0
+// ^2.0, ^2.0.x --> >=2.0.0 <3.0.0
+// ^1.2, ^1.2.x --> >=1.2.0 <2.0.0
+// ^1.2.3 --> >=1.2.3 <2.0.0
+// ^1.2.0 --> >=1.2.0 <2.0.0
+function replaceCarets (comp, options) {
+  return comp.trim().split(/\s+/).map(function (comp) {
+    return replaceCaret(comp, options)
+  }).join(' ')
+}
 
-/**
- * Encodes a message of this type preceeded by its byte length as a varint. Does not implicitly {@link Type#verify|verify} messages.
- * @param {Message<{}>|Object.<string,*>} message Message instance or plain object
- * @param {Writer} [writer] Writer to encode to
- * @returns {Writer} writer
- */
-Type.prototype.encodeDelimited = function encodeDelimited(message, writer) {
-    return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
-};
+function replaceCaret (comp, options) {
+  debug('caret', comp, options)
+  var r = options.loose ? re[CARETLOOSE] : re[CARET]
+  return comp.replace(r, function (_, M, m, p, pr) {
+    debug('caret', comp, _, M, m, p, pr)
+    var ret
 
-/**
- * Decodes a message of this type.
- * @param {Reader|Uint8Array} reader Reader or buffer to decode from
- * @param {number} [length] Length of the message, if known beforehand
- * @returns {Message<{}>} Decoded message
- * @throws {Error} If the payload is not a reader or valid buffer
- * @throws {util.ProtocolError<{}>} If required fields are missing
- */
-Type.prototype.decode = function decode_setup(reader, length) {
-    return this.setup().decode(reader, length); // overrides this method
-};
+    if (isX(M)) {
+      ret = ''
+    } else if (isX(m)) {
+      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0'
+    } else if (isX(p)) {
+      if (M === '0') {
+        ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0'
+      } else {
+        ret = '>=' + M + '.' + m + '.0 <' + (+M + 1) + '.0.0'
+      }
+    } else if (pr) {
+      debug('replaceCaret pr', pr)
+      if (M === '0') {
+        if (m === '0') {
+          ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
+                ' <' + M + '.' + m + '.' + (+p + 1)
+        } else {
+          ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
+                ' <' + M + '.' + (+m + 1) + '.0'
+        }
+      } else {
+        ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
+              ' <' + (+M + 1) + '.0.0'
+      }
+    } else {
+      debug('no pr')
+      if (M === '0') {
+        if (m === '0') {
+          ret = '>=' + M + '.' + m + '.' + p +
+                ' <' + M + '.' + m + '.' + (+p + 1)
+        } else {
+          ret = '>=' + M + '.' + m + '.' + p +
+                ' <' + M + '.' + (+m + 1) + '.0'
+        }
+      } else {
+        ret = '>=' + M + '.' + m + '.' + p +
+              ' <' + (+M + 1) + '.0.0'
+      }
+    }
 
-/**
- * Decodes a message of this type preceeded by its byte length as a varint.
- * @param {Reader|Uint8Array} reader Reader or buffer to decode from
- * @returns {Message<{}>} Decoded message
- * @throws {Error} If the payload is not a reader or valid buffer
- * @throws {util.ProtocolError} If required fields are missing
- */
-Type.prototype.decodeDelimited = function decodeDelimited(reader) {
-    if (!(reader instanceof Reader))
-        reader = Reader.create(reader);
-    return this.decode(reader, reader.uint32());
-};
+    debug('caret return', ret)
+    return ret
+  })
+}
 
-/**
- * Verifies that field values are valid and that required fields are present.
- * @param {Object.<string,*>} message Plain object to verify
- * @returns {null|string} `null` if valid, otherwise the reason why it is not
- */
-Type.prototype.verify = function verify_setup(message) {
-    return this.setup().verify(message); // overrides this method
-};
+function replaceXRanges (comp, options) {
+  debug('replaceXRanges', comp, options)
+  return comp.split(/\s+/).map(function (comp) {
+    return replaceXRange(comp, options)
+  }).join(' ')
+}
 
-/**
- * Creates a new message of this type from a plain object. Also converts values to their respective internal types.
- * @param {Object.<string,*>} object Plain object to convert
- * @returns {Message<{}>} Message instance
- */
-Type.prototype.fromObject = function fromObject(object) {
-    return this.setup().fromObject(object);
-};
+function replaceXRange (comp, options) {
+  comp = comp.trim()
+  var r = options.loose ? re[XRANGELOOSE] : re[XRANGE]
+  return comp.replace(r, function (ret, gtlt, M, m, p, pr) {
+    debug('xRange', comp, ret, gtlt, M, m, p, pr)
+    var xM = isX(M)
+    var xm = xM || isX(m)
+    var xp = xm || isX(p)
+    var anyX = xp
 
-/**
- * Conversion options as used by {@link Type#toObject} and {@link Message.toObject}.
- * @interface IConversionOptions
- * @property {Function} [longs] Long conversion type.
- * Valid values are `String` and `Number` (the global types).
- * Defaults to copy the present value, which is a possibly unsafe number without and a {@link Long} with a long library.
- * @property {Function} [enums] Enum value conversion type.
- * Only valid value is `String` (the global type).
- * Defaults to copy the present value, which is the numeric id.
- * @property {Function} [bytes] Bytes value conversion type.
- * Valid values are `Array` and (a base64 encoded) `String` (the global types).
- * Defaults to copy the present value, which usually is a Buffer under node and an Uint8Array in the browser.
- * @property {boolean} [defaults=false] Also sets default values on the resulting object
- * @property {boolean} [arrays=false] Sets empty arrays for missing repeated fields even if `defaults=false`
- * @property {boolean} [objects=false] Sets empty objects for missing map fields even if `defaults=false`
- * @property {boolean} [oneofs=false] Includes virtual oneof properties set to the present field's name, if any
- * @property {boolean} [json=false] Performs additional JSON compatibility conversions, i.e. NaN and Infinity to strings
- */
+    if (gtlt === '=' && anyX) {
+      gtlt = ''
+    }
 
-/**
- * Creates a plain object from a message of this type. Also converts values to other types if specified.
- * @param {Message<{}>} message Message instance
- * @param {IConversionOptions} [options] Conversion options
- * @returns {Object.<string,*>} Plain object
- */
-Type.prototype.toObject = function toObject(message, options) {
-    return this.setup().toObject(message, options);
-};
+    if (xM) {
+      if (gtlt === '>' || gtlt === '<') {
+        // nothing is allowed
+        ret = '<0.0.0'
+      } else {
+        // nothing is forbidden
+        ret = '*'
+      }
+    } else if (gtlt && anyX) {
+      // we know patch is an x, because we have any x at all.
+      // replace X with 0
+      if (xm) {
+        m = 0
+      }
+      p = 0
 
-/**
- * Decorator function as returned by {@link Type.d} (TypeScript).
- * @typedef TypeDecorator
- * @type {function}
- * @param {Constructor<T>} target Target constructor
- * @returns {undefined}
- * @template T extends Message<T>
- */
+      if (gtlt === '>') {
+        // >1 => >=2.0.0
+        // >1.2 => >=1.3.0
+        // >1.2.3 => >= 1.2.4
+        gtlt = '>='
+        if (xm) {
+          M = +M + 1
+          m = 0
+          p = 0
+        } else {
+          m = +m + 1
+          p = 0
+        }
+      } else if (gtlt === '<=') {
+        // <=0.7.x is actually <0.8.0, since any 0.7.x should
+        // pass.  Similarly, <=7.x is actually <8.0.0, etc.
+        gtlt = '<'
+        if (xm) {
+          M = +M + 1
+        } else {
+          m = +m + 1
+        }
+      }
 
-/**
- * Type decorator (TypeScript).
- * @param {string} [typeName] Type name, defaults to the constructor's name
- * @returns {TypeDecorator<T>} Decorator function
- * @template T extends Message<T>
- */
-Type.d = function decorateType(typeName) {
-    return function typeDecorator(target) {
-        util.decorateType(target, typeName);
-    };
-};
+      ret = gtlt + M + '.' + m + '.' + p
+    } else if (xm) {
+      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0'
+    } else if (xp) {
+      ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0'
+    }
+
+    debug('xRange return', ret)
+
+    return ret
+  })
+}
+
+// Because * is AND-ed with everything else in the comparator,
+// and '' means "any version", just remove the *s entirely.
+function replaceStars (comp, options) {
+  debug('replaceStars', comp, options)
+  // Looseness is ignored here.  star is always as loose as it gets!
+  return comp.trim().replace(re[STAR], '')
+}
+
+// This function is passed to string.replace(re[HYPHENRANGE])
+// M, m, patch, prerelease, build
+// 1.2 - 3.4.5 => >=1.2.0 <=3.4.5
+// 1.2.3 - 3.4 => >=1.2.0 <3.5.0 Any 3.4.x will do
+// 1.2 - 3.4 => >=1.2.0 <3.5.0
+function hyphenReplace ($0,
+  from, fM, fm, fp, fpr, fb,
+  to, tM, tm, tp, tpr, tb) {
+  if (isX(fM)) {
+    from = ''
+  } else if (isX(fm)) {
+    from = '>=' + fM + '.0.0'
+  } else if (isX(fp)) {
+    from = '>=' + fM + '.' + fm + '.0'
+  } else {
+    from = '>=' + from
+  }
+
+  if (isX(tM)) {
+    to = ''
+  } else if (isX(tm)) {
+    to = '<' + (+tM + 1) + '.0.0'
+  } else if (isX(tp)) {
+    to = '<' + tM + '.' + (+tm + 1) + '.0'
+  } else if (tpr) {
+    to = '<=' + tM + '.' + tm + '.' + tp + '-' + tpr
+  } else {
+    to = '<=' + to
+  }
+
+  return (from + ' ' + to).trim()
+}
+
+// if ANY of the sets match ALL of its comparators, then pass
+Range.prototype.test = function (version) {
+  if (!version) {
+    return false
+  }
+
+  if (typeof version === 'string') {
+    version = new SemVer(version, this.options)
+  }
+
+  for (var i = 0; i < this.set.length; i++) {
+    if (testSet(this.set[i], version, this.options)) {
+      return true
+    }
+  }
+  return false
+}
+
+function testSet (set, version, options) {
+  for (var i = 0; i < set.length; i++) {
+    if (!set[i].test(version)) {
+      return false
+    }
+  }
+
+  if (version.prerelease.length && !options.includePrerelease) {
+    // Find the set of versions that are allowed to have prereleases
+    // For example, ^1.2.3-pr.1 desugars to >=1.2.3-pr.1 <2.0.0
+    // That should allow `1.2.3-pr.2` to pass.
+    // However, `1.2.4-alpha.notready` should NOT be allowed,
+    // even though it's within the range set by the comparators.
+    for (i = 0; i < set.length; i++) {
+      debug(set[i].semver)
+      if (set[i].semver === ANY) {
+        continue
+      }
+
+      if (set[i].semver.prerelease.length > 0) {
+        var allowed = set[i].semver
+        if (allowed.major === version.major &&
+            allowed.minor === version.minor &&
+            allowed.patch === version.patch) {
+          return true
+        }
+      }
+    }
+
+    // Version has a -pre, but it's not one of the ones we like.
+    return false
+  }
+
+  return true
+}
+
+exports.satisfies = satisfies
+function satisfies (version, range, options) {
+  try {
+    range = new Range(range, options)
+  } catch (er) {
+    return false
+  }
+  return range.test(version)
+}
+
+exports.maxSatisfying = maxSatisfying
+function maxSatisfying (versions, range, options) {
+  var max = null
+  var maxSV = null
+  try {
+    var rangeObj = new Range(range, options)
+  } catch (er) {
+    return null
+  }
+  versions.forEach(function (v) {
+    if (rangeObj.test(v)) {
+      // satisfies(v, range, options)
+      if (!max || maxSV.compare(v) === -1) {
+        // compare(max, v, true)
+        max = v
+        maxSV = new SemVer(max, options)
+      }
+    }
+  })
+  return max
+}
+
+exports.minSatisfying = minSatisfying
+function minSatisfying (versions, range, options) {
+  var min = null
+  var minSV = null
+  try {
+    var rangeObj = new Range(range, options)
+  } catch (er) {
+    return null
+  }
+  versions.forEach(function (v) {
+    if (rangeObj.test(v)) {
+      // satisfies(v, range, options)
+      if (!min || minSV.compare(v) === 1) {
+        // compare(min, v, true)
+        min = v
+        minSV = new SemVer(min, options)
+      }
+    }
+  })
+  return min
+}
+
+exports.minVersion = minVersion
+function minVersion (range, loose) {
+  range = new Range(range, loose)
+
+  var minver = new SemVer('0.0.0')
+  if (range.test(minver)) {
+    return minver
+  }
+
+  minver = new SemVer('0.0.0-0')
+  if (range.test(minver)) {
+    return minver
+  }
+
+  minver = null
+  for (var i = 0; i < range.set.length; ++i) {
+    var comparators = range.set[i]
+
+    comparators.forEach(function (comparator) {
+      // Clone to avoid manipulating the comparator's semver object.
+      var compver = new SemVer(comparator.semver.version)
+      switch (comparator.operator) {
+        case '>':
+          if (compver.prerelease.length === 0) {
+            compver.patch++
+          } else {
+            compver.prerelease.push(0)
+          }
+          compver.raw = compver.format()
+          /* fallthrough */
+        case '':
+        case '>=':
+          if (!minver || gt(minver, compver)) {
+            minver = compver
+          }
+          break
+        case '<':
+        case '<=':
+          /* Ignore maximum versions */
+          break
+        /* istanbul ignore next */
+        default:
+          throw new Error('Unexpected operation: ' + comparator.operator)
+      }
+    })
+  }
+
+  if (minver && range.test(minver)) {
+    return minver
+  }
+
+  return null
+}
+
+exports.validRange = validRange
+function validRange (range, options) {
+  try {
+    // Return '*' instead of '' so that truthiness works.
+    // This will throw if it's invalid anyway
+    return new Range(range, options).range || '*'
+  } catch (er) {
+    return null
+  }
+}
+
+// Determine if version is less than all the versions possible in the range
+exports.ltr = ltr
+function ltr (version, range, options) {
+  return outside(version, range, '<', options)
+}
+
+// Determine if version is greater than all the versions possible in the range.
+exports.gtr = gtr
+function gtr (version, range, options) {
+  return outside(version, range, '>', options)
+}
+
+exports.outside = outside
+function outside (version, range, hilo, options) {
+  version = new SemVer(version, options)
+  range = new Range(range, options)
+
+  var gtfn, ltefn, ltfn, comp, ecomp
+  switch (hilo) {
+    case '>':
+      gtfn = gt
+      ltefn = lte
+      ltfn = lt
+      comp = '>'
+      ecomp = '>='
+      break
+    case '<':
+      gtfn = lt
+      ltefn = gte
+      ltfn = gt
+      comp = '<'
+      ecomp = '<='
+      break
+    default:
+      throw new TypeError('Must provide a hilo val of "<" or ">"')
+  }
+
+  // If it satisifes the range it is not outside
+  if (satisfies(version, range, options)) {
+    return false
+  }
+
+  // From now on, variable terms are as if we're in "gtr" mode.
+  // but note that everything is flipped for the "ltr" function.
+
+  for (var i = 0; i < range.set.length; ++i) {
+    var comparators = range.set[i]
+
+    var high = null
+    var low = null
+
+    comparators.forEach(function (comparator) {
+      if (comparator.semver === ANY) {
+        comparator = new Comparator('>=0.0.0')
+      }
+      high = high || comparator
+      low = low || comparator
+      if (gtfn(comparator.semver, high.semver, options)) {
+        high = comparator
+      } else if (ltfn(comparator.semver, low.semver, options)) {
+        low = comparator
+      }
+    })
+
+    // If the edge version comparator has a operator then our version
+    // isn't outside it
+    if (high.operator === comp || high.operator === ecomp) {
+      return false
+    }
+
+    // If the lowest version comparator has an operator and our version
+    // is less than it then it isn't higher than the range
+    if ((!low.operator || low.operator === comp) &&
+        ltefn(version, low.semver)) {
+      return false
+    } else if (low.operator === ecomp && ltfn(version, low.semver)) {
+      return false
+    }
+  }
+  return true
+}
+
+exports.prerelease = prerelease
+function prerelease (version, options) {
+  var parsed = parse(version, options)
+  return (parsed && parsed.prerelease.length) ? parsed.prerelease : null
+}
+
+exports.intersects = intersects
+function intersects (r1, r2, options) {
+  r1 = new Range(r1, options)
+  r2 = new Range(r2, options)
+  return r1.intersects(r2)
+}
+
+exports.coerce = coerce
+function coerce (version) {
+  if (version instanceof SemVer) {
+    return version
+  }
+
+  if (typeof version !== 'string') {
+    return null
+  }
+
+  var match = version.match(re[COERCE])
+
+  if (match == null) {
+    return null
+  }
+
+  return parse(match[1] +
+    '.' + (match[2] || '0') +
+    '.' + (match[3] || '0'))
+}
 
 
 /***/ }),
@@ -24478,408 +25458,115 @@ function verifier(mtype) {
 /* 284 */,
 /* 285 */,
 /* 286 */
-/***/ (function(module) {
+/***/ (function(__unusedmodule, exports) {
 
-"use strict";
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-module.exports = common;
+// NOTE: These type checking functions intentionally don't use `instanceof`
+// because it is fragile and can be easily faked with `Object.create()`.
 
-var commonRe = /\/|\./;
-
-/**
- * Provides common type definitions.
- * Can also be used to provide additional google types or your own custom types.
- * @param {string} name Short name as in `google/protobuf/[name].proto` or full file name
- * @param {Object.<string,*>} json JSON definition within `google.protobuf` if a short name, otherwise the file's root definition
- * @returns {undefined}
- * @property {INamespace} google/protobuf/any.proto Any
- * @property {INamespace} google/protobuf/duration.proto Duration
- * @property {INamespace} google/protobuf/empty.proto Empty
- * @property {INamespace} google/protobuf/field_mask.proto FieldMask
- * @property {INamespace} google/protobuf/struct.proto Struct, Value, NullValue and ListValue
- * @property {INamespace} google/protobuf/timestamp.proto Timestamp
- * @property {INamespace} google/protobuf/wrappers.proto Wrappers
- * @example
- * // manually provides descriptor.proto (assumes google/protobuf/ namespace and .proto extension)
- * protobuf.common("descriptor", descriptorJson);
- *
- * // manually provides a custom definition (uses my.foo namespace)
- * protobuf.common("my/foo/bar.proto", myFooBarJson);
- */
-function common(name, json) {
-    if (!commonRe.test(name)) {
-        name = "google/protobuf/" + name + ".proto";
-        json = { nested: { google: { nested: { protobuf: { nested: json } } } } };
-    }
-    common[name] = json;
+function isArray(arg) {
+  if (Array.isArray) {
+    return Array.isArray(arg);
+  }
+  return objectToString(arg) === '[object Array]';
 }
+exports.isArray = isArray;
 
-// Not provided because of limited use (feel free to discuss or to provide yourself):
-//
-// google/protobuf/descriptor.proto
-// google/protobuf/source_context.proto
-// google/protobuf/type.proto
-//
-// Stripped and pre-parsed versions of these non-bundled files are instead available as part of
-// the repository or package within the google/protobuf directory.
+function isBoolean(arg) {
+  return typeof arg === 'boolean';
+}
+exports.isBoolean = isBoolean;
 
-common("any", {
+function isNull(arg) {
+  return arg === null;
+}
+exports.isNull = isNull;
 
-    /**
-     * Properties of a google.protobuf.Any message.
-     * @interface IAny
-     * @type {Object}
-     * @property {string} [typeUrl]
-     * @property {Uint8Array} [bytes]
-     * @memberof common
-     */
-    Any: {
-        fields: {
-            type_url: {
-                type: "string",
-                id: 1
-            },
-            value: {
-                type: "bytes",
-                id: 2
-            }
-        }
-    }
-});
+function isNullOrUndefined(arg) {
+  return arg == null;
+}
+exports.isNullOrUndefined = isNullOrUndefined;
 
-var timeType;
+function isNumber(arg) {
+  return typeof arg === 'number';
+}
+exports.isNumber = isNumber;
 
-common("duration", {
+function isString(arg) {
+  return typeof arg === 'string';
+}
+exports.isString = isString;
 
-    /**
-     * Properties of a google.protobuf.Duration message.
-     * @interface IDuration
-     * @type {Object}
-     * @property {number|Long} [seconds]
-     * @property {number} [nanos]
-     * @memberof common
-     */
-    Duration: timeType = {
-        fields: {
-            seconds: {
-                type: "int64",
-                id: 1
-            },
-            nanos: {
-                type: "int32",
-                id: 2
-            }
-        }
-    }
-});
+function isSymbol(arg) {
+  return typeof arg === 'symbol';
+}
+exports.isSymbol = isSymbol;
 
-common("timestamp", {
+function isUndefined(arg) {
+  return arg === void 0;
+}
+exports.isUndefined = isUndefined;
 
-    /**
-     * Properties of a google.protobuf.Timestamp message.
-     * @interface ITimestamp
-     * @type {Object}
-     * @property {number|Long} [seconds]
-     * @property {number} [nanos]
-     * @memberof common
-     */
-    Timestamp: timeType
-});
+function isRegExp(re) {
+  return objectToString(re) === '[object RegExp]';
+}
+exports.isRegExp = isRegExp;
 
-common("empty", {
+function isObject(arg) {
+  return typeof arg === 'object' && arg !== null;
+}
+exports.isObject = isObject;
 
-    /**
-     * Properties of a google.protobuf.Empty message.
-     * @interface IEmpty
-     * @memberof common
-     */
-    Empty: {
-        fields: {}
-    }
-});
+function isDate(d) {
+  return objectToString(d) === '[object Date]';
+}
+exports.isDate = isDate;
 
-common("struct", {
+function isError(e) {
+  return (objectToString(e) === '[object Error]' || e instanceof Error);
+}
+exports.isError = isError;
 
-    /**
-     * Properties of a google.protobuf.Struct message.
-     * @interface IStruct
-     * @type {Object}
-     * @property {Object.<string,IValue>} [fields]
-     * @memberof common
-     */
-    Struct: {
-        fields: {
-            fields: {
-                keyType: "string",
-                type: "Value",
-                id: 1
-            }
-        }
-    },
+function isFunction(arg) {
+  return typeof arg === 'function';
+}
+exports.isFunction = isFunction;
 
-    /**
-     * Properties of a google.protobuf.Value message.
-     * @interface IValue
-     * @type {Object}
-     * @property {string} [kind]
-     * @property {0} [nullValue]
-     * @property {number} [numberValue]
-     * @property {string} [stringValue]
-     * @property {boolean} [boolValue]
-     * @property {IStruct} [structValue]
-     * @property {IListValue} [listValue]
-     * @memberof common
-     */
-    Value: {
-        oneofs: {
-            kind: {
-                oneof: [
-                    "nullValue",
-                    "numberValue",
-                    "stringValue",
-                    "boolValue",
-                    "structValue",
-                    "listValue"
-                ]
-            }
-        },
-        fields: {
-            nullValue: {
-                type: "NullValue",
-                id: 1
-            },
-            numberValue: {
-                type: "double",
-                id: 2
-            },
-            stringValue: {
-                type: "string",
-                id: 3
-            },
-            boolValue: {
-                type: "bool",
-                id: 4
-            },
-            structValue: {
-                type: "Struct",
-                id: 5
-            },
-            listValue: {
-                type: "ListValue",
-                id: 6
-            }
-        }
-    },
+function isPrimitive(arg) {
+  return arg === null ||
+         typeof arg === 'boolean' ||
+         typeof arg === 'number' ||
+         typeof arg === 'string' ||
+         typeof arg === 'symbol' ||  // ES6 symbol
+         typeof arg === 'undefined';
+}
+exports.isPrimitive = isPrimitive;
 
-    NullValue: {
-        values: {
-            NULL_VALUE: 0
-        }
-    },
+exports.isBuffer = Buffer.isBuffer;
 
-    /**
-     * Properties of a google.protobuf.ListValue message.
-     * @interface IListValue
-     * @type {Object}
-     * @property {Array.<IValue>} [values]
-     * @memberof common
-     */
-    ListValue: {
-        fields: {
-            values: {
-                rule: "repeated",
-                type: "Value",
-                id: 1
-            }
-        }
-    }
-});
-
-common("wrappers", {
-
-    /**
-     * Properties of a google.protobuf.DoubleValue message.
-     * @interface IDoubleValue
-     * @type {Object}
-     * @property {number} [value]
-     * @memberof common
-     */
-    DoubleValue: {
-        fields: {
-            value: {
-                type: "double",
-                id: 1
-            }
-        }
-    },
-
-    /**
-     * Properties of a google.protobuf.FloatValue message.
-     * @interface IFloatValue
-     * @type {Object}
-     * @property {number} [value]
-     * @memberof common
-     */
-    FloatValue: {
-        fields: {
-            value: {
-                type: "float",
-                id: 1
-            }
-        }
-    },
-
-    /**
-     * Properties of a google.protobuf.Int64Value message.
-     * @interface IInt64Value
-     * @type {Object}
-     * @property {number|Long} [value]
-     * @memberof common
-     */
-    Int64Value: {
-        fields: {
-            value: {
-                type: "int64",
-                id: 1
-            }
-        }
-    },
-
-    /**
-     * Properties of a google.protobuf.UInt64Value message.
-     * @interface IUInt64Value
-     * @type {Object}
-     * @property {number|Long} [value]
-     * @memberof common
-     */
-    UInt64Value: {
-        fields: {
-            value: {
-                type: "uint64",
-                id: 1
-            }
-        }
-    },
-
-    /**
-     * Properties of a google.protobuf.Int32Value message.
-     * @interface IInt32Value
-     * @type {Object}
-     * @property {number} [value]
-     * @memberof common
-     */
-    Int32Value: {
-        fields: {
-            value: {
-                type: "int32",
-                id: 1
-            }
-        }
-    },
-
-    /**
-     * Properties of a google.protobuf.UInt32Value message.
-     * @interface IUInt32Value
-     * @type {Object}
-     * @property {number} [value]
-     * @memberof common
-     */
-    UInt32Value: {
-        fields: {
-            value: {
-                type: "uint32",
-                id: 1
-            }
-        }
-    },
-
-    /**
-     * Properties of a google.protobuf.BoolValue message.
-     * @interface IBoolValue
-     * @type {Object}
-     * @property {boolean} [value]
-     * @memberof common
-     */
-    BoolValue: {
-        fields: {
-            value: {
-                type: "bool",
-                id: 1
-            }
-        }
-    },
-
-    /**
-     * Properties of a google.protobuf.StringValue message.
-     * @interface IStringValue
-     * @type {Object}
-     * @property {string} [value]
-     * @memberof common
-     */
-    StringValue: {
-        fields: {
-            value: {
-                type: "string",
-                id: 1
-            }
-        }
-    },
-
-    /**
-     * Properties of a google.protobuf.BytesValue message.
-     * @interface IBytesValue
-     * @type {Object}
-     * @property {Uint8Array} [value]
-     * @memberof common
-     */
-    BytesValue: {
-        fields: {
-            value: {
-                type: "bytes",
-                id: 1
-            }
-        }
-    }
-});
-
-common("field_mask", {
-
-    /**
-     * Properties of a google.protobuf.FieldMask message.
-     * @interface IDoubleValue
-     * @type {Object}
-     * @property {number} [value]
-     * @memberof common
-     */
-    FieldMask: {
-        fields: {
-            paths: {
-                rule: "repeated",
-                type: "string",
-                id: 1
-            }
-        }
-    }
-});
-
-/**
- * Gets the root definition of the specified common proto file.
- *
- * Bundled definitions are:
- * - google/protobuf/any.proto
- * - google/protobuf/duration.proto
- * - google/protobuf/empty.proto
- * - google/protobuf/field_mask.proto
- * - google/protobuf/struct.proto
- * - google/protobuf/timestamp.proto
- * - google/protobuf/wrappers.proto
- *
- * @param {string} file Proto file name
- * @returns {INamespace|null} Root definition or `null` if not defined
- */
-common.get = function get(file) {
-    return common[file] || null;
-};
+function objectToString(o) {
+  return Object.prototype.toString.call(o);
+}
 
 
 /***/ }),
@@ -25349,60 +26036,1765 @@ Field._configure = function configure(Type_) {
 
 /***/ }),
 /* 291 */
-/***/ (function(module, __unusedexports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+/* module decorator */ module = __webpack_require__.nmd(module);
+/**
+ * lodash (Custom Build) <https://lodash.com/>
+ * Build: `lodash modularize exports="npm" -o ./`
+ * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+ * Released under MIT license <https://lodash.com/license>
+ * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+ * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ */
 
-module.exports = BufferReader;
+/** Used as the size to enable large array optimizations. */
+var LARGE_ARRAY_SIZE = 200;
 
-// extends Reader
-var Reader = __webpack_require__(468);
-(BufferReader.prototype = Object.create(Reader.prototype)).constructor = BufferReader;
+/** Used to stand-in for `undefined` hash values. */
+var HASH_UNDEFINED = '__lodash_hash_undefined__';
 
-var util = __webpack_require__(729);
+/** Used as references for various `Number` constants. */
+var MAX_SAFE_INTEGER = 9007199254740991;
+
+/** `Object#toString` result references. */
+var argsTag = '[object Arguments]',
+    arrayTag = '[object Array]',
+    boolTag = '[object Boolean]',
+    dateTag = '[object Date]',
+    errorTag = '[object Error]',
+    funcTag = '[object Function]',
+    genTag = '[object GeneratorFunction]',
+    mapTag = '[object Map]',
+    numberTag = '[object Number]',
+    objectTag = '[object Object]',
+    promiseTag = '[object Promise]',
+    regexpTag = '[object RegExp]',
+    setTag = '[object Set]',
+    stringTag = '[object String]',
+    symbolTag = '[object Symbol]',
+    weakMapTag = '[object WeakMap]';
+
+var arrayBufferTag = '[object ArrayBuffer]',
+    dataViewTag = '[object DataView]',
+    float32Tag = '[object Float32Array]',
+    float64Tag = '[object Float64Array]',
+    int8Tag = '[object Int8Array]',
+    int16Tag = '[object Int16Array]',
+    int32Tag = '[object Int32Array]',
+    uint8Tag = '[object Uint8Array]',
+    uint8ClampedTag = '[object Uint8ClampedArray]',
+    uint16Tag = '[object Uint16Array]',
+    uint32Tag = '[object Uint32Array]';
 
 /**
- * Constructs a new buffer reader instance.
- * @classdesc Wire format reader using node buffers.
- * @extends Reader
- * @constructor
- * @param {Buffer} buffer Buffer to read from
+ * Used to match `RegExp`
+ * [syntax characters](http://ecma-international.org/ecma-262/7.0/#sec-patterns).
  */
-function BufferReader(buffer) {
-    Reader.call(this, buffer);
+var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
 
-    /**
-     * Read buffer.
-     * @name BufferReader#buf
-     * @type {Buffer}
-     */
+/** Used to match `RegExp` flags from their coerced string values. */
+var reFlags = /\w*$/;
+
+/** Used to detect host constructors (Safari). */
+var reIsHostCtor = /^\[object .+?Constructor\]$/;
+
+/** Used to detect unsigned integer values. */
+var reIsUint = /^(?:0|[1-9]\d*)$/;
+
+/** Used to identify `toStringTag` values supported by `_.clone`. */
+var cloneableTags = {};
+cloneableTags[argsTag] = cloneableTags[arrayTag] =
+cloneableTags[arrayBufferTag] = cloneableTags[dataViewTag] =
+cloneableTags[boolTag] = cloneableTags[dateTag] =
+cloneableTags[float32Tag] = cloneableTags[float64Tag] =
+cloneableTags[int8Tag] = cloneableTags[int16Tag] =
+cloneableTags[int32Tag] = cloneableTags[mapTag] =
+cloneableTags[numberTag] = cloneableTags[objectTag] =
+cloneableTags[regexpTag] = cloneableTags[setTag] =
+cloneableTags[stringTag] = cloneableTags[symbolTag] =
+cloneableTags[uint8Tag] = cloneableTags[uint8ClampedTag] =
+cloneableTags[uint16Tag] = cloneableTags[uint32Tag] = true;
+cloneableTags[errorTag] = cloneableTags[funcTag] =
+cloneableTags[weakMapTag] = false;
+
+/** Detect free variable `global` from Node.js. */
+var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+/** Detect free variable `exports`. */
+var freeExports =  true && exports && !exports.nodeType && exports;
+
+/** Detect free variable `module`. */
+var freeModule = freeExports && "object" == 'object' && module && !module.nodeType && module;
+
+/** Detect the popular CommonJS extension `module.exports`. */
+var moduleExports = freeModule && freeModule.exports === freeExports;
+
+/**
+ * Adds the key-value `pair` to `map`.
+ *
+ * @private
+ * @param {Object} map The map to modify.
+ * @param {Array} pair The key-value pair to add.
+ * @returns {Object} Returns `map`.
+ */
+function addMapEntry(map, pair) {
+  // Don't return `map.set` because it's not chainable in IE 11.
+  map.set(pair[0], pair[1]);
+  return map;
 }
 
-BufferReader._configure = function () {
-    /* istanbul ignore else */
-    if (util.Buffer)
-        BufferReader.prototype._slice = util.Buffer.prototype.slice;
-};
-
+/**
+ * Adds `value` to `set`.
+ *
+ * @private
+ * @param {Object} set The set to modify.
+ * @param {*} value The value to add.
+ * @returns {Object} Returns `set`.
+ */
+function addSetEntry(set, value) {
+  // Don't return `set.add` because it's not chainable in IE 11.
+  set.add(value);
+  return set;
+}
 
 /**
- * @override
+ * A specialized version of `_.forEach` for arrays without support for
+ * iteratee shorthands.
+ *
+ * @private
+ * @param {Array} [array] The array to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns `array`.
  */
-BufferReader.prototype.string = function read_string_buffer() {
-    var len = this.uint32(); // modifies pos
-    return this.buf.utf8Slice
-        ? this.buf.utf8Slice(this.pos, this.pos = Math.min(this.pos + len, this.len))
-        : this.buf.toString("utf-8", this.pos, this.pos = Math.min(this.pos + len, this.len));
-};
+function arrayEach(array, iteratee) {
+  var index = -1,
+      length = array ? array.length : 0;
+
+  while (++index < length) {
+    if (iteratee(array[index], index, array) === false) {
+      break;
+    }
+  }
+  return array;
+}
 
 /**
- * Reads a sequence of bytes preceeded by its length as a varint.
- * @name BufferReader#bytes
- * @function
- * @returns {Buffer} Value read
+ * Appends the elements of `values` to `array`.
+ *
+ * @private
+ * @param {Array} array The array to modify.
+ * @param {Array} values The values to append.
+ * @returns {Array} Returns `array`.
  */
+function arrayPush(array, values) {
+  var index = -1,
+      length = values.length,
+      offset = array.length;
 
-BufferReader._configure();
+  while (++index < length) {
+    array[offset + index] = values[index];
+  }
+  return array;
+}
+
+/**
+ * A specialized version of `_.reduce` for arrays without support for
+ * iteratee shorthands.
+ *
+ * @private
+ * @param {Array} [array] The array to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @param {*} [accumulator] The initial value.
+ * @param {boolean} [initAccum] Specify using the first element of `array` as
+ *  the initial value.
+ * @returns {*} Returns the accumulated value.
+ */
+function arrayReduce(array, iteratee, accumulator, initAccum) {
+  var index = -1,
+      length = array ? array.length : 0;
+
+  if (initAccum && length) {
+    accumulator = array[++index];
+  }
+  while (++index < length) {
+    accumulator = iteratee(accumulator, array[index], index, array);
+  }
+  return accumulator;
+}
+
+/**
+ * The base implementation of `_.times` without support for iteratee shorthands
+ * or max array length checks.
+ *
+ * @private
+ * @param {number} n The number of times to invoke `iteratee`.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns the array of results.
+ */
+function baseTimes(n, iteratee) {
+  var index = -1,
+      result = Array(n);
+
+  while (++index < n) {
+    result[index] = iteratee(index);
+  }
+  return result;
+}
+
+/**
+ * Gets the value at `key` of `object`.
+ *
+ * @private
+ * @param {Object} [object] The object to query.
+ * @param {string} key The key of the property to get.
+ * @returns {*} Returns the property value.
+ */
+function getValue(object, key) {
+  return object == null ? undefined : object[key];
+}
+
+/**
+ * Checks if `value` is a host object in IE < 9.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a host object, else `false`.
+ */
+function isHostObject(value) {
+  // Many host objects are `Object` objects that can coerce to strings
+  // despite having improperly defined `toString` methods.
+  var result = false;
+  if (value != null && typeof value.toString != 'function') {
+    try {
+      result = !!(value + '');
+    } catch (e) {}
+  }
+  return result;
+}
+
+/**
+ * Converts `map` to its key-value pairs.
+ *
+ * @private
+ * @param {Object} map The map to convert.
+ * @returns {Array} Returns the key-value pairs.
+ */
+function mapToArray(map) {
+  var index = -1,
+      result = Array(map.size);
+
+  map.forEach(function(value, key) {
+    result[++index] = [key, value];
+  });
+  return result;
+}
+
+/**
+ * Creates a unary function that invokes `func` with its argument transformed.
+ *
+ * @private
+ * @param {Function} func The function to wrap.
+ * @param {Function} transform The argument transform.
+ * @returns {Function} Returns the new function.
+ */
+function overArg(func, transform) {
+  return function(arg) {
+    return func(transform(arg));
+  };
+}
+
+/**
+ * Converts `set` to an array of its values.
+ *
+ * @private
+ * @param {Object} set The set to convert.
+ * @returns {Array} Returns the values.
+ */
+function setToArray(set) {
+  var index = -1,
+      result = Array(set.size);
+
+  set.forEach(function(value) {
+    result[++index] = value;
+  });
+  return result;
+}
+
+/** Used for built-in method references. */
+var arrayProto = Array.prototype,
+    funcProto = Function.prototype,
+    objectProto = Object.prototype;
+
+/** Used to detect overreaching core-js shims. */
+var coreJsData = root['__core-js_shared__'];
+
+/** Used to detect methods masquerading as native. */
+var maskSrcKey = (function() {
+  var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
+  return uid ? ('Symbol(src)_1.' + uid) : '';
+}());
+
+/** Used to resolve the decompiled source of functions. */
+var funcToString = funcProto.toString;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var objectToString = objectProto.toString;
+
+/** Used to detect if a method is native. */
+var reIsNative = RegExp('^' +
+  funcToString.call(hasOwnProperty).replace(reRegExpChar, '\\$&')
+  .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
+);
+
+/** Built-in value references. */
+var Buffer = moduleExports ? root.Buffer : undefined,
+    Symbol = root.Symbol,
+    Uint8Array = root.Uint8Array,
+    getPrototype = overArg(Object.getPrototypeOf, Object),
+    objectCreate = Object.create,
+    propertyIsEnumerable = objectProto.propertyIsEnumerable,
+    splice = arrayProto.splice;
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeGetSymbols = Object.getOwnPropertySymbols,
+    nativeIsBuffer = Buffer ? Buffer.isBuffer : undefined,
+    nativeKeys = overArg(Object.keys, Object);
+
+/* Built-in method references that are verified to be native. */
+var DataView = getNative(root, 'DataView'),
+    Map = getNative(root, 'Map'),
+    Promise = getNative(root, 'Promise'),
+    Set = getNative(root, 'Set'),
+    WeakMap = getNative(root, 'WeakMap'),
+    nativeCreate = getNative(Object, 'create');
+
+/** Used to detect maps, sets, and weakmaps. */
+var dataViewCtorString = toSource(DataView),
+    mapCtorString = toSource(Map),
+    promiseCtorString = toSource(Promise),
+    setCtorString = toSource(Set),
+    weakMapCtorString = toSource(WeakMap);
+
+/** Used to convert symbols to primitives and strings. */
+var symbolProto = Symbol ? Symbol.prototype : undefined,
+    symbolValueOf = symbolProto ? symbolProto.valueOf : undefined;
+
+/**
+ * Creates a hash object.
+ *
+ * @private
+ * @constructor
+ * @param {Array} [entries] The key-value pairs to cache.
+ */
+function Hash(entries) {
+  var index = -1,
+      length = entries ? entries.length : 0;
+
+  this.clear();
+  while (++index < length) {
+    var entry = entries[index];
+    this.set(entry[0], entry[1]);
+  }
+}
+
+/**
+ * Removes all key-value entries from the hash.
+ *
+ * @private
+ * @name clear
+ * @memberOf Hash
+ */
+function hashClear() {
+  this.__data__ = nativeCreate ? nativeCreate(null) : {};
+}
+
+/**
+ * Removes `key` and its value from the hash.
+ *
+ * @private
+ * @name delete
+ * @memberOf Hash
+ * @param {Object} hash The hash to modify.
+ * @param {string} key The key of the value to remove.
+ * @returns {boolean} Returns `true` if the entry was removed, else `false`.
+ */
+function hashDelete(key) {
+  return this.has(key) && delete this.__data__[key];
+}
+
+/**
+ * Gets the hash value for `key`.
+ *
+ * @private
+ * @name get
+ * @memberOf Hash
+ * @param {string} key The key of the value to get.
+ * @returns {*} Returns the entry value.
+ */
+function hashGet(key) {
+  var data = this.__data__;
+  if (nativeCreate) {
+    var result = data[key];
+    return result === HASH_UNDEFINED ? undefined : result;
+  }
+  return hasOwnProperty.call(data, key) ? data[key] : undefined;
+}
+
+/**
+ * Checks if a hash value for `key` exists.
+ *
+ * @private
+ * @name has
+ * @memberOf Hash
+ * @param {string} key The key of the entry to check.
+ * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
+ */
+function hashHas(key) {
+  var data = this.__data__;
+  return nativeCreate ? data[key] !== undefined : hasOwnProperty.call(data, key);
+}
+
+/**
+ * Sets the hash `key` to `value`.
+ *
+ * @private
+ * @name set
+ * @memberOf Hash
+ * @param {string} key The key of the value to set.
+ * @param {*} value The value to set.
+ * @returns {Object} Returns the hash instance.
+ */
+function hashSet(key, value) {
+  var data = this.__data__;
+  data[key] = (nativeCreate && value === undefined) ? HASH_UNDEFINED : value;
+  return this;
+}
+
+// Add methods to `Hash`.
+Hash.prototype.clear = hashClear;
+Hash.prototype['delete'] = hashDelete;
+Hash.prototype.get = hashGet;
+Hash.prototype.has = hashHas;
+Hash.prototype.set = hashSet;
+
+/**
+ * Creates an list cache object.
+ *
+ * @private
+ * @constructor
+ * @param {Array} [entries] The key-value pairs to cache.
+ */
+function ListCache(entries) {
+  var index = -1,
+      length = entries ? entries.length : 0;
+
+  this.clear();
+  while (++index < length) {
+    var entry = entries[index];
+    this.set(entry[0], entry[1]);
+  }
+}
+
+/**
+ * Removes all key-value entries from the list cache.
+ *
+ * @private
+ * @name clear
+ * @memberOf ListCache
+ */
+function listCacheClear() {
+  this.__data__ = [];
+}
+
+/**
+ * Removes `key` and its value from the list cache.
+ *
+ * @private
+ * @name delete
+ * @memberOf ListCache
+ * @param {string} key The key of the value to remove.
+ * @returns {boolean} Returns `true` if the entry was removed, else `false`.
+ */
+function listCacheDelete(key) {
+  var data = this.__data__,
+      index = assocIndexOf(data, key);
+
+  if (index < 0) {
+    return false;
+  }
+  var lastIndex = data.length - 1;
+  if (index == lastIndex) {
+    data.pop();
+  } else {
+    splice.call(data, index, 1);
+  }
+  return true;
+}
+
+/**
+ * Gets the list cache value for `key`.
+ *
+ * @private
+ * @name get
+ * @memberOf ListCache
+ * @param {string} key The key of the value to get.
+ * @returns {*} Returns the entry value.
+ */
+function listCacheGet(key) {
+  var data = this.__data__,
+      index = assocIndexOf(data, key);
+
+  return index < 0 ? undefined : data[index][1];
+}
+
+/**
+ * Checks if a list cache value for `key` exists.
+ *
+ * @private
+ * @name has
+ * @memberOf ListCache
+ * @param {string} key The key of the entry to check.
+ * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
+ */
+function listCacheHas(key) {
+  return assocIndexOf(this.__data__, key) > -1;
+}
+
+/**
+ * Sets the list cache `key` to `value`.
+ *
+ * @private
+ * @name set
+ * @memberOf ListCache
+ * @param {string} key The key of the value to set.
+ * @param {*} value The value to set.
+ * @returns {Object} Returns the list cache instance.
+ */
+function listCacheSet(key, value) {
+  var data = this.__data__,
+      index = assocIndexOf(data, key);
+
+  if (index < 0) {
+    data.push([key, value]);
+  } else {
+    data[index][1] = value;
+  }
+  return this;
+}
+
+// Add methods to `ListCache`.
+ListCache.prototype.clear = listCacheClear;
+ListCache.prototype['delete'] = listCacheDelete;
+ListCache.prototype.get = listCacheGet;
+ListCache.prototype.has = listCacheHas;
+ListCache.prototype.set = listCacheSet;
+
+/**
+ * Creates a map cache object to store key-value pairs.
+ *
+ * @private
+ * @constructor
+ * @param {Array} [entries] The key-value pairs to cache.
+ */
+function MapCache(entries) {
+  var index = -1,
+      length = entries ? entries.length : 0;
+
+  this.clear();
+  while (++index < length) {
+    var entry = entries[index];
+    this.set(entry[0], entry[1]);
+  }
+}
+
+/**
+ * Removes all key-value entries from the map.
+ *
+ * @private
+ * @name clear
+ * @memberOf MapCache
+ */
+function mapCacheClear() {
+  this.__data__ = {
+    'hash': new Hash,
+    'map': new (Map || ListCache),
+    'string': new Hash
+  };
+}
+
+/**
+ * Removes `key` and its value from the map.
+ *
+ * @private
+ * @name delete
+ * @memberOf MapCache
+ * @param {string} key The key of the value to remove.
+ * @returns {boolean} Returns `true` if the entry was removed, else `false`.
+ */
+function mapCacheDelete(key) {
+  return getMapData(this, key)['delete'](key);
+}
+
+/**
+ * Gets the map value for `key`.
+ *
+ * @private
+ * @name get
+ * @memberOf MapCache
+ * @param {string} key The key of the value to get.
+ * @returns {*} Returns the entry value.
+ */
+function mapCacheGet(key) {
+  return getMapData(this, key).get(key);
+}
+
+/**
+ * Checks if a map value for `key` exists.
+ *
+ * @private
+ * @name has
+ * @memberOf MapCache
+ * @param {string} key The key of the entry to check.
+ * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
+ */
+function mapCacheHas(key) {
+  return getMapData(this, key).has(key);
+}
+
+/**
+ * Sets the map `key` to `value`.
+ *
+ * @private
+ * @name set
+ * @memberOf MapCache
+ * @param {string} key The key of the value to set.
+ * @param {*} value The value to set.
+ * @returns {Object} Returns the map cache instance.
+ */
+function mapCacheSet(key, value) {
+  getMapData(this, key).set(key, value);
+  return this;
+}
+
+// Add methods to `MapCache`.
+MapCache.prototype.clear = mapCacheClear;
+MapCache.prototype['delete'] = mapCacheDelete;
+MapCache.prototype.get = mapCacheGet;
+MapCache.prototype.has = mapCacheHas;
+MapCache.prototype.set = mapCacheSet;
+
+/**
+ * Creates a stack cache object to store key-value pairs.
+ *
+ * @private
+ * @constructor
+ * @param {Array} [entries] The key-value pairs to cache.
+ */
+function Stack(entries) {
+  this.__data__ = new ListCache(entries);
+}
+
+/**
+ * Removes all key-value entries from the stack.
+ *
+ * @private
+ * @name clear
+ * @memberOf Stack
+ */
+function stackClear() {
+  this.__data__ = new ListCache;
+}
+
+/**
+ * Removes `key` and its value from the stack.
+ *
+ * @private
+ * @name delete
+ * @memberOf Stack
+ * @param {string} key The key of the value to remove.
+ * @returns {boolean} Returns `true` if the entry was removed, else `false`.
+ */
+function stackDelete(key) {
+  return this.__data__['delete'](key);
+}
+
+/**
+ * Gets the stack value for `key`.
+ *
+ * @private
+ * @name get
+ * @memberOf Stack
+ * @param {string} key The key of the value to get.
+ * @returns {*} Returns the entry value.
+ */
+function stackGet(key) {
+  return this.__data__.get(key);
+}
+
+/**
+ * Checks if a stack value for `key` exists.
+ *
+ * @private
+ * @name has
+ * @memberOf Stack
+ * @param {string} key The key of the entry to check.
+ * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
+ */
+function stackHas(key) {
+  return this.__data__.has(key);
+}
+
+/**
+ * Sets the stack `key` to `value`.
+ *
+ * @private
+ * @name set
+ * @memberOf Stack
+ * @param {string} key The key of the value to set.
+ * @param {*} value The value to set.
+ * @returns {Object} Returns the stack cache instance.
+ */
+function stackSet(key, value) {
+  var cache = this.__data__;
+  if (cache instanceof ListCache) {
+    var pairs = cache.__data__;
+    if (!Map || (pairs.length < LARGE_ARRAY_SIZE - 1)) {
+      pairs.push([key, value]);
+      return this;
+    }
+    cache = this.__data__ = new MapCache(pairs);
+  }
+  cache.set(key, value);
+  return this;
+}
+
+// Add methods to `Stack`.
+Stack.prototype.clear = stackClear;
+Stack.prototype['delete'] = stackDelete;
+Stack.prototype.get = stackGet;
+Stack.prototype.has = stackHas;
+Stack.prototype.set = stackSet;
+
+/**
+ * Creates an array of the enumerable property names of the array-like `value`.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @param {boolean} inherited Specify returning inherited property names.
+ * @returns {Array} Returns the array of property names.
+ */
+function arrayLikeKeys(value, inherited) {
+  // Safari 8.1 makes `arguments.callee` enumerable in strict mode.
+  // Safari 9 makes `arguments.length` enumerable in strict mode.
+  var result = (isArray(value) || isArguments(value))
+    ? baseTimes(value.length, String)
+    : [];
+
+  var length = result.length,
+      skipIndexes = !!length;
+
+  for (var key in value) {
+    if ((inherited || hasOwnProperty.call(value, key)) &&
+        !(skipIndexes && (key == 'length' || isIndex(key, length)))) {
+      result.push(key);
+    }
+  }
+  return result;
+}
+
+/**
+ * Assigns `value` to `key` of `object` if the existing value is not equivalent
+ * using [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+ * for equality comparisons.
+ *
+ * @private
+ * @param {Object} object The object to modify.
+ * @param {string} key The key of the property to assign.
+ * @param {*} value The value to assign.
+ */
+function assignValue(object, key, value) {
+  var objValue = object[key];
+  if (!(hasOwnProperty.call(object, key) && eq(objValue, value)) ||
+      (value === undefined && !(key in object))) {
+    object[key] = value;
+  }
+}
+
+/**
+ * Gets the index at which the `key` is found in `array` of key-value pairs.
+ *
+ * @private
+ * @param {Array} array The array to inspect.
+ * @param {*} key The key to search for.
+ * @returns {number} Returns the index of the matched value, else `-1`.
+ */
+function assocIndexOf(array, key) {
+  var length = array.length;
+  while (length--) {
+    if (eq(array[length][0], key)) {
+      return length;
+    }
+  }
+  return -1;
+}
+
+/**
+ * The base implementation of `_.assign` without support for multiple sources
+ * or `customizer` functions.
+ *
+ * @private
+ * @param {Object} object The destination object.
+ * @param {Object} source The source object.
+ * @returns {Object} Returns `object`.
+ */
+function baseAssign(object, source) {
+  return object && copyObject(source, keys(source), object);
+}
+
+/**
+ * The base implementation of `_.clone` and `_.cloneDeep` which tracks
+ * traversed objects.
+ *
+ * @private
+ * @param {*} value The value to clone.
+ * @param {boolean} [isDeep] Specify a deep clone.
+ * @param {boolean} [isFull] Specify a clone including symbols.
+ * @param {Function} [customizer] The function to customize cloning.
+ * @param {string} [key] The key of `value`.
+ * @param {Object} [object] The parent object of `value`.
+ * @param {Object} [stack] Tracks traversed objects and their clone counterparts.
+ * @returns {*} Returns the cloned value.
+ */
+function baseClone(value, isDeep, isFull, customizer, key, object, stack) {
+  var result;
+  if (customizer) {
+    result = object ? customizer(value, key, object, stack) : customizer(value);
+  }
+  if (result !== undefined) {
+    return result;
+  }
+  if (!isObject(value)) {
+    return value;
+  }
+  var isArr = isArray(value);
+  if (isArr) {
+    result = initCloneArray(value);
+    if (!isDeep) {
+      return copyArray(value, result);
+    }
+  } else {
+    var tag = getTag(value),
+        isFunc = tag == funcTag || tag == genTag;
+
+    if (isBuffer(value)) {
+      return cloneBuffer(value, isDeep);
+    }
+    if (tag == objectTag || tag == argsTag || (isFunc && !object)) {
+      if (isHostObject(value)) {
+        return object ? value : {};
+      }
+      result = initCloneObject(isFunc ? {} : value);
+      if (!isDeep) {
+        return copySymbols(value, baseAssign(result, value));
+      }
+    } else {
+      if (!cloneableTags[tag]) {
+        return object ? value : {};
+      }
+      result = initCloneByTag(value, tag, baseClone, isDeep);
+    }
+  }
+  // Check for circular references and return its corresponding clone.
+  stack || (stack = new Stack);
+  var stacked = stack.get(value);
+  if (stacked) {
+    return stacked;
+  }
+  stack.set(value, result);
+
+  if (!isArr) {
+    var props = isFull ? getAllKeys(value) : keys(value);
+  }
+  arrayEach(props || value, function(subValue, key) {
+    if (props) {
+      key = subValue;
+      subValue = value[key];
+    }
+    // Recursively populate clone (susceptible to call stack limits).
+    assignValue(result, key, baseClone(subValue, isDeep, isFull, customizer, key, value, stack));
+  });
+  return result;
+}
+
+/**
+ * The base implementation of `_.create` without support for assigning
+ * properties to the created object.
+ *
+ * @private
+ * @param {Object} prototype The object to inherit from.
+ * @returns {Object} Returns the new object.
+ */
+function baseCreate(proto) {
+  return isObject(proto) ? objectCreate(proto) : {};
+}
+
+/**
+ * The base implementation of `getAllKeys` and `getAllKeysIn` which uses
+ * `keysFunc` and `symbolsFunc` to get the enumerable property names and
+ * symbols of `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @param {Function} keysFunc The function to get the keys of `object`.
+ * @param {Function} symbolsFunc The function to get the symbols of `object`.
+ * @returns {Array} Returns the array of property names and symbols.
+ */
+function baseGetAllKeys(object, keysFunc, symbolsFunc) {
+  var result = keysFunc(object);
+  return isArray(object) ? result : arrayPush(result, symbolsFunc(object));
+}
+
+/**
+ * The base implementation of `getTag`.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  return objectToString.call(value);
+}
+
+/**
+ * The base implementation of `_.isNative` without bad shim checks.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a native function,
+ *  else `false`.
+ */
+function baseIsNative(value) {
+  if (!isObject(value) || isMasked(value)) {
+    return false;
+  }
+  var pattern = (isFunction(value) || isHostObject(value)) ? reIsNative : reIsHostCtor;
+  return pattern.test(toSource(value));
+}
+
+/**
+ * The base implementation of `_.keys` which doesn't treat sparse arrays as dense.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of property names.
+ */
+function baseKeys(object) {
+  if (!isPrototype(object)) {
+    return nativeKeys(object);
+  }
+  var result = [];
+  for (var key in Object(object)) {
+    if (hasOwnProperty.call(object, key) && key != 'constructor') {
+      result.push(key);
+    }
+  }
+  return result;
+}
+
+/**
+ * Creates a clone of  `buffer`.
+ *
+ * @private
+ * @param {Buffer} buffer The buffer to clone.
+ * @param {boolean} [isDeep] Specify a deep clone.
+ * @returns {Buffer} Returns the cloned buffer.
+ */
+function cloneBuffer(buffer, isDeep) {
+  if (isDeep) {
+    return buffer.slice();
+  }
+  var result = new buffer.constructor(buffer.length);
+  buffer.copy(result);
+  return result;
+}
+
+/**
+ * Creates a clone of `arrayBuffer`.
+ *
+ * @private
+ * @param {ArrayBuffer} arrayBuffer The array buffer to clone.
+ * @returns {ArrayBuffer} Returns the cloned array buffer.
+ */
+function cloneArrayBuffer(arrayBuffer) {
+  var result = new arrayBuffer.constructor(arrayBuffer.byteLength);
+  new Uint8Array(result).set(new Uint8Array(arrayBuffer));
+  return result;
+}
+
+/**
+ * Creates a clone of `dataView`.
+ *
+ * @private
+ * @param {Object} dataView The data view to clone.
+ * @param {boolean} [isDeep] Specify a deep clone.
+ * @returns {Object} Returns the cloned data view.
+ */
+function cloneDataView(dataView, isDeep) {
+  var buffer = isDeep ? cloneArrayBuffer(dataView.buffer) : dataView.buffer;
+  return new dataView.constructor(buffer, dataView.byteOffset, dataView.byteLength);
+}
+
+/**
+ * Creates a clone of `map`.
+ *
+ * @private
+ * @param {Object} map The map to clone.
+ * @param {Function} cloneFunc The function to clone values.
+ * @param {boolean} [isDeep] Specify a deep clone.
+ * @returns {Object} Returns the cloned map.
+ */
+function cloneMap(map, isDeep, cloneFunc) {
+  var array = isDeep ? cloneFunc(mapToArray(map), true) : mapToArray(map);
+  return arrayReduce(array, addMapEntry, new map.constructor);
+}
+
+/**
+ * Creates a clone of `regexp`.
+ *
+ * @private
+ * @param {Object} regexp The regexp to clone.
+ * @returns {Object} Returns the cloned regexp.
+ */
+function cloneRegExp(regexp) {
+  var result = new regexp.constructor(regexp.source, reFlags.exec(regexp));
+  result.lastIndex = regexp.lastIndex;
+  return result;
+}
+
+/**
+ * Creates a clone of `set`.
+ *
+ * @private
+ * @param {Object} set The set to clone.
+ * @param {Function} cloneFunc The function to clone values.
+ * @param {boolean} [isDeep] Specify a deep clone.
+ * @returns {Object} Returns the cloned set.
+ */
+function cloneSet(set, isDeep, cloneFunc) {
+  var array = isDeep ? cloneFunc(setToArray(set), true) : setToArray(set);
+  return arrayReduce(array, addSetEntry, new set.constructor);
+}
+
+/**
+ * Creates a clone of the `symbol` object.
+ *
+ * @private
+ * @param {Object} symbol The symbol object to clone.
+ * @returns {Object} Returns the cloned symbol object.
+ */
+function cloneSymbol(symbol) {
+  return symbolValueOf ? Object(symbolValueOf.call(symbol)) : {};
+}
+
+/**
+ * Creates a clone of `typedArray`.
+ *
+ * @private
+ * @param {Object} typedArray The typed array to clone.
+ * @param {boolean} [isDeep] Specify a deep clone.
+ * @returns {Object} Returns the cloned typed array.
+ */
+function cloneTypedArray(typedArray, isDeep) {
+  var buffer = isDeep ? cloneArrayBuffer(typedArray.buffer) : typedArray.buffer;
+  return new typedArray.constructor(buffer, typedArray.byteOffset, typedArray.length);
+}
+
+/**
+ * Copies the values of `source` to `array`.
+ *
+ * @private
+ * @param {Array} source The array to copy values from.
+ * @param {Array} [array=[]] The array to copy values to.
+ * @returns {Array} Returns `array`.
+ */
+function copyArray(source, array) {
+  var index = -1,
+      length = source.length;
+
+  array || (array = Array(length));
+  while (++index < length) {
+    array[index] = source[index];
+  }
+  return array;
+}
+
+/**
+ * Copies properties of `source` to `object`.
+ *
+ * @private
+ * @param {Object} source The object to copy properties from.
+ * @param {Array} props The property identifiers to copy.
+ * @param {Object} [object={}] The object to copy properties to.
+ * @param {Function} [customizer] The function to customize copied values.
+ * @returns {Object} Returns `object`.
+ */
+function copyObject(source, props, object, customizer) {
+  object || (object = {});
+
+  var index = -1,
+      length = props.length;
+
+  while (++index < length) {
+    var key = props[index];
+
+    var newValue = customizer
+      ? customizer(object[key], source[key], key, object, source)
+      : undefined;
+
+    assignValue(object, key, newValue === undefined ? source[key] : newValue);
+  }
+  return object;
+}
+
+/**
+ * Copies own symbol properties of `source` to `object`.
+ *
+ * @private
+ * @param {Object} source The object to copy symbols from.
+ * @param {Object} [object={}] The object to copy symbols to.
+ * @returns {Object} Returns `object`.
+ */
+function copySymbols(source, object) {
+  return copyObject(source, getSymbols(source), object);
+}
+
+/**
+ * Creates an array of own enumerable property names and symbols of `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of property names and symbols.
+ */
+function getAllKeys(object) {
+  return baseGetAllKeys(object, keys, getSymbols);
+}
+
+/**
+ * Gets the data for `map`.
+ *
+ * @private
+ * @param {Object} map The map to query.
+ * @param {string} key The reference key.
+ * @returns {*} Returns the map data.
+ */
+function getMapData(map, key) {
+  var data = map.__data__;
+  return isKeyable(key)
+    ? data[typeof key == 'string' ? 'string' : 'hash']
+    : data.map;
+}
+
+/**
+ * Gets the native function at `key` of `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @param {string} key The key of the method to get.
+ * @returns {*} Returns the function if it's native, else `undefined`.
+ */
+function getNative(object, key) {
+  var value = getValue(object, key);
+  return baseIsNative(value) ? value : undefined;
+}
+
+/**
+ * Creates an array of the own enumerable symbol properties of `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of symbols.
+ */
+var getSymbols = nativeGetSymbols ? overArg(nativeGetSymbols, Object) : stubArray;
+
+/**
+ * Gets the `toStringTag` of `value`.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+var getTag = baseGetTag;
+
+// Fallback for data views, maps, sets, and weak maps in IE 11,
+// for data views in Edge < 14, and promises in Node.js.
+if ((DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag) ||
+    (Map && getTag(new Map) != mapTag) ||
+    (Promise && getTag(Promise.resolve()) != promiseTag) ||
+    (Set && getTag(new Set) != setTag) ||
+    (WeakMap && getTag(new WeakMap) != weakMapTag)) {
+  getTag = function(value) {
+    var result = objectToString.call(value),
+        Ctor = result == objectTag ? value.constructor : undefined,
+        ctorString = Ctor ? toSource(Ctor) : undefined;
+
+    if (ctorString) {
+      switch (ctorString) {
+        case dataViewCtorString: return dataViewTag;
+        case mapCtorString: return mapTag;
+        case promiseCtorString: return promiseTag;
+        case setCtorString: return setTag;
+        case weakMapCtorString: return weakMapTag;
+      }
+    }
+    return result;
+  };
+}
+
+/**
+ * Initializes an array clone.
+ *
+ * @private
+ * @param {Array} array The array to clone.
+ * @returns {Array} Returns the initialized clone.
+ */
+function initCloneArray(array) {
+  var length = array.length,
+      result = array.constructor(length);
+
+  // Add properties assigned by `RegExp#exec`.
+  if (length && typeof array[0] == 'string' && hasOwnProperty.call(array, 'index')) {
+    result.index = array.index;
+    result.input = array.input;
+  }
+  return result;
+}
+
+/**
+ * Initializes an object clone.
+ *
+ * @private
+ * @param {Object} object The object to clone.
+ * @returns {Object} Returns the initialized clone.
+ */
+function initCloneObject(object) {
+  return (typeof object.constructor == 'function' && !isPrototype(object))
+    ? baseCreate(getPrototype(object))
+    : {};
+}
+
+/**
+ * Initializes an object clone based on its `toStringTag`.
+ *
+ * **Note:** This function only supports cloning values with tags of
+ * `Boolean`, `Date`, `Error`, `Number`, `RegExp`, or `String`.
+ *
+ * @private
+ * @param {Object} object The object to clone.
+ * @param {string} tag The `toStringTag` of the object to clone.
+ * @param {Function} cloneFunc The function to clone values.
+ * @param {boolean} [isDeep] Specify a deep clone.
+ * @returns {Object} Returns the initialized clone.
+ */
+function initCloneByTag(object, tag, cloneFunc, isDeep) {
+  var Ctor = object.constructor;
+  switch (tag) {
+    case arrayBufferTag:
+      return cloneArrayBuffer(object);
+
+    case boolTag:
+    case dateTag:
+      return new Ctor(+object);
+
+    case dataViewTag:
+      return cloneDataView(object, isDeep);
+
+    case float32Tag: case float64Tag:
+    case int8Tag: case int16Tag: case int32Tag:
+    case uint8Tag: case uint8ClampedTag: case uint16Tag: case uint32Tag:
+      return cloneTypedArray(object, isDeep);
+
+    case mapTag:
+      return cloneMap(object, isDeep, cloneFunc);
+
+    case numberTag:
+    case stringTag:
+      return new Ctor(object);
+
+    case regexpTag:
+      return cloneRegExp(object);
+
+    case setTag:
+      return cloneSet(object, isDeep, cloneFunc);
+
+    case symbolTag:
+      return cloneSymbol(object);
+  }
+}
+
+/**
+ * Checks if `value` is a valid array-like index.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
+ * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
+ */
+function isIndex(value, length) {
+  length = length == null ? MAX_SAFE_INTEGER : length;
+  return !!length &&
+    (typeof value == 'number' || reIsUint.test(value)) &&
+    (value > -1 && value % 1 == 0 && value < length);
+}
+
+/**
+ * Checks if `value` is suitable for use as unique object key.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is suitable, else `false`.
+ */
+function isKeyable(value) {
+  var type = typeof value;
+  return (type == 'string' || type == 'number' || type == 'symbol' || type == 'boolean')
+    ? (value !== '__proto__')
+    : (value === null);
+}
+
+/**
+ * Checks if `func` has its source masked.
+ *
+ * @private
+ * @param {Function} func The function to check.
+ * @returns {boolean} Returns `true` if `func` is masked, else `false`.
+ */
+function isMasked(func) {
+  return !!maskSrcKey && (maskSrcKey in func);
+}
+
+/**
+ * Checks if `value` is likely a prototype object.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a prototype, else `false`.
+ */
+function isPrototype(value) {
+  var Ctor = value && value.constructor,
+      proto = (typeof Ctor == 'function' && Ctor.prototype) || objectProto;
+
+  return value === proto;
+}
+
+/**
+ * Converts `func` to its source code.
+ *
+ * @private
+ * @param {Function} func The function to process.
+ * @returns {string} Returns the source code.
+ */
+function toSource(func) {
+  if (func != null) {
+    try {
+      return funcToString.call(func);
+    } catch (e) {}
+    try {
+      return (func + '');
+    } catch (e) {}
+  }
+  return '';
+}
+
+/**
+ * Creates a shallow clone of `value`.
+ *
+ * **Note:** This method is loosely based on the
+ * [structured clone algorithm](https://mdn.io/Structured_clone_algorithm)
+ * and supports cloning arrays, array buffers, booleans, date objects, maps,
+ * numbers, `Object` objects, regexes, sets, strings, symbols, and typed
+ * arrays. The own enumerable properties of `arguments` objects are cloned
+ * as plain objects. An empty object is returned for uncloneable values such
+ * as error objects, functions, DOM nodes, and WeakMaps.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to clone.
+ * @returns {*} Returns the cloned value.
+ * @see _.cloneDeep
+ * @example
+ *
+ * var objects = [{ 'a': 1 }, { 'b': 2 }];
+ *
+ * var shallow = _.clone(objects);
+ * console.log(shallow[0] === objects[0]);
+ * // => true
+ */
+function clone(value) {
+  return baseClone(value, false, true);
+}
+
+/**
+ * Performs a
+ * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+ * comparison between two values to determine if they are equivalent.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to compare.
+ * @param {*} other The other value to compare.
+ * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
+ * @example
+ *
+ * var object = { 'a': 1 };
+ * var other = { 'a': 1 };
+ *
+ * _.eq(object, object);
+ * // => true
+ *
+ * _.eq(object, other);
+ * // => false
+ *
+ * _.eq('a', 'a');
+ * // => true
+ *
+ * _.eq('a', Object('a'));
+ * // => false
+ *
+ * _.eq(NaN, NaN);
+ * // => true
+ */
+function eq(value, other) {
+  return value === other || (value !== value && other !== other);
+}
+
+/**
+ * Checks if `value` is likely an `arguments` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an `arguments` object,
+ *  else `false`.
+ * @example
+ *
+ * _.isArguments(function() { return arguments; }());
+ * // => true
+ *
+ * _.isArguments([1, 2, 3]);
+ * // => false
+ */
+function isArguments(value) {
+  // Safari 8.1 makes `arguments.callee` enumerable in strict mode.
+  return isArrayLikeObject(value) && hasOwnProperty.call(value, 'callee') &&
+    (!propertyIsEnumerable.call(value, 'callee') || objectToString.call(value) == argsTag);
+}
+
+/**
+ * Checks if `value` is classified as an `Array` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an array, else `false`.
+ * @example
+ *
+ * _.isArray([1, 2, 3]);
+ * // => true
+ *
+ * _.isArray(document.body.children);
+ * // => false
+ *
+ * _.isArray('abc');
+ * // => false
+ *
+ * _.isArray(_.noop);
+ * // => false
+ */
+var isArray = Array.isArray;
+
+/**
+ * Checks if `value` is array-like. A value is considered array-like if it's
+ * not a function and has a `value.length` that's an integer greater than or
+ * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+ * @example
+ *
+ * _.isArrayLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isArrayLike(document.body.children);
+ * // => true
+ *
+ * _.isArrayLike('abc');
+ * // => true
+ *
+ * _.isArrayLike(_.noop);
+ * // => false
+ */
+function isArrayLike(value) {
+  return value != null && isLength(value.length) && !isFunction(value);
+}
+
+/**
+ * This method is like `_.isArrayLike` except that it also checks if `value`
+ * is an object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an array-like object,
+ *  else `false`.
+ * @example
+ *
+ * _.isArrayLikeObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isArrayLikeObject(document.body.children);
+ * // => true
+ *
+ * _.isArrayLikeObject('abc');
+ * // => false
+ *
+ * _.isArrayLikeObject(_.noop);
+ * // => false
+ */
+function isArrayLikeObject(value) {
+  return isObjectLike(value) && isArrayLike(value);
+}
+
+/**
+ * Checks if `value` is a buffer.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.3.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a buffer, else `false`.
+ * @example
+ *
+ * _.isBuffer(new Buffer(2));
+ * // => true
+ *
+ * _.isBuffer(new Uint8Array(2));
+ * // => false
+ */
+var isBuffer = nativeIsBuffer || stubFalse;
+
+/**
+ * Checks if `value` is classified as a `Function` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a function, else `false`.
+ * @example
+ *
+ * _.isFunction(_);
+ * // => true
+ *
+ * _.isFunction(/abc/);
+ * // => false
+ */
+function isFunction(value) {
+  // The use of `Object#toString` avoids issues with the `typeof` operator
+  // in Safari 8-9 which returns 'object' for typed array and other constructors.
+  var tag = isObject(value) ? objectToString.call(value) : '';
+  return tag == funcTag || tag == genTag;
+}
+
+/**
+ * Checks if `value` is a valid array-like length.
+ *
+ * **Note:** This method is loosely based on
+ * [`ToLength`](http://ecma-international.org/ecma-262/7.0/#sec-tolength).
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+ * @example
+ *
+ * _.isLength(3);
+ * // => true
+ *
+ * _.isLength(Number.MIN_VALUE);
+ * // => false
+ *
+ * _.isLength(Infinity);
+ * // => false
+ *
+ * _.isLength('3');
+ * // => false
+ */
+function isLength(value) {
+  return typeof value == 'number' &&
+    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+}
+
+/**
+ * Checks if `value` is the
+ * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+ * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(_.noop);
+ * // => true
+ *
+ * _.isObject(null);
+ * // => false
+ */
+function isObject(value) {
+  var type = typeof value;
+  return !!value && (type == 'object' || type == 'function');
+}
+
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return !!value && typeof value == 'object';
+}
+
+/**
+ * Creates an array of the own enumerable property names of `object`.
+ *
+ * **Note:** Non-object values are coerced to objects. See the
+ * [ES spec](http://ecma-international.org/ecma-262/7.0/#sec-object.keys)
+ * for more details.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Object
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of property names.
+ * @example
+ *
+ * function Foo() {
+ *   this.a = 1;
+ *   this.b = 2;
+ * }
+ *
+ * Foo.prototype.c = 3;
+ *
+ * _.keys(new Foo);
+ * // => ['a', 'b'] (iteration order is not guaranteed)
+ *
+ * _.keys('hi');
+ * // => ['0', '1']
+ */
+function keys(object) {
+  return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
+}
+
+/**
+ * This method returns a new empty array.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.13.0
+ * @category Util
+ * @returns {Array} Returns the new empty array.
+ * @example
+ *
+ * var arrays = _.times(2, _.stubArray);
+ *
+ * console.log(arrays);
+ * // => [[], []]
+ *
+ * console.log(arrays[0] === arrays[1]);
+ * // => false
+ */
+function stubArray() {
+  return [];
+}
+
+/**
+ * This method returns `false`.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.13.0
+ * @category Util
+ * @returns {boolean} Returns `false`.
+ * @example
+ *
+ * _.times(2, _.stubFalse);
+ * // => [false, false]
+ */
+function stubFalse() {
+  return false;
+}
+
+module.exports = clone;
 
 
 /***/ }),
@@ -25492,7 +27884,7 @@ module.exports = Transform;
 var Duplex = __webpack_require__(697);
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -25716,7 +28108,7 @@ var origRealpathSync = fs.realpathSync
 
 var version = process.version
 var ok = /^v[0-5]\./.test(version)
-var old = __webpack_require__(981)
+var old = __webpack_require__(117)
 
 function newError (er) {
   return er && er.syscall === 'realpath' && (
@@ -26339,7 +28731,7 @@ module.exports = Transform;
 var Duplex = __webpack_require__(90);
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -26922,16 +29314,16 @@ exports.Channel = grpc.Channel;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(470);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var stream_buffers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(877);
-/* harmony import */ var stream_buffers__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(stream_buffers__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(605);
-/* harmony import */ var yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var long__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(900);
-/* harmony import */ var long__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(long__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var yandex_cloud__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(135);
-/* harmony import */ var yandex_cloud__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(yandex_cloud__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var yandex_cloud__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(135);
+/* harmony import */ var yandex_cloud__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(yandex_cloud__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(470);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var stream_buffers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(877);
+/* harmony import */ var stream_buffers__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(stream_buffers__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(936);
+/* harmony import */ var yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var long__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(900);
+/* harmony import */ var long__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(long__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var archiver__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(248);
 /* harmony import */ var archiver__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(archiver__WEBPACK_IMPORTED_MODULE_5__);
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -26951,81 +29343,80 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.setCommandEcho(true);
+        _actions_core__WEBPACK_IMPORTED_MODULE_1__.setCommandEcho(true);
         try {
-            const inputFunctionId = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("function_id", { required: true });
-            const inputToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("token", { required: true });
-            const inputRuntime = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("runtime", { required: true });
-            const inputEntrypoint = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("entrypoint", { required: true });
-            const inputMemory = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("memory", { required: false });
-            const inputSource = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("source", { required: false });
-            const inputExecutionTimeout = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("execution_timeout", { required: false });
-            const inputEnvironment = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("environment", { required: false });
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Parsed inputs");
+            const inputFunctionId = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("function_id", { required: true });
+            const inputToken = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("token", { required: true });
+            const inputRuntime = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("runtime", { required: true });
+            const inputEntrypoint = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("entrypoint", { required: true });
+            const inputMemory = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("memory", { required: false });
+            const inputSource = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("source", { required: false });
+            const inputExecutionTimeout = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("execution_timeout", { required: false });
+            const inputEnvironment = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("environment", { required: false });
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Parsed inputs");
             const fileContents = yield zipDirectory(inputSource);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Archive inmemory buffer created");
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Archive inmemory buffer created");
             if (!fileContents)
                 throw Error("buffer error");
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Buffer size: ${Buffer.byteLength(fileContents)}b`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Buffer size: ${Buffer.byteLength(fileContents)}b`);
             // IAM token
             // Initialize SDK with your token
-            const session = new yandex_cloud__WEBPACK_IMPORTED_MODULE_4__.Session({ oauthToken: inputToken });
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Session created with token");
+            const session = new yandex_cloud__WEBPACK_IMPORTED_MODULE_0__.Session({ oauthToken: inputToken });
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Session created with token");
             // Create function
-            const functionService = new yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_2__.FunctionService(session);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Function service created");
+            const functionService = new yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_3__.FunctionService(session);
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Function service created");
             // Check if FunctionId exist
             //let exist = functionService.get({ functionId: inputFunctionId });
             //conver variables
             let memory = Number.parseFloat(inputMemory);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Parsed memory ${memory}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Parsed memory ${memory}`);
             let executionTimeout = Number.parseFloat(inputExecutionTimeout);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Parsed timeout ${executionTimeout}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Parsed timeout ${executionTimeout}`);
             // Create new version
             let operation = yield functionService.createVersion({
                 functionId: inputFunctionId,
                 runtime: inputRuntime,
                 entrypoint: inputEntrypoint,
                 resources: {
-                    memory: memory ? long__WEBPACK_IMPORTED_MODULE_3___default().fromNumber(memory * 1024 * 1024) : undefined,
+                    memory: memory ? long__WEBPACK_IMPORTED_MODULE_4___default().fromNumber(memory * 1024 * 1024) : undefined,
                 },
                 environment: parseEnvironmentVariables(inputEnvironment),
                 content: fileContents,
-                executionTimeout: { seconds: long__WEBPACK_IMPORTED_MODULE_3___default().fromNumber(executionTimeout) }
+                executionTimeout: { seconds: long__WEBPACK_IMPORTED_MODULE_4___default().fromNumber(executionTimeout) }
             });
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Operation complete ${inputFunctionId}, ${inputRuntime}, ${inputEntrypoint}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Operation complete ${inputFunctionId}, ${inputRuntime}, ${inputEntrypoint}`);
             if (operation.error)
                 throw Error(`${operation.error.code}: ${operation.error.message}`);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Operation success ${operation.response.value}`);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput("time", new Date().toTimeString());
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Operation success ${operation.response.value}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.setOutput("time", new Date().toTimeString());
         }
         catch (error) {
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Operation error ${error.message}`);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.setFailed(error.message);
         }
     });
 }
 function zipDirectory(source) {
     return __awaiter(this, void 0, void 0, function* () {
-        let outputStreamBuffer = new stream_buffers__WEBPACK_IMPORTED_MODULE_1__.WritableStreamBuffer({
+        let outputStreamBuffer = new stream_buffers__WEBPACK_IMPORTED_MODULE_2__.WritableStreamBuffer({
             initialSize: (1000 * 1024),
             incrementAmount: (1000 * 1024) // grow by 1000 kilobytes each time buffer overflows.
         });
         const archive = archiver__WEBPACK_IMPORTED_MODULE_5___default()("zip", { zlib: { level: 9 } });
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Archive initialize");
+        _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Archive initialize");
         archive.pipe(outputStreamBuffer);
         yield archive
             .directory(source, false)
             .finalize();
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Archive finalized");
+        _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Archive finalized");
         outputStreamBuffer.end();
         let buffer = outputStreamBuffer.getContents();
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Buffer is set");
+        _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Buffer is set");
         return buffer;
     });
 }
 function parseEnvironmentVariables(env) {
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Environment string: ${env}`);
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Environment string: ${env}`);
     return {};
 }
 run();
@@ -27190,7 +29581,7 @@ module.exports = PassThrough;
 var Transform = __webpack_require__(314);
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -27347,7 +29738,7 @@ module.exports = PassThrough;
 var Transform = __webpack_require__(882);
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -27372,7 +29763,412 @@ module.exports = __webpack_require__(413);
 
 /***/ }),
 /* 351 */,
-/* 352 */,
+/* 352 */
+/***/ (function(module) {
+
+"use strict";
+
+module.exports = common;
+
+var commonRe = /\/|\./;
+
+/**
+ * Provides common type definitions.
+ * Can also be used to provide additional google types or your own custom types.
+ * @param {string} name Short name as in `google/protobuf/[name].proto` or full file name
+ * @param {Object.<string,*>} json JSON definition within `google.protobuf` if a short name, otherwise the file's root definition
+ * @returns {undefined}
+ * @property {INamespace} google/protobuf/any.proto Any
+ * @property {INamespace} google/protobuf/duration.proto Duration
+ * @property {INamespace} google/protobuf/empty.proto Empty
+ * @property {INamespace} google/protobuf/field_mask.proto FieldMask
+ * @property {INamespace} google/protobuf/struct.proto Struct, Value, NullValue and ListValue
+ * @property {INamespace} google/protobuf/timestamp.proto Timestamp
+ * @property {INamespace} google/protobuf/wrappers.proto Wrappers
+ * @example
+ * // manually provides descriptor.proto (assumes google/protobuf/ namespace and .proto extension)
+ * protobuf.common("descriptor", descriptorJson);
+ *
+ * // manually provides a custom definition (uses my.foo namespace)
+ * protobuf.common("my/foo/bar.proto", myFooBarJson);
+ */
+function common(name, json) {
+    if (!commonRe.test(name)) {
+        name = "google/protobuf/" + name + ".proto";
+        json = { nested: { google: { nested: { protobuf: { nested: json } } } } };
+    }
+    common[name] = json;
+}
+
+// Not provided because of limited use (feel free to discuss or to provide yourself):
+//
+// google/protobuf/descriptor.proto
+// google/protobuf/source_context.proto
+// google/protobuf/type.proto
+//
+// Stripped and pre-parsed versions of these non-bundled files are instead available as part of
+// the repository or package within the google/protobuf directory.
+
+common("any", {
+
+    /**
+     * Properties of a google.protobuf.Any message.
+     * @interface IAny
+     * @type {Object}
+     * @property {string} [typeUrl]
+     * @property {Uint8Array} [bytes]
+     * @memberof common
+     */
+    Any: {
+        fields: {
+            type_url: {
+                type: "string",
+                id: 1
+            },
+            value: {
+                type: "bytes",
+                id: 2
+            }
+        }
+    }
+});
+
+var timeType;
+
+common("duration", {
+
+    /**
+     * Properties of a google.protobuf.Duration message.
+     * @interface IDuration
+     * @type {Object}
+     * @property {number|Long} [seconds]
+     * @property {number} [nanos]
+     * @memberof common
+     */
+    Duration: timeType = {
+        fields: {
+            seconds: {
+                type: "int64",
+                id: 1
+            },
+            nanos: {
+                type: "int32",
+                id: 2
+            }
+        }
+    }
+});
+
+common("timestamp", {
+
+    /**
+     * Properties of a google.protobuf.Timestamp message.
+     * @interface ITimestamp
+     * @type {Object}
+     * @property {number|Long} [seconds]
+     * @property {number} [nanos]
+     * @memberof common
+     */
+    Timestamp: timeType
+});
+
+common("empty", {
+
+    /**
+     * Properties of a google.protobuf.Empty message.
+     * @interface IEmpty
+     * @memberof common
+     */
+    Empty: {
+        fields: {}
+    }
+});
+
+common("struct", {
+
+    /**
+     * Properties of a google.protobuf.Struct message.
+     * @interface IStruct
+     * @type {Object}
+     * @property {Object.<string,IValue>} [fields]
+     * @memberof common
+     */
+    Struct: {
+        fields: {
+            fields: {
+                keyType: "string",
+                type: "Value",
+                id: 1
+            }
+        }
+    },
+
+    /**
+     * Properties of a google.protobuf.Value message.
+     * @interface IValue
+     * @type {Object}
+     * @property {string} [kind]
+     * @property {0} [nullValue]
+     * @property {number} [numberValue]
+     * @property {string} [stringValue]
+     * @property {boolean} [boolValue]
+     * @property {IStruct} [structValue]
+     * @property {IListValue} [listValue]
+     * @memberof common
+     */
+    Value: {
+        oneofs: {
+            kind: {
+                oneof: [
+                    "nullValue",
+                    "numberValue",
+                    "stringValue",
+                    "boolValue",
+                    "structValue",
+                    "listValue"
+                ]
+            }
+        },
+        fields: {
+            nullValue: {
+                type: "NullValue",
+                id: 1
+            },
+            numberValue: {
+                type: "double",
+                id: 2
+            },
+            stringValue: {
+                type: "string",
+                id: 3
+            },
+            boolValue: {
+                type: "bool",
+                id: 4
+            },
+            structValue: {
+                type: "Struct",
+                id: 5
+            },
+            listValue: {
+                type: "ListValue",
+                id: 6
+            }
+        }
+    },
+
+    NullValue: {
+        values: {
+            NULL_VALUE: 0
+        }
+    },
+
+    /**
+     * Properties of a google.protobuf.ListValue message.
+     * @interface IListValue
+     * @type {Object}
+     * @property {Array.<IValue>} [values]
+     * @memberof common
+     */
+    ListValue: {
+        fields: {
+            values: {
+                rule: "repeated",
+                type: "Value",
+                id: 1
+            }
+        }
+    }
+});
+
+common("wrappers", {
+
+    /**
+     * Properties of a google.protobuf.DoubleValue message.
+     * @interface IDoubleValue
+     * @type {Object}
+     * @property {number} [value]
+     * @memberof common
+     */
+    DoubleValue: {
+        fields: {
+            value: {
+                type: "double",
+                id: 1
+            }
+        }
+    },
+
+    /**
+     * Properties of a google.protobuf.FloatValue message.
+     * @interface IFloatValue
+     * @type {Object}
+     * @property {number} [value]
+     * @memberof common
+     */
+    FloatValue: {
+        fields: {
+            value: {
+                type: "float",
+                id: 1
+            }
+        }
+    },
+
+    /**
+     * Properties of a google.protobuf.Int64Value message.
+     * @interface IInt64Value
+     * @type {Object}
+     * @property {number|Long} [value]
+     * @memberof common
+     */
+    Int64Value: {
+        fields: {
+            value: {
+                type: "int64",
+                id: 1
+            }
+        }
+    },
+
+    /**
+     * Properties of a google.protobuf.UInt64Value message.
+     * @interface IUInt64Value
+     * @type {Object}
+     * @property {number|Long} [value]
+     * @memberof common
+     */
+    UInt64Value: {
+        fields: {
+            value: {
+                type: "uint64",
+                id: 1
+            }
+        }
+    },
+
+    /**
+     * Properties of a google.protobuf.Int32Value message.
+     * @interface IInt32Value
+     * @type {Object}
+     * @property {number} [value]
+     * @memberof common
+     */
+    Int32Value: {
+        fields: {
+            value: {
+                type: "int32",
+                id: 1
+            }
+        }
+    },
+
+    /**
+     * Properties of a google.protobuf.UInt32Value message.
+     * @interface IUInt32Value
+     * @type {Object}
+     * @property {number} [value]
+     * @memberof common
+     */
+    UInt32Value: {
+        fields: {
+            value: {
+                type: "uint32",
+                id: 1
+            }
+        }
+    },
+
+    /**
+     * Properties of a google.protobuf.BoolValue message.
+     * @interface IBoolValue
+     * @type {Object}
+     * @property {boolean} [value]
+     * @memberof common
+     */
+    BoolValue: {
+        fields: {
+            value: {
+                type: "bool",
+                id: 1
+            }
+        }
+    },
+
+    /**
+     * Properties of a google.protobuf.StringValue message.
+     * @interface IStringValue
+     * @type {Object}
+     * @property {string} [value]
+     * @memberof common
+     */
+    StringValue: {
+        fields: {
+            value: {
+                type: "string",
+                id: 1
+            }
+        }
+    },
+
+    /**
+     * Properties of a google.protobuf.BytesValue message.
+     * @interface IBytesValue
+     * @type {Object}
+     * @property {Uint8Array} [value]
+     * @memberof common
+     */
+    BytesValue: {
+        fields: {
+            value: {
+                type: "bytes",
+                id: 1
+            }
+        }
+    }
+});
+
+common("field_mask", {
+
+    /**
+     * Properties of a google.protobuf.FieldMask message.
+     * @interface IDoubleValue
+     * @type {Object}
+     * @property {number} [value]
+     * @memberof common
+     */
+    FieldMask: {
+        fields: {
+            paths: {
+                rule: "repeated",
+                type: "string",
+                id: 1
+            }
+        }
+    }
+});
+
+/**
+ * Gets the root definition of the specified common proto file.
+ *
+ * Bundled definitions are:
+ * - google/protobuf/any.proto
+ * - google/protobuf/duration.proto
+ * - google/protobuf/empty.proto
+ * - google/protobuf/field_mask.proto
+ * - google/protobuf/struct.proto
+ * - google/protobuf/timestamp.proto
+ * - google/protobuf/wrappers.proto
+ *
+ * @param {string} file Proto file name
+ * @returns {INamespace|null} Root definition or `null` if not defined
+ */
+common.get = function get(file) {
+    return common[file] || null;
+};
+
+
+/***/ }),
 /* 353 */,
 /* 354 */
 /***/ (function(module) {
@@ -27485,19 +30281,37 @@ function wideTruncate (str, target) {
 
 
 /***/ }),
-/* 356 */
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-module.exports = require(__webpack_require__.ab + "src/node/extension_binary/node-v72-linux-x64-glibc/grpc_node.node")
-
-/***/ }),
+/* 356 */,
 /* 357 */
 /***/ (function(module) {
 
 module.exports = require("assert");
 
 /***/ }),
-/* 358 */,
+/* 358 */
+/***/ (function(module) {
+
+"use strict";
+
+module.exports = inquire;
+
+/**
+ * Requires a module only if available.
+ * @memberof util
+ * @param {string} moduleName Module to require
+ * @returns {?Object} Required module if available and not empty, otherwise `null`
+ */
+function inquire(moduleName) {
+    try {
+        var mod = eval("quire".replace(/^/,"re"))(moduleName); // eslint-disable-line no-eval
+        if (mod && (mod.length || Object.keys(mod).length))
+            return mod;
+    } catch (e) {} // eslint-disable-line no-empty
+    return null;
+}
+
+
+/***/ }),
 /* 359 */,
 /* 360 */,
 /* 361 */,
@@ -28961,9 +31775,211 @@ module.exports = require("stream");
 
 /***/ }),
 /* 414 */
-/***/ (function(module) {
+/***/ (function(module, __unusedexports, __webpack_require__) {
 
-module.exports = require("url");
+module.exports = (function() {
+  const $protobuf = __webpack_require__(72);
+  const grpc = __webpack_require__(323);
+  const registar = __webpack_require__(866);
+  const util = __webpack_require__(949);
+  const yc = __webpack_require__(135);
+  const $Reader = $protobuf.Reader;
+  const $Writer = $protobuf.Writer;
+  const $util = $protobuf.util;
+  let root = {};
+  (function($root) {
+    $root.ApiEndpoint = (function() {
+      function ApiEndpoint(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      ApiEndpoint.prototype.id = '';
+      ApiEndpoint.prototype.address = '';
+      ApiEndpoint.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.id != null && m.hasOwnProperty('id')) w.uint32(10).string(m.id);
+        if (m.address != null && m.hasOwnProperty('address')) w.uint32(18).string(m.address);
+        return w;
+      };
+      ApiEndpoint.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.endpoint.ApiEndpoint();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.id = r.string();
+              break;
+            case 2:
+              m.address = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return ApiEndpoint;
+    })();
+  })(root);
+  (function($root) {
+    $root.ApiEndpointService = function(session) {
+      if (session === undefined) {
+        session = new yc.Session();
+      }
+      return session.client($root.ApiEndpointService.makeGrpcConstructor());
+    };
+    $root.ApiEndpointService.makeGrpcConstructor = () => {
+      let ctor = grpc.makeGenericClientConstructor({
+        get: {
+          path: '/yandex.cloud.endpoint.ApiEndpointService/Get',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.endpoint.GetApiEndpointRequest,
+          responseType: $root.api.endpoint.ApiEndpoint,
+          requestSerialize: r => {
+            return $root.api.endpoint.GetApiEndpointRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.endpoint.GetApiEndpointRequest.decode,
+          responseSerialize: r => {
+            return $root.api.endpoint.ApiEndpoint.encode(r).finish();
+          },
+          responseDeserialize: $root.api.endpoint.ApiEndpoint.decode
+        },
+        list: {
+          path: '/yandex.cloud.endpoint.ApiEndpointService/List',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.endpoint.ListApiEndpointsRequest,
+          responseType: $root.api.endpoint.ListApiEndpointsResponse,
+          requestSerialize: r => {
+            return $root.api.endpoint.ListApiEndpointsRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.endpoint.ListApiEndpointsRequest.decode,
+          responseSerialize: r => {
+            return $root.api.endpoint.ListApiEndpointsResponse.encode(r).finish();
+          },
+          responseDeserialize: $root.api.endpoint.ListApiEndpointsResponse.decode
+        }
+      });
+      ctor.__endpointId = 'endpoint';
+      return ctor;
+    };
+  })(root);
+  (function($root) {
+    $root.GetApiEndpointRequest = (function() {
+      function GetApiEndpointRequest(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      GetApiEndpointRequest.prototype.apiEndpointId = '';
+      GetApiEndpointRequest.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.apiEndpointId != null && m.hasOwnProperty('apiEndpointId')) w.uint32(10).string(m.apiEndpointId);
+        return w;
+      };
+      GetApiEndpointRequest.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.endpoint.GetApiEndpointRequest();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.apiEndpointId = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return GetApiEndpointRequest;
+    })();
+  })(root);
+  (function($root) {
+    $root.ListApiEndpointsRequest = (function() {
+      function ListApiEndpointsRequest(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      ListApiEndpointsRequest.prototype.pageSize = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
+      ListApiEndpointsRequest.prototype.pageToken = '';
+      ListApiEndpointsRequest.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.pageSize != null && m.hasOwnProperty('pageSize')) w.uint32(8).int64(m.pageSize);
+        if (m.pageToken != null && m.hasOwnProperty('pageToken')) w.uint32(18).string(m.pageToken);
+        return w;
+      };
+      ListApiEndpointsRequest.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.endpoint.ListApiEndpointsRequest();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.pageSize = r.int64();
+              break;
+            case 2:
+              m.pageToken = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return ListApiEndpointsRequest;
+    })();
+  })(root);
+  (function($root) {
+    $root.ListApiEndpointsResponse = (function() {
+      function ListApiEndpointsResponse(p) {
+        this.endpoints = [];
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      ListApiEndpointsResponse.prototype.endpoints = $util.emptyArray;
+      ListApiEndpointsResponse.prototype.nextPageToken = '';
+      ListApiEndpointsResponse.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.endpoints != null && m.endpoints.length) {
+          for (let i = 0; i < m.endpoints.length; ++i) $root.api.endpoint.ApiEndpoint.encode(m.endpoints[i], w.uint32(10).fork()).ldelim();
+        }
+        if (m.nextPageToken != null && m.hasOwnProperty('nextPageToken')) w.uint32(18).string(m.nextPageToken);
+        return w;
+      };
+      ListApiEndpointsResponse.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.endpoint.ListApiEndpointsResponse();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              if (!(m.endpoints && m.endpoints.length)) m.endpoints = [];
+              m.endpoints.push($root.api.endpoint.ApiEndpoint.decode(r, r.uint32()));
+              break;
+            case 2:
+              m.nextPageToken = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return ListApiEndpointsResponse;
+    })();
+  })(root);
+  registar.register('api.endpoint', root);
+  root.api = registar.lookup('api');
+  root.contrib = registar.lookup('contrib');
+  return root;
+})();
+
 
 /***/ }),
 /* 415 */,
@@ -29702,10 +32718,10 @@ protobuf.build = "minimal";
 protobuf.Writer       = __webpack_require__(613);
 protobuf.BufferWriter = __webpack_require__(523);
 protobuf.Reader       = __webpack_require__(468);
-protobuf.BufferReader = __webpack_require__(291);
+protobuf.BufferReader = __webpack_require__(585);
 
 // Utility
-protobuf.util         = __webpack_require__(729);
+protobuf.util         = __webpack_require__(941);
 protobuf.rpc          = __webpack_require__(693);
 protobuf.roots        = __webpack_require__(162);
 protobuf.configure    = configure;
@@ -29775,7 +32791,7 @@ var objectKeys = Object.keys || function (obj) {
 module.exports = Duplex;
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -29899,7 +32915,7 @@ module.exports = PassThrough;
 var Transform = __webpack_require__(299);
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -29988,7 +33004,7 @@ function _isUint8Array(obj) {
 /*</replacement>*/
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -31079,8 +34095,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var Stream = _interopDefault(__webpack_require__(413));
-var http = _interopDefault(__webpack_require__(876));
-var Url = _interopDefault(__webpack_require__(414));
+var http = _interopDefault(__webpack_require__(605));
+var Url = _interopDefault(__webpack_require__(835));
 var https = _interopDefault(__webpack_require__(211));
 var zlib = _interopDefault(__webpack_require__(761));
 
@@ -32892,7 +35908,7 @@ function _isUint8Array(obj) {
 /*</replacement>*/
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -33855,7 +36871,7 @@ function indexOf(xs, x) {
 
 module.exports = Reader;
 
-var util      = __webpack_require__(729);
+var util      = __webpack_require__(941);
 
 var BufferReader; // cyclic
 
@@ -34693,7 +37709,7 @@ module.exports = DeflateCRC32Stream;
 module.exports = fetch;
 
 var asPromise = __webpack_require__(189),
-    inquire   = __webpack_require__(712);
+    inquire   = __webpack_require__(358);
 
 var fs = inquire("fs");
 
@@ -34871,7 +37887,7 @@ module.exports = { TokenService };
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 module.exports = (function() {
-  const $protobuf = __webpack_require__(835);
+  const $protobuf = __webpack_require__(72);
   const grpc = __webpack_require__(323);
   const registar = __webpack_require__(866);
   const util = __webpack_require__(949);
@@ -35326,1769 +38342,7 @@ module.exports = {
 /* 503 */,
 /* 504 */,
 /* 505 */,
-/* 506 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* module decorator */ module = __webpack_require__.nmd(module);
-/**
- * lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash modularize exports="npm" -o ./`
- * Copyright jQuery Foundation and other contributors <https://jquery.org/>
- * Released under MIT license <https://lodash.com/license>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- */
-
-/** Used as the size to enable large array optimizations. */
-var LARGE_ARRAY_SIZE = 200;
-
-/** Used to stand-in for `undefined` hash values. */
-var HASH_UNDEFINED = '__lodash_hash_undefined__';
-
-/** Used as references for various `Number` constants. */
-var MAX_SAFE_INTEGER = 9007199254740991;
-
-/** `Object#toString` result references. */
-var argsTag = '[object Arguments]',
-    arrayTag = '[object Array]',
-    boolTag = '[object Boolean]',
-    dateTag = '[object Date]',
-    errorTag = '[object Error]',
-    funcTag = '[object Function]',
-    genTag = '[object GeneratorFunction]',
-    mapTag = '[object Map]',
-    numberTag = '[object Number]',
-    objectTag = '[object Object]',
-    promiseTag = '[object Promise]',
-    regexpTag = '[object RegExp]',
-    setTag = '[object Set]',
-    stringTag = '[object String]',
-    symbolTag = '[object Symbol]',
-    weakMapTag = '[object WeakMap]';
-
-var arrayBufferTag = '[object ArrayBuffer]',
-    dataViewTag = '[object DataView]',
-    float32Tag = '[object Float32Array]',
-    float64Tag = '[object Float64Array]',
-    int8Tag = '[object Int8Array]',
-    int16Tag = '[object Int16Array]',
-    int32Tag = '[object Int32Array]',
-    uint8Tag = '[object Uint8Array]',
-    uint8ClampedTag = '[object Uint8ClampedArray]',
-    uint16Tag = '[object Uint16Array]',
-    uint32Tag = '[object Uint32Array]';
-
-/**
- * Used to match `RegExp`
- * [syntax characters](http://ecma-international.org/ecma-262/7.0/#sec-patterns).
- */
-var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
-
-/** Used to match `RegExp` flags from their coerced string values. */
-var reFlags = /\w*$/;
-
-/** Used to detect host constructors (Safari). */
-var reIsHostCtor = /^\[object .+?Constructor\]$/;
-
-/** Used to detect unsigned integer values. */
-var reIsUint = /^(?:0|[1-9]\d*)$/;
-
-/** Used to identify `toStringTag` values supported by `_.clone`. */
-var cloneableTags = {};
-cloneableTags[argsTag] = cloneableTags[arrayTag] =
-cloneableTags[arrayBufferTag] = cloneableTags[dataViewTag] =
-cloneableTags[boolTag] = cloneableTags[dateTag] =
-cloneableTags[float32Tag] = cloneableTags[float64Tag] =
-cloneableTags[int8Tag] = cloneableTags[int16Tag] =
-cloneableTags[int32Tag] = cloneableTags[mapTag] =
-cloneableTags[numberTag] = cloneableTags[objectTag] =
-cloneableTags[regexpTag] = cloneableTags[setTag] =
-cloneableTags[stringTag] = cloneableTags[symbolTag] =
-cloneableTags[uint8Tag] = cloneableTags[uint8ClampedTag] =
-cloneableTags[uint16Tag] = cloneableTags[uint32Tag] = true;
-cloneableTags[errorTag] = cloneableTags[funcTag] =
-cloneableTags[weakMapTag] = false;
-
-/** Detect free variable `global` from Node.js. */
-var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
-
-/** Detect free variable `self`. */
-var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-
-/** Used as a reference to the global object. */
-var root = freeGlobal || freeSelf || Function('return this')();
-
-/** Detect free variable `exports`. */
-var freeExports =  true && exports && !exports.nodeType && exports;
-
-/** Detect free variable `module`. */
-var freeModule = freeExports && "object" == 'object' && module && !module.nodeType && module;
-
-/** Detect the popular CommonJS extension `module.exports`. */
-var moduleExports = freeModule && freeModule.exports === freeExports;
-
-/**
- * Adds the key-value `pair` to `map`.
- *
- * @private
- * @param {Object} map The map to modify.
- * @param {Array} pair The key-value pair to add.
- * @returns {Object} Returns `map`.
- */
-function addMapEntry(map, pair) {
-  // Don't return `map.set` because it's not chainable in IE 11.
-  map.set(pair[0], pair[1]);
-  return map;
-}
-
-/**
- * Adds `value` to `set`.
- *
- * @private
- * @param {Object} set The set to modify.
- * @param {*} value The value to add.
- * @returns {Object} Returns `set`.
- */
-function addSetEntry(set, value) {
-  // Don't return `set.add` because it's not chainable in IE 11.
-  set.add(value);
-  return set;
-}
-
-/**
- * A specialized version of `_.forEach` for arrays without support for
- * iteratee shorthands.
- *
- * @private
- * @param {Array} [array] The array to iterate over.
- * @param {Function} iteratee The function invoked per iteration.
- * @returns {Array} Returns `array`.
- */
-function arrayEach(array, iteratee) {
-  var index = -1,
-      length = array ? array.length : 0;
-
-  while (++index < length) {
-    if (iteratee(array[index], index, array) === false) {
-      break;
-    }
-  }
-  return array;
-}
-
-/**
- * Appends the elements of `values` to `array`.
- *
- * @private
- * @param {Array} array The array to modify.
- * @param {Array} values The values to append.
- * @returns {Array} Returns `array`.
- */
-function arrayPush(array, values) {
-  var index = -1,
-      length = values.length,
-      offset = array.length;
-
-  while (++index < length) {
-    array[offset + index] = values[index];
-  }
-  return array;
-}
-
-/**
- * A specialized version of `_.reduce` for arrays without support for
- * iteratee shorthands.
- *
- * @private
- * @param {Array} [array] The array to iterate over.
- * @param {Function} iteratee The function invoked per iteration.
- * @param {*} [accumulator] The initial value.
- * @param {boolean} [initAccum] Specify using the first element of `array` as
- *  the initial value.
- * @returns {*} Returns the accumulated value.
- */
-function arrayReduce(array, iteratee, accumulator, initAccum) {
-  var index = -1,
-      length = array ? array.length : 0;
-
-  if (initAccum && length) {
-    accumulator = array[++index];
-  }
-  while (++index < length) {
-    accumulator = iteratee(accumulator, array[index], index, array);
-  }
-  return accumulator;
-}
-
-/**
- * The base implementation of `_.times` without support for iteratee shorthands
- * or max array length checks.
- *
- * @private
- * @param {number} n The number of times to invoke `iteratee`.
- * @param {Function} iteratee The function invoked per iteration.
- * @returns {Array} Returns the array of results.
- */
-function baseTimes(n, iteratee) {
-  var index = -1,
-      result = Array(n);
-
-  while (++index < n) {
-    result[index] = iteratee(index);
-  }
-  return result;
-}
-
-/**
- * Gets the value at `key` of `object`.
- *
- * @private
- * @param {Object} [object] The object to query.
- * @param {string} key The key of the property to get.
- * @returns {*} Returns the property value.
- */
-function getValue(object, key) {
-  return object == null ? undefined : object[key];
-}
-
-/**
- * Checks if `value` is a host object in IE < 9.
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a host object, else `false`.
- */
-function isHostObject(value) {
-  // Many host objects are `Object` objects that can coerce to strings
-  // despite having improperly defined `toString` methods.
-  var result = false;
-  if (value != null && typeof value.toString != 'function') {
-    try {
-      result = !!(value + '');
-    } catch (e) {}
-  }
-  return result;
-}
-
-/**
- * Converts `map` to its key-value pairs.
- *
- * @private
- * @param {Object} map The map to convert.
- * @returns {Array} Returns the key-value pairs.
- */
-function mapToArray(map) {
-  var index = -1,
-      result = Array(map.size);
-
-  map.forEach(function(value, key) {
-    result[++index] = [key, value];
-  });
-  return result;
-}
-
-/**
- * Creates a unary function that invokes `func` with its argument transformed.
- *
- * @private
- * @param {Function} func The function to wrap.
- * @param {Function} transform The argument transform.
- * @returns {Function} Returns the new function.
- */
-function overArg(func, transform) {
-  return function(arg) {
-    return func(transform(arg));
-  };
-}
-
-/**
- * Converts `set` to an array of its values.
- *
- * @private
- * @param {Object} set The set to convert.
- * @returns {Array} Returns the values.
- */
-function setToArray(set) {
-  var index = -1,
-      result = Array(set.size);
-
-  set.forEach(function(value) {
-    result[++index] = value;
-  });
-  return result;
-}
-
-/** Used for built-in method references. */
-var arrayProto = Array.prototype,
-    funcProto = Function.prototype,
-    objectProto = Object.prototype;
-
-/** Used to detect overreaching core-js shims. */
-var coreJsData = root['__core-js_shared__'];
-
-/** Used to detect methods masquerading as native. */
-var maskSrcKey = (function() {
-  var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
-  return uid ? ('Symbol(src)_1.' + uid) : '';
-}());
-
-/** Used to resolve the decompiled source of functions. */
-var funcToString = funcProto.toString;
-
-/** Used to check objects for own properties. */
-var hasOwnProperty = objectProto.hasOwnProperty;
-
-/**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var objectToString = objectProto.toString;
-
-/** Used to detect if a method is native. */
-var reIsNative = RegExp('^' +
-  funcToString.call(hasOwnProperty).replace(reRegExpChar, '\\$&')
-  .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
-);
-
-/** Built-in value references. */
-var Buffer = moduleExports ? root.Buffer : undefined,
-    Symbol = root.Symbol,
-    Uint8Array = root.Uint8Array,
-    getPrototype = overArg(Object.getPrototypeOf, Object),
-    objectCreate = Object.create,
-    propertyIsEnumerable = objectProto.propertyIsEnumerable,
-    splice = arrayProto.splice;
-
-/* Built-in method references for those with the same name as other `lodash` methods. */
-var nativeGetSymbols = Object.getOwnPropertySymbols,
-    nativeIsBuffer = Buffer ? Buffer.isBuffer : undefined,
-    nativeKeys = overArg(Object.keys, Object);
-
-/* Built-in method references that are verified to be native. */
-var DataView = getNative(root, 'DataView'),
-    Map = getNative(root, 'Map'),
-    Promise = getNative(root, 'Promise'),
-    Set = getNative(root, 'Set'),
-    WeakMap = getNative(root, 'WeakMap'),
-    nativeCreate = getNative(Object, 'create');
-
-/** Used to detect maps, sets, and weakmaps. */
-var dataViewCtorString = toSource(DataView),
-    mapCtorString = toSource(Map),
-    promiseCtorString = toSource(Promise),
-    setCtorString = toSource(Set),
-    weakMapCtorString = toSource(WeakMap);
-
-/** Used to convert symbols to primitives and strings. */
-var symbolProto = Symbol ? Symbol.prototype : undefined,
-    symbolValueOf = symbolProto ? symbolProto.valueOf : undefined;
-
-/**
- * Creates a hash object.
- *
- * @private
- * @constructor
- * @param {Array} [entries] The key-value pairs to cache.
- */
-function Hash(entries) {
-  var index = -1,
-      length = entries ? entries.length : 0;
-
-  this.clear();
-  while (++index < length) {
-    var entry = entries[index];
-    this.set(entry[0], entry[1]);
-  }
-}
-
-/**
- * Removes all key-value entries from the hash.
- *
- * @private
- * @name clear
- * @memberOf Hash
- */
-function hashClear() {
-  this.__data__ = nativeCreate ? nativeCreate(null) : {};
-}
-
-/**
- * Removes `key` and its value from the hash.
- *
- * @private
- * @name delete
- * @memberOf Hash
- * @param {Object} hash The hash to modify.
- * @param {string} key The key of the value to remove.
- * @returns {boolean} Returns `true` if the entry was removed, else `false`.
- */
-function hashDelete(key) {
-  return this.has(key) && delete this.__data__[key];
-}
-
-/**
- * Gets the hash value for `key`.
- *
- * @private
- * @name get
- * @memberOf Hash
- * @param {string} key The key of the value to get.
- * @returns {*} Returns the entry value.
- */
-function hashGet(key) {
-  var data = this.__data__;
-  if (nativeCreate) {
-    var result = data[key];
-    return result === HASH_UNDEFINED ? undefined : result;
-  }
-  return hasOwnProperty.call(data, key) ? data[key] : undefined;
-}
-
-/**
- * Checks if a hash value for `key` exists.
- *
- * @private
- * @name has
- * @memberOf Hash
- * @param {string} key The key of the entry to check.
- * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
- */
-function hashHas(key) {
-  var data = this.__data__;
-  return nativeCreate ? data[key] !== undefined : hasOwnProperty.call(data, key);
-}
-
-/**
- * Sets the hash `key` to `value`.
- *
- * @private
- * @name set
- * @memberOf Hash
- * @param {string} key The key of the value to set.
- * @param {*} value The value to set.
- * @returns {Object} Returns the hash instance.
- */
-function hashSet(key, value) {
-  var data = this.__data__;
-  data[key] = (nativeCreate && value === undefined) ? HASH_UNDEFINED : value;
-  return this;
-}
-
-// Add methods to `Hash`.
-Hash.prototype.clear = hashClear;
-Hash.prototype['delete'] = hashDelete;
-Hash.prototype.get = hashGet;
-Hash.prototype.has = hashHas;
-Hash.prototype.set = hashSet;
-
-/**
- * Creates an list cache object.
- *
- * @private
- * @constructor
- * @param {Array} [entries] The key-value pairs to cache.
- */
-function ListCache(entries) {
-  var index = -1,
-      length = entries ? entries.length : 0;
-
-  this.clear();
-  while (++index < length) {
-    var entry = entries[index];
-    this.set(entry[0], entry[1]);
-  }
-}
-
-/**
- * Removes all key-value entries from the list cache.
- *
- * @private
- * @name clear
- * @memberOf ListCache
- */
-function listCacheClear() {
-  this.__data__ = [];
-}
-
-/**
- * Removes `key` and its value from the list cache.
- *
- * @private
- * @name delete
- * @memberOf ListCache
- * @param {string} key The key of the value to remove.
- * @returns {boolean} Returns `true` if the entry was removed, else `false`.
- */
-function listCacheDelete(key) {
-  var data = this.__data__,
-      index = assocIndexOf(data, key);
-
-  if (index < 0) {
-    return false;
-  }
-  var lastIndex = data.length - 1;
-  if (index == lastIndex) {
-    data.pop();
-  } else {
-    splice.call(data, index, 1);
-  }
-  return true;
-}
-
-/**
- * Gets the list cache value for `key`.
- *
- * @private
- * @name get
- * @memberOf ListCache
- * @param {string} key The key of the value to get.
- * @returns {*} Returns the entry value.
- */
-function listCacheGet(key) {
-  var data = this.__data__,
-      index = assocIndexOf(data, key);
-
-  return index < 0 ? undefined : data[index][1];
-}
-
-/**
- * Checks if a list cache value for `key` exists.
- *
- * @private
- * @name has
- * @memberOf ListCache
- * @param {string} key The key of the entry to check.
- * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
- */
-function listCacheHas(key) {
-  return assocIndexOf(this.__data__, key) > -1;
-}
-
-/**
- * Sets the list cache `key` to `value`.
- *
- * @private
- * @name set
- * @memberOf ListCache
- * @param {string} key The key of the value to set.
- * @param {*} value The value to set.
- * @returns {Object} Returns the list cache instance.
- */
-function listCacheSet(key, value) {
-  var data = this.__data__,
-      index = assocIndexOf(data, key);
-
-  if (index < 0) {
-    data.push([key, value]);
-  } else {
-    data[index][1] = value;
-  }
-  return this;
-}
-
-// Add methods to `ListCache`.
-ListCache.prototype.clear = listCacheClear;
-ListCache.prototype['delete'] = listCacheDelete;
-ListCache.prototype.get = listCacheGet;
-ListCache.prototype.has = listCacheHas;
-ListCache.prototype.set = listCacheSet;
-
-/**
- * Creates a map cache object to store key-value pairs.
- *
- * @private
- * @constructor
- * @param {Array} [entries] The key-value pairs to cache.
- */
-function MapCache(entries) {
-  var index = -1,
-      length = entries ? entries.length : 0;
-
-  this.clear();
-  while (++index < length) {
-    var entry = entries[index];
-    this.set(entry[0], entry[1]);
-  }
-}
-
-/**
- * Removes all key-value entries from the map.
- *
- * @private
- * @name clear
- * @memberOf MapCache
- */
-function mapCacheClear() {
-  this.__data__ = {
-    'hash': new Hash,
-    'map': new (Map || ListCache),
-    'string': new Hash
-  };
-}
-
-/**
- * Removes `key` and its value from the map.
- *
- * @private
- * @name delete
- * @memberOf MapCache
- * @param {string} key The key of the value to remove.
- * @returns {boolean} Returns `true` if the entry was removed, else `false`.
- */
-function mapCacheDelete(key) {
-  return getMapData(this, key)['delete'](key);
-}
-
-/**
- * Gets the map value for `key`.
- *
- * @private
- * @name get
- * @memberOf MapCache
- * @param {string} key The key of the value to get.
- * @returns {*} Returns the entry value.
- */
-function mapCacheGet(key) {
-  return getMapData(this, key).get(key);
-}
-
-/**
- * Checks if a map value for `key` exists.
- *
- * @private
- * @name has
- * @memberOf MapCache
- * @param {string} key The key of the entry to check.
- * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
- */
-function mapCacheHas(key) {
-  return getMapData(this, key).has(key);
-}
-
-/**
- * Sets the map `key` to `value`.
- *
- * @private
- * @name set
- * @memberOf MapCache
- * @param {string} key The key of the value to set.
- * @param {*} value The value to set.
- * @returns {Object} Returns the map cache instance.
- */
-function mapCacheSet(key, value) {
-  getMapData(this, key).set(key, value);
-  return this;
-}
-
-// Add methods to `MapCache`.
-MapCache.prototype.clear = mapCacheClear;
-MapCache.prototype['delete'] = mapCacheDelete;
-MapCache.prototype.get = mapCacheGet;
-MapCache.prototype.has = mapCacheHas;
-MapCache.prototype.set = mapCacheSet;
-
-/**
- * Creates a stack cache object to store key-value pairs.
- *
- * @private
- * @constructor
- * @param {Array} [entries] The key-value pairs to cache.
- */
-function Stack(entries) {
-  this.__data__ = new ListCache(entries);
-}
-
-/**
- * Removes all key-value entries from the stack.
- *
- * @private
- * @name clear
- * @memberOf Stack
- */
-function stackClear() {
-  this.__data__ = new ListCache;
-}
-
-/**
- * Removes `key` and its value from the stack.
- *
- * @private
- * @name delete
- * @memberOf Stack
- * @param {string} key The key of the value to remove.
- * @returns {boolean} Returns `true` if the entry was removed, else `false`.
- */
-function stackDelete(key) {
-  return this.__data__['delete'](key);
-}
-
-/**
- * Gets the stack value for `key`.
- *
- * @private
- * @name get
- * @memberOf Stack
- * @param {string} key The key of the value to get.
- * @returns {*} Returns the entry value.
- */
-function stackGet(key) {
-  return this.__data__.get(key);
-}
-
-/**
- * Checks if a stack value for `key` exists.
- *
- * @private
- * @name has
- * @memberOf Stack
- * @param {string} key The key of the entry to check.
- * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
- */
-function stackHas(key) {
-  return this.__data__.has(key);
-}
-
-/**
- * Sets the stack `key` to `value`.
- *
- * @private
- * @name set
- * @memberOf Stack
- * @param {string} key The key of the value to set.
- * @param {*} value The value to set.
- * @returns {Object} Returns the stack cache instance.
- */
-function stackSet(key, value) {
-  var cache = this.__data__;
-  if (cache instanceof ListCache) {
-    var pairs = cache.__data__;
-    if (!Map || (pairs.length < LARGE_ARRAY_SIZE - 1)) {
-      pairs.push([key, value]);
-      return this;
-    }
-    cache = this.__data__ = new MapCache(pairs);
-  }
-  cache.set(key, value);
-  return this;
-}
-
-// Add methods to `Stack`.
-Stack.prototype.clear = stackClear;
-Stack.prototype['delete'] = stackDelete;
-Stack.prototype.get = stackGet;
-Stack.prototype.has = stackHas;
-Stack.prototype.set = stackSet;
-
-/**
- * Creates an array of the enumerable property names of the array-like `value`.
- *
- * @private
- * @param {*} value The value to query.
- * @param {boolean} inherited Specify returning inherited property names.
- * @returns {Array} Returns the array of property names.
- */
-function arrayLikeKeys(value, inherited) {
-  // Safari 8.1 makes `arguments.callee` enumerable in strict mode.
-  // Safari 9 makes `arguments.length` enumerable in strict mode.
-  var result = (isArray(value) || isArguments(value))
-    ? baseTimes(value.length, String)
-    : [];
-
-  var length = result.length,
-      skipIndexes = !!length;
-
-  for (var key in value) {
-    if ((inherited || hasOwnProperty.call(value, key)) &&
-        !(skipIndexes && (key == 'length' || isIndex(key, length)))) {
-      result.push(key);
-    }
-  }
-  return result;
-}
-
-/**
- * Assigns `value` to `key` of `object` if the existing value is not equivalent
- * using [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
- * for equality comparisons.
- *
- * @private
- * @param {Object} object The object to modify.
- * @param {string} key The key of the property to assign.
- * @param {*} value The value to assign.
- */
-function assignValue(object, key, value) {
-  var objValue = object[key];
-  if (!(hasOwnProperty.call(object, key) && eq(objValue, value)) ||
-      (value === undefined && !(key in object))) {
-    object[key] = value;
-  }
-}
-
-/**
- * Gets the index at which the `key` is found in `array` of key-value pairs.
- *
- * @private
- * @param {Array} array The array to inspect.
- * @param {*} key The key to search for.
- * @returns {number} Returns the index of the matched value, else `-1`.
- */
-function assocIndexOf(array, key) {
-  var length = array.length;
-  while (length--) {
-    if (eq(array[length][0], key)) {
-      return length;
-    }
-  }
-  return -1;
-}
-
-/**
- * The base implementation of `_.assign` without support for multiple sources
- * or `customizer` functions.
- *
- * @private
- * @param {Object} object The destination object.
- * @param {Object} source The source object.
- * @returns {Object} Returns `object`.
- */
-function baseAssign(object, source) {
-  return object && copyObject(source, keys(source), object);
-}
-
-/**
- * The base implementation of `_.clone` and `_.cloneDeep` which tracks
- * traversed objects.
- *
- * @private
- * @param {*} value The value to clone.
- * @param {boolean} [isDeep] Specify a deep clone.
- * @param {boolean} [isFull] Specify a clone including symbols.
- * @param {Function} [customizer] The function to customize cloning.
- * @param {string} [key] The key of `value`.
- * @param {Object} [object] The parent object of `value`.
- * @param {Object} [stack] Tracks traversed objects and their clone counterparts.
- * @returns {*} Returns the cloned value.
- */
-function baseClone(value, isDeep, isFull, customizer, key, object, stack) {
-  var result;
-  if (customizer) {
-    result = object ? customizer(value, key, object, stack) : customizer(value);
-  }
-  if (result !== undefined) {
-    return result;
-  }
-  if (!isObject(value)) {
-    return value;
-  }
-  var isArr = isArray(value);
-  if (isArr) {
-    result = initCloneArray(value);
-    if (!isDeep) {
-      return copyArray(value, result);
-    }
-  } else {
-    var tag = getTag(value),
-        isFunc = tag == funcTag || tag == genTag;
-
-    if (isBuffer(value)) {
-      return cloneBuffer(value, isDeep);
-    }
-    if (tag == objectTag || tag == argsTag || (isFunc && !object)) {
-      if (isHostObject(value)) {
-        return object ? value : {};
-      }
-      result = initCloneObject(isFunc ? {} : value);
-      if (!isDeep) {
-        return copySymbols(value, baseAssign(result, value));
-      }
-    } else {
-      if (!cloneableTags[tag]) {
-        return object ? value : {};
-      }
-      result = initCloneByTag(value, tag, baseClone, isDeep);
-    }
-  }
-  // Check for circular references and return its corresponding clone.
-  stack || (stack = new Stack);
-  var stacked = stack.get(value);
-  if (stacked) {
-    return stacked;
-  }
-  stack.set(value, result);
-
-  if (!isArr) {
-    var props = isFull ? getAllKeys(value) : keys(value);
-  }
-  arrayEach(props || value, function(subValue, key) {
-    if (props) {
-      key = subValue;
-      subValue = value[key];
-    }
-    // Recursively populate clone (susceptible to call stack limits).
-    assignValue(result, key, baseClone(subValue, isDeep, isFull, customizer, key, value, stack));
-  });
-  return result;
-}
-
-/**
- * The base implementation of `_.create` without support for assigning
- * properties to the created object.
- *
- * @private
- * @param {Object} prototype The object to inherit from.
- * @returns {Object} Returns the new object.
- */
-function baseCreate(proto) {
-  return isObject(proto) ? objectCreate(proto) : {};
-}
-
-/**
- * The base implementation of `getAllKeys` and `getAllKeysIn` which uses
- * `keysFunc` and `symbolsFunc` to get the enumerable property names and
- * symbols of `object`.
- *
- * @private
- * @param {Object} object The object to query.
- * @param {Function} keysFunc The function to get the keys of `object`.
- * @param {Function} symbolsFunc The function to get the symbols of `object`.
- * @returns {Array} Returns the array of property names and symbols.
- */
-function baseGetAllKeys(object, keysFunc, symbolsFunc) {
-  var result = keysFunc(object);
-  return isArray(object) ? result : arrayPush(result, symbolsFunc(object));
-}
-
-/**
- * The base implementation of `getTag`.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the `toStringTag`.
- */
-function baseGetTag(value) {
-  return objectToString.call(value);
-}
-
-/**
- * The base implementation of `_.isNative` without bad shim checks.
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a native function,
- *  else `false`.
- */
-function baseIsNative(value) {
-  if (!isObject(value) || isMasked(value)) {
-    return false;
-  }
-  var pattern = (isFunction(value) || isHostObject(value)) ? reIsNative : reIsHostCtor;
-  return pattern.test(toSource(value));
-}
-
-/**
- * The base implementation of `_.keys` which doesn't treat sparse arrays as dense.
- *
- * @private
- * @param {Object} object The object to query.
- * @returns {Array} Returns the array of property names.
- */
-function baseKeys(object) {
-  if (!isPrototype(object)) {
-    return nativeKeys(object);
-  }
-  var result = [];
-  for (var key in Object(object)) {
-    if (hasOwnProperty.call(object, key) && key != 'constructor') {
-      result.push(key);
-    }
-  }
-  return result;
-}
-
-/**
- * Creates a clone of  `buffer`.
- *
- * @private
- * @param {Buffer} buffer The buffer to clone.
- * @param {boolean} [isDeep] Specify a deep clone.
- * @returns {Buffer} Returns the cloned buffer.
- */
-function cloneBuffer(buffer, isDeep) {
-  if (isDeep) {
-    return buffer.slice();
-  }
-  var result = new buffer.constructor(buffer.length);
-  buffer.copy(result);
-  return result;
-}
-
-/**
- * Creates a clone of `arrayBuffer`.
- *
- * @private
- * @param {ArrayBuffer} arrayBuffer The array buffer to clone.
- * @returns {ArrayBuffer} Returns the cloned array buffer.
- */
-function cloneArrayBuffer(arrayBuffer) {
-  var result = new arrayBuffer.constructor(arrayBuffer.byteLength);
-  new Uint8Array(result).set(new Uint8Array(arrayBuffer));
-  return result;
-}
-
-/**
- * Creates a clone of `dataView`.
- *
- * @private
- * @param {Object} dataView The data view to clone.
- * @param {boolean} [isDeep] Specify a deep clone.
- * @returns {Object} Returns the cloned data view.
- */
-function cloneDataView(dataView, isDeep) {
-  var buffer = isDeep ? cloneArrayBuffer(dataView.buffer) : dataView.buffer;
-  return new dataView.constructor(buffer, dataView.byteOffset, dataView.byteLength);
-}
-
-/**
- * Creates a clone of `map`.
- *
- * @private
- * @param {Object} map The map to clone.
- * @param {Function} cloneFunc The function to clone values.
- * @param {boolean} [isDeep] Specify a deep clone.
- * @returns {Object} Returns the cloned map.
- */
-function cloneMap(map, isDeep, cloneFunc) {
-  var array = isDeep ? cloneFunc(mapToArray(map), true) : mapToArray(map);
-  return arrayReduce(array, addMapEntry, new map.constructor);
-}
-
-/**
- * Creates a clone of `regexp`.
- *
- * @private
- * @param {Object} regexp The regexp to clone.
- * @returns {Object} Returns the cloned regexp.
- */
-function cloneRegExp(regexp) {
-  var result = new regexp.constructor(regexp.source, reFlags.exec(regexp));
-  result.lastIndex = regexp.lastIndex;
-  return result;
-}
-
-/**
- * Creates a clone of `set`.
- *
- * @private
- * @param {Object} set The set to clone.
- * @param {Function} cloneFunc The function to clone values.
- * @param {boolean} [isDeep] Specify a deep clone.
- * @returns {Object} Returns the cloned set.
- */
-function cloneSet(set, isDeep, cloneFunc) {
-  var array = isDeep ? cloneFunc(setToArray(set), true) : setToArray(set);
-  return arrayReduce(array, addSetEntry, new set.constructor);
-}
-
-/**
- * Creates a clone of the `symbol` object.
- *
- * @private
- * @param {Object} symbol The symbol object to clone.
- * @returns {Object} Returns the cloned symbol object.
- */
-function cloneSymbol(symbol) {
-  return symbolValueOf ? Object(symbolValueOf.call(symbol)) : {};
-}
-
-/**
- * Creates a clone of `typedArray`.
- *
- * @private
- * @param {Object} typedArray The typed array to clone.
- * @param {boolean} [isDeep] Specify a deep clone.
- * @returns {Object} Returns the cloned typed array.
- */
-function cloneTypedArray(typedArray, isDeep) {
-  var buffer = isDeep ? cloneArrayBuffer(typedArray.buffer) : typedArray.buffer;
-  return new typedArray.constructor(buffer, typedArray.byteOffset, typedArray.length);
-}
-
-/**
- * Copies the values of `source` to `array`.
- *
- * @private
- * @param {Array} source The array to copy values from.
- * @param {Array} [array=[]] The array to copy values to.
- * @returns {Array} Returns `array`.
- */
-function copyArray(source, array) {
-  var index = -1,
-      length = source.length;
-
-  array || (array = Array(length));
-  while (++index < length) {
-    array[index] = source[index];
-  }
-  return array;
-}
-
-/**
- * Copies properties of `source` to `object`.
- *
- * @private
- * @param {Object} source The object to copy properties from.
- * @param {Array} props The property identifiers to copy.
- * @param {Object} [object={}] The object to copy properties to.
- * @param {Function} [customizer] The function to customize copied values.
- * @returns {Object} Returns `object`.
- */
-function copyObject(source, props, object, customizer) {
-  object || (object = {});
-
-  var index = -1,
-      length = props.length;
-
-  while (++index < length) {
-    var key = props[index];
-
-    var newValue = customizer
-      ? customizer(object[key], source[key], key, object, source)
-      : undefined;
-
-    assignValue(object, key, newValue === undefined ? source[key] : newValue);
-  }
-  return object;
-}
-
-/**
- * Copies own symbol properties of `source` to `object`.
- *
- * @private
- * @param {Object} source The object to copy symbols from.
- * @param {Object} [object={}] The object to copy symbols to.
- * @returns {Object} Returns `object`.
- */
-function copySymbols(source, object) {
-  return copyObject(source, getSymbols(source), object);
-}
-
-/**
- * Creates an array of own enumerable property names and symbols of `object`.
- *
- * @private
- * @param {Object} object The object to query.
- * @returns {Array} Returns the array of property names and symbols.
- */
-function getAllKeys(object) {
-  return baseGetAllKeys(object, keys, getSymbols);
-}
-
-/**
- * Gets the data for `map`.
- *
- * @private
- * @param {Object} map The map to query.
- * @param {string} key The reference key.
- * @returns {*} Returns the map data.
- */
-function getMapData(map, key) {
-  var data = map.__data__;
-  return isKeyable(key)
-    ? data[typeof key == 'string' ? 'string' : 'hash']
-    : data.map;
-}
-
-/**
- * Gets the native function at `key` of `object`.
- *
- * @private
- * @param {Object} object The object to query.
- * @param {string} key The key of the method to get.
- * @returns {*} Returns the function if it's native, else `undefined`.
- */
-function getNative(object, key) {
-  var value = getValue(object, key);
-  return baseIsNative(value) ? value : undefined;
-}
-
-/**
- * Creates an array of the own enumerable symbol properties of `object`.
- *
- * @private
- * @param {Object} object The object to query.
- * @returns {Array} Returns the array of symbols.
- */
-var getSymbols = nativeGetSymbols ? overArg(nativeGetSymbols, Object) : stubArray;
-
-/**
- * Gets the `toStringTag` of `value`.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the `toStringTag`.
- */
-var getTag = baseGetTag;
-
-// Fallback for data views, maps, sets, and weak maps in IE 11,
-// for data views in Edge < 14, and promises in Node.js.
-if ((DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag) ||
-    (Map && getTag(new Map) != mapTag) ||
-    (Promise && getTag(Promise.resolve()) != promiseTag) ||
-    (Set && getTag(new Set) != setTag) ||
-    (WeakMap && getTag(new WeakMap) != weakMapTag)) {
-  getTag = function(value) {
-    var result = objectToString.call(value),
-        Ctor = result == objectTag ? value.constructor : undefined,
-        ctorString = Ctor ? toSource(Ctor) : undefined;
-
-    if (ctorString) {
-      switch (ctorString) {
-        case dataViewCtorString: return dataViewTag;
-        case mapCtorString: return mapTag;
-        case promiseCtorString: return promiseTag;
-        case setCtorString: return setTag;
-        case weakMapCtorString: return weakMapTag;
-      }
-    }
-    return result;
-  };
-}
-
-/**
- * Initializes an array clone.
- *
- * @private
- * @param {Array} array The array to clone.
- * @returns {Array} Returns the initialized clone.
- */
-function initCloneArray(array) {
-  var length = array.length,
-      result = array.constructor(length);
-
-  // Add properties assigned by `RegExp#exec`.
-  if (length && typeof array[0] == 'string' && hasOwnProperty.call(array, 'index')) {
-    result.index = array.index;
-    result.input = array.input;
-  }
-  return result;
-}
-
-/**
- * Initializes an object clone.
- *
- * @private
- * @param {Object} object The object to clone.
- * @returns {Object} Returns the initialized clone.
- */
-function initCloneObject(object) {
-  return (typeof object.constructor == 'function' && !isPrototype(object))
-    ? baseCreate(getPrototype(object))
-    : {};
-}
-
-/**
- * Initializes an object clone based on its `toStringTag`.
- *
- * **Note:** This function only supports cloning values with tags of
- * `Boolean`, `Date`, `Error`, `Number`, `RegExp`, or `String`.
- *
- * @private
- * @param {Object} object The object to clone.
- * @param {string} tag The `toStringTag` of the object to clone.
- * @param {Function} cloneFunc The function to clone values.
- * @param {boolean} [isDeep] Specify a deep clone.
- * @returns {Object} Returns the initialized clone.
- */
-function initCloneByTag(object, tag, cloneFunc, isDeep) {
-  var Ctor = object.constructor;
-  switch (tag) {
-    case arrayBufferTag:
-      return cloneArrayBuffer(object);
-
-    case boolTag:
-    case dateTag:
-      return new Ctor(+object);
-
-    case dataViewTag:
-      return cloneDataView(object, isDeep);
-
-    case float32Tag: case float64Tag:
-    case int8Tag: case int16Tag: case int32Tag:
-    case uint8Tag: case uint8ClampedTag: case uint16Tag: case uint32Tag:
-      return cloneTypedArray(object, isDeep);
-
-    case mapTag:
-      return cloneMap(object, isDeep, cloneFunc);
-
-    case numberTag:
-    case stringTag:
-      return new Ctor(object);
-
-    case regexpTag:
-      return cloneRegExp(object);
-
-    case setTag:
-      return cloneSet(object, isDeep, cloneFunc);
-
-    case symbolTag:
-      return cloneSymbol(object);
-  }
-}
-
-/**
- * Checks if `value` is a valid array-like index.
- *
- * @private
- * @param {*} value The value to check.
- * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
- * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
- */
-function isIndex(value, length) {
-  length = length == null ? MAX_SAFE_INTEGER : length;
-  return !!length &&
-    (typeof value == 'number' || reIsUint.test(value)) &&
-    (value > -1 && value % 1 == 0 && value < length);
-}
-
-/**
- * Checks if `value` is suitable for use as unique object key.
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is suitable, else `false`.
- */
-function isKeyable(value) {
-  var type = typeof value;
-  return (type == 'string' || type == 'number' || type == 'symbol' || type == 'boolean')
-    ? (value !== '__proto__')
-    : (value === null);
-}
-
-/**
- * Checks if `func` has its source masked.
- *
- * @private
- * @param {Function} func The function to check.
- * @returns {boolean} Returns `true` if `func` is masked, else `false`.
- */
-function isMasked(func) {
-  return !!maskSrcKey && (maskSrcKey in func);
-}
-
-/**
- * Checks if `value` is likely a prototype object.
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a prototype, else `false`.
- */
-function isPrototype(value) {
-  var Ctor = value && value.constructor,
-      proto = (typeof Ctor == 'function' && Ctor.prototype) || objectProto;
-
-  return value === proto;
-}
-
-/**
- * Converts `func` to its source code.
- *
- * @private
- * @param {Function} func The function to process.
- * @returns {string} Returns the source code.
- */
-function toSource(func) {
-  if (func != null) {
-    try {
-      return funcToString.call(func);
-    } catch (e) {}
-    try {
-      return (func + '');
-    } catch (e) {}
-  }
-  return '';
-}
-
-/**
- * Creates a shallow clone of `value`.
- *
- * **Note:** This method is loosely based on the
- * [structured clone algorithm](https://mdn.io/Structured_clone_algorithm)
- * and supports cloning arrays, array buffers, booleans, date objects, maps,
- * numbers, `Object` objects, regexes, sets, strings, symbols, and typed
- * arrays. The own enumerable properties of `arguments` objects are cloned
- * as plain objects. An empty object is returned for uncloneable values such
- * as error objects, functions, DOM nodes, and WeakMaps.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to clone.
- * @returns {*} Returns the cloned value.
- * @see _.cloneDeep
- * @example
- *
- * var objects = [{ 'a': 1 }, { 'b': 2 }];
- *
- * var shallow = _.clone(objects);
- * console.log(shallow[0] === objects[0]);
- * // => true
- */
-function clone(value) {
-  return baseClone(value, false, true);
-}
-
-/**
- * Performs a
- * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
- * comparison between two values to determine if they are equivalent.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to compare.
- * @param {*} other The other value to compare.
- * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
- * @example
- *
- * var object = { 'a': 1 };
- * var other = { 'a': 1 };
- *
- * _.eq(object, object);
- * // => true
- *
- * _.eq(object, other);
- * // => false
- *
- * _.eq('a', 'a');
- * // => true
- *
- * _.eq('a', Object('a'));
- * // => false
- *
- * _.eq(NaN, NaN);
- * // => true
- */
-function eq(value, other) {
-  return value === other || (value !== value && other !== other);
-}
-
-/**
- * Checks if `value` is likely an `arguments` object.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an `arguments` object,
- *  else `false`.
- * @example
- *
- * _.isArguments(function() { return arguments; }());
- * // => true
- *
- * _.isArguments([1, 2, 3]);
- * // => false
- */
-function isArguments(value) {
-  // Safari 8.1 makes `arguments.callee` enumerable in strict mode.
-  return isArrayLikeObject(value) && hasOwnProperty.call(value, 'callee') &&
-    (!propertyIsEnumerable.call(value, 'callee') || objectToString.call(value) == argsTag);
-}
-
-/**
- * Checks if `value` is classified as an `Array` object.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an array, else `false`.
- * @example
- *
- * _.isArray([1, 2, 3]);
- * // => true
- *
- * _.isArray(document.body.children);
- * // => false
- *
- * _.isArray('abc');
- * // => false
- *
- * _.isArray(_.noop);
- * // => false
- */
-var isArray = Array.isArray;
-
-/**
- * Checks if `value` is array-like. A value is considered array-like if it's
- * not a function and has a `value.length` that's an integer greater than or
- * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
- * @example
- *
- * _.isArrayLike([1, 2, 3]);
- * // => true
- *
- * _.isArrayLike(document.body.children);
- * // => true
- *
- * _.isArrayLike('abc');
- * // => true
- *
- * _.isArrayLike(_.noop);
- * // => false
- */
-function isArrayLike(value) {
-  return value != null && isLength(value.length) && !isFunction(value);
-}
-
-/**
- * This method is like `_.isArrayLike` except that it also checks if `value`
- * is an object.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an array-like object,
- *  else `false`.
- * @example
- *
- * _.isArrayLikeObject([1, 2, 3]);
- * // => true
- *
- * _.isArrayLikeObject(document.body.children);
- * // => true
- *
- * _.isArrayLikeObject('abc');
- * // => false
- *
- * _.isArrayLikeObject(_.noop);
- * // => false
- */
-function isArrayLikeObject(value) {
-  return isObjectLike(value) && isArrayLike(value);
-}
-
-/**
- * Checks if `value` is a buffer.
- *
- * @static
- * @memberOf _
- * @since 4.3.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a buffer, else `false`.
- * @example
- *
- * _.isBuffer(new Buffer(2));
- * // => true
- *
- * _.isBuffer(new Uint8Array(2));
- * // => false
- */
-var isBuffer = nativeIsBuffer || stubFalse;
-
-/**
- * Checks if `value` is classified as a `Function` object.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a function, else `false`.
- * @example
- *
- * _.isFunction(_);
- * // => true
- *
- * _.isFunction(/abc/);
- * // => false
- */
-function isFunction(value) {
-  // The use of `Object#toString` avoids issues with the `typeof` operator
-  // in Safari 8-9 which returns 'object' for typed array and other constructors.
-  var tag = isObject(value) ? objectToString.call(value) : '';
-  return tag == funcTag || tag == genTag;
-}
-
-/**
- * Checks if `value` is a valid array-like length.
- *
- * **Note:** This method is loosely based on
- * [`ToLength`](http://ecma-international.org/ecma-262/7.0/#sec-tolength).
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
- * @example
- *
- * _.isLength(3);
- * // => true
- *
- * _.isLength(Number.MIN_VALUE);
- * // => false
- *
- * _.isLength(Infinity);
- * // => false
- *
- * _.isLength('3');
- * // => false
- */
-function isLength(value) {
-  return typeof value == 'number' &&
-    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
-}
-
-/**
- * Checks if `value` is the
- * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
- * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an object, else `false`.
- * @example
- *
- * _.isObject({});
- * // => true
- *
- * _.isObject([1, 2, 3]);
- * // => true
- *
- * _.isObject(_.noop);
- * // => true
- *
- * _.isObject(null);
- * // => false
- */
-function isObject(value) {
-  var type = typeof value;
-  return !!value && (type == 'object' || type == 'function');
-}
-
-/**
- * Checks if `value` is object-like. A value is object-like if it's not `null`
- * and has a `typeof` result of "object".
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
- * @example
- *
- * _.isObjectLike({});
- * // => true
- *
- * _.isObjectLike([1, 2, 3]);
- * // => true
- *
- * _.isObjectLike(_.noop);
- * // => false
- *
- * _.isObjectLike(null);
- * // => false
- */
-function isObjectLike(value) {
-  return !!value && typeof value == 'object';
-}
-
-/**
- * Creates an array of the own enumerable property names of `object`.
- *
- * **Note:** Non-object values are coerced to objects. See the
- * [ES spec](http://ecma-international.org/ecma-262/7.0/#sec-object.keys)
- * for more details.
- *
- * @static
- * @since 0.1.0
- * @memberOf _
- * @category Object
- * @param {Object} object The object to query.
- * @returns {Array} Returns the array of property names.
- * @example
- *
- * function Foo() {
- *   this.a = 1;
- *   this.b = 2;
- * }
- *
- * Foo.prototype.c = 3;
- *
- * _.keys(new Foo);
- * // => ['a', 'b'] (iteration order is not guaranteed)
- *
- * _.keys('hi');
- * // => ['0', '1']
- */
-function keys(object) {
-  return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
-}
-
-/**
- * This method returns a new empty array.
- *
- * @static
- * @memberOf _
- * @since 4.13.0
- * @category Util
- * @returns {Array} Returns the new empty array.
- * @example
- *
- * var arrays = _.times(2, _.stubArray);
- *
- * console.log(arrays);
- * // => [[], []]
- *
- * console.log(arrays[0] === arrays[1]);
- * // => false
- */
-function stubArray() {
-  return [];
-}
-
-/**
- * This method returns `false`.
- *
- * @static
- * @memberOf _
- * @since 4.13.0
- * @category Util
- * @returns {boolean} Returns `false`.
- * @example
- *
- * _.times(2, _.stubFalse);
- * // => [false, false]
- */
-function stubFalse() {
-  return false;
-}
-
-module.exports = clone;
-
-
-/***/ }),
+/* 506 */,
 /* 507 */,
 /* 508 */,
 /* 509 */,
@@ -37264,7 +38518,7 @@ var Duplex;
 Writable.WritableState = WritableState;
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -37901,7 +39155,7 @@ module.exports = BufferWriter;
 var Writer = __webpack_require__(613);
 (BufferWriter.prototype = Object.create(Writer.prototype)).constructor = BufferWriter;
 
-var util = __webpack_require__(729);
+var util = __webpack_require__(941);
 
 /**
  * Constructs a new buffer writer instance.
@@ -38242,212 +39496,318 @@ function done(stream, er, data) {
 /* 531 */,
 /* 532 */,
 /* 533 */
-/***/ (function(module, __unusedexports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-module.exports = OneOf;
+var Progress = __webpack_require__(702)
+var Gauge = __webpack_require__(278)
+var EE = __webpack_require__(614).EventEmitter
+var log = exports = module.exports = new EE()
+var util = __webpack_require__(669)
 
-// extends ReflectionObject
-var ReflectionObject = __webpack_require__(136);
-((OneOf.prototype = Object.create(ReflectionObject.prototype)).constructor = OneOf).className = "OneOf";
+var setBlocking = __webpack_require__(658)
+var consoleControl = __webpack_require__(920)
 
-var Field = __webpack_require__(290),
-    util  = __webpack_require__(663);
+setBlocking(true)
+var stream = process.stderr
+Object.defineProperty(log, 'stream', {
+  set: function (newStream) {
+    stream = newStream
+    if (this.gauge) this.gauge.setWriteTo(stream, stream)
+  },
+  get: function () {
+    return stream
+  }
+})
 
-/**
- * Constructs a new oneof instance.
- * @classdesc Reflected oneof.
- * @extends ReflectionObject
- * @constructor
- * @param {string} name Oneof name
- * @param {string[]|Object.<string,*>} [fieldNames] Field names
- * @param {Object.<string,*>} [options] Declared options
- * @param {string} [comment] Comment associated with this field
- */
-function OneOf(name, fieldNames, options, comment) {
-    if (!Array.isArray(fieldNames)) {
-        options = fieldNames;
-        fieldNames = undefined;
-    }
-    ReflectionObject.call(this, name, options);
-
-    /* istanbul ignore if */
-    if (!(fieldNames === undefined || Array.isArray(fieldNames)))
-        throw TypeError("fieldNames must be an Array");
-
-    /**
-     * Field names that belong to this oneof.
-     * @type {string[]}
-     */
-    this.oneof = fieldNames || []; // toJSON, marker
-
-    /**
-     * Fields that belong to this oneof as an array for iteration.
-     * @type {Field[]}
-     * @readonly
-     */
-    this.fieldsArray = []; // declared readonly for conformance, possibly not yet added to parent
-
-    /**
-     * Comment for this field.
-     * @type {string|null}
-     */
-    this.comment = comment;
+// by default, decide based on tty-ness.
+var colorEnabled
+log.useColor = function () {
+  return colorEnabled != null ? colorEnabled : stream.isTTY
 }
 
-/**
- * Oneof descriptor.
- * @interface IOneOf
- * @property {Array.<string>} oneof Oneof field names
- * @property {Object.<string,*>} [options] Oneof options
- */
-
-/**
- * Constructs a oneof from a oneof descriptor.
- * @param {string} name Oneof name
- * @param {IOneOf} json Oneof descriptor
- * @returns {OneOf} Created oneof
- * @throws {TypeError} If arguments are invalid
- */
-OneOf.fromJSON = function fromJSON(name, json) {
-    return new OneOf(name, json.oneof, json.options, json.comment);
-};
-
-/**
- * Converts this oneof to a oneof descriptor.
- * @param {IToJSONOptions} [toJSONOptions] JSON conversion options
- * @returns {IOneOf} Oneof descriptor
- */
-OneOf.prototype.toJSON = function toJSON(toJSONOptions) {
-    var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    return util.toObject([
-        "options" , this.options,
-        "oneof"   , this.oneof,
-        "comment" , keepComments ? this.comment : undefined
-    ]);
-};
-
-/**
- * Adds the fields of the specified oneof to the parent if not already done so.
- * @param {OneOf} oneof The oneof
- * @returns {undefined}
- * @inner
- * @ignore
- */
-function addFieldsToParent(oneof) {
-    if (oneof.parent)
-        for (var i = 0; i < oneof.fieldsArray.length; ++i)
-            if (!oneof.fieldsArray[i].parent)
-                oneof.parent.add(oneof.fieldsArray[i]);
+log.enableColor = function () {
+  colorEnabled = true
+  this.gauge.setTheme({hasColor: colorEnabled, hasUnicode: unicodeEnabled})
+}
+log.disableColor = function () {
+  colorEnabled = false
+  this.gauge.setTheme({hasColor: colorEnabled, hasUnicode: unicodeEnabled})
 }
 
-/**
- * Adds a field to this oneof and removes it from its current parent, if any.
- * @param {Field} field Field to add
- * @returns {OneOf} `this`
- */
-OneOf.prototype.add = function add(field) {
+// default level
+log.level = 'info'
 
-    /* istanbul ignore if */
-    if (!(field instanceof Field))
-        throw TypeError("field must be a Field");
+log.gauge = new Gauge(stream, {
+  enabled: false, // no progress bars unless asked
+  theme: {hasColor: log.useColor()},
+  template: [
+    {type: 'progressbar', length: 20},
+    {type: 'activityIndicator', kerning: 1, length: 1},
+    {type: 'section', default: ''},
+    ':',
+    {type: 'logline', kerning: 1, default: ''}
+  ]
+})
 
-    if (field.parent && field.parent !== this.parent)
-        field.parent.remove(field);
-    this.oneof.push(field.name);
-    this.fieldsArray.push(field);
-    field.partOf = this; // field.parent remains null
-    addFieldsToParent(this);
-    return this;
-};
+log.tracker = new Progress.TrackerGroup()
 
-/**
- * Removes a field from this oneof and puts it back to the oneof's parent.
- * @param {Field} field Field to remove
- * @returns {OneOf} `this`
- */
-OneOf.prototype.remove = function remove(field) {
+// we track this separately as we may need to temporarily disable the
+// display of the status bar for our own loggy purposes.
+log.progressEnabled = log.gauge.isEnabled()
 
-    /* istanbul ignore if */
-    if (!(field instanceof Field))
-        throw TypeError("field must be a Field");
+var unicodeEnabled
 
-    var index = this.fieldsArray.indexOf(field);
+log.enableUnicode = function () {
+  unicodeEnabled = true
+  this.gauge.setTheme({hasColor: this.useColor(), hasUnicode: unicodeEnabled})
+}
 
-    /* istanbul ignore if */
-    if (index < 0)
-        throw Error(field + " is not a member of " + this);
+log.disableUnicode = function () {
+  unicodeEnabled = false
+  this.gauge.setTheme({hasColor: this.useColor(), hasUnicode: unicodeEnabled})
+}
 
-    this.fieldsArray.splice(index, 1);
-    index = this.oneof.indexOf(field.name);
+log.setGaugeThemeset = function (themes) {
+  this.gauge.setThemeset(themes)
+}
 
-    /* istanbul ignore else */
-    if (index > -1) // theoretical
-        this.oneof.splice(index, 1);
+log.setGaugeTemplate = function (template) {
+  this.gauge.setTemplate(template)
+}
 
-    field.partOf = null;
-    return this;
-};
+log.enableProgress = function () {
+  if (this.progressEnabled) return
+  this.progressEnabled = true
+  this.tracker.on('change', this.showProgress)
+  if (this._pause) return
+  this.gauge.enable()
+}
 
-/**
- * @override
- */
-OneOf.prototype.onAdd = function onAdd(parent) {
-    ReflectionObject.prototype.onAdd.call(this, parent);
-    var self = this;
-    // Collect present fields
-    for (var i = 0; i < this.oneof.length; ++i) {
-        var field = parent.get(this.oneof[i]);
-        if (field && !field.partOf) {
-            field.partOf = self;
-            self.fieldsArray.push(field);
-        }
+log.disableProgress = function () {
+  if (!this.progressEnabled) return
+  this.progressEnabled = false
+  this.tracker.removeListener('change', this.showProgress)
+  this.gauge.disable()
+}
+
+var trackerConstructors = ['newGroup', 'newItem', 'newStream']
+
+var mixinLog = function (tracker) {
+  // mixin the public methods from log into the tracker
+  // (except: conflicts and one's we handle specially)
+  Object.keys(log).forEach(function (P) {
+    if (P[0] === '_') return
+    if (trackerConstructors.filter(function (C) { return C === P }).length) return
+    if (tracker[P]) return
+    if (typeof log[P] !== 'function') return
+    var func = log[P]
+    tracker[P] = function () {
+      return func.apply(log, arguments)
     }
-    // Add not yet present fields
-    addFieldsToParent(this);
-};
+  })
+  // if the new tracker is a group, make sure any subtrackers get
+  // mixed in too
+  if (tracker instanceof Progress.TrackerGroup) {
+    trackerConstructors.forEach(function (C) {
+      var func = tracker[C]
+      tracker[C] = function () { return mixinLog(func.apply(tracker, arguments)) }
+    })
+  }
+  return tracker
+}
 
-/**
- * @override
- */
-OneOf.prototype.onRemove = function onRemove(parent) {
-    for (var i = 0, field; i < this.fieldsArray.length; ++i)
-        if ((field = this.fieldsArray[i]).parent)
-            field.parent.remove(field);
-    ReflectionObject.prototype.onRemove.call(this, parent);
-};
+// Add tracker constructors to the top level log object
+trackerConstructors.forEach(function (C) {
+  log[C] = function () { return mixinLog(this.tracker[C].apply(this.tracker, arguments)) }
+})
 
-/**
- * Decorator function as returned by {@link OneOf.d} (TypeScript).
- * @typedef OneOfDecorator
- * @type {function}
- * @param {Object} prototype Target prototype
- * @param {string} oneofName OneOf name
- * @returns {undefined}
- */
+log.clearProgress = function (cb) {
+  if (!this.progressEnabled) return cb && process.nextTick(cb)
+  this.gauge.hide(cb)
+}
 
-/**
- * OneOf decorator (TypeScript).
- * @function
- * @param {...string} fieldNames Field names
- * @returns {OneOfDecorator} Decorator function
- * @template T extends string
- */
-OneOf.d = function decorateOneOf() {
-    var fieldNames = new Array(arguments.length),
-        index = 0;
-    while (index < arguments.length)
-        fieldNames[index] = arguments[index++];
-    return function oneOfDecorator(prototype, oneofName) {
-        util.decorateType(prototype.constructor)
-            .add(new OneOf(oneofName, fieldNames));
-        Object.defineProperty(prototype, oneofName, {
-            get: util.oneOfGetter(fieldNames),
-            set: util.oneOfSetter(fieldNames)
-        });
-    };
-};
+log.showProgress = function (name, completed) {
+  if (!this.progressEnabled) return
+  var values = {}
+  if (name) values.section = name
+  var last = log.record[log.record.length - 1]
+  if (last) {
+    values.subsection = last.prefix
+    var disp = log.disp[last.level] || last.level
+    var logline = this._format(disp, log.style[last.level])
+    if (last.prefix) logline += ' ' + this._format(last.prefix, this.prefixStyle)
+    logline += ' ' + last.message.split(/\r?\n/)[0]
+    values.logline = logline
+  }
+  values.completed = completed || this.tracker.completed()
+  this.gauge.show(values)
+}.bind(log) // bind for use in tracker's on-change listener
+
+// temporarily stop emitting, but don't drop
+log.pause = function () {
+  this._paused = true
+  if (this.progressEnabled) this.gauge.disable()
+}
+
+log.resume = function () {
+  if (!this._paused) return
+  this._paused = false
+
+  var b = this._buffer
+  this._buffer = []
+  b.forEach(function (m) {
+    this.emitLog(m)
+  }, this)
+  if (this.progressEnabled) this.gauge.enable()
+}
+
+log._buffer = []
+
+var id = 0
+log.record = []
+log.maxRecordSize = 10000
+log.log = function (lvl, prefix, message) {
+  var l = this.levels[lvl]
+  if (l === undefined) {
+    return this.emit('error', new Error(util.format(
+      'Undefined log level: %j', lvl)))
+  }
+
+  var a = new Array(arguments.length - 2)
+  var stack = null
+  for (var i = 2; i < arguments.length; i++) {
+    var arg = a[i - 2] = arguments[i]
+
+    // resolve stack traces to a plain string.
+    if (typeof arg === 'object' && arg &&
+        (arg instanceof Error) && arg.stack) {
+
+      Object.defineProperty(arg, 'stack', {
+        value: stack = arg.stack + '',
+        enumerable: true,
+        writable: true
+      })
+    }
+  }
+  if (stack) a.unshift(stack + '\n')
+  message = util.format.apply(util, a)
+
+  var m = { id: id++,
+            level: lvl,
+            prefix: String(prefix || ''),
+            message: message,
+            messageRaw: a }
+
+  this.emit('log', m)
+  this.emit('log.' + lvl, m)
+  if (m.prefix) this.emit(m.prefix, m)
+
+  this.record.push(m)
+  var mrs = this.maxRecordSize
+  var n = this.record.length - mrs
+  if (n > mrs / 10) {
+    var newSize = Math.floor(mrs * 0.9)
+    this.record = this.record.slice(-1 * newSize)
+  }
+
+  this.emitLog(m)
+}.bind(log)
+
+log.emitLog = function (m) {
+  if (this._paused) {
+    this._buffer.push(m)
+    return
+  }
+  if (this.progressEnabled) this.gauge.pulse(m.prefix)
+  var l = this.levels[m.level]
+  if (l === undefined) return
+  if (l < this.levels[this.level]) return
+  if (l > 0 && !isFinite(l)) return
+
+  // If 'disp' is null or undefined, use the lvl as a default
+  // Allows: '', 0 as valid disp
+  var disp = log.disp[m.level] != null ? log.disp[m.level] : m.level
+  this.clearProgress()
+  m.message.split(/\r?\n/).forEach(function (line) {
+    if (this.heading) {
+      this.write(this.heading, this.headingStyle)
+      this.write(' ')
+    }
+    this.write(disp, log.style[m.level])
+    var p = m.prefix || ''
+    if (p) this.write(' ')
+    this.write(p, this.prefixStyle)
+    this.write(' ' + line + '\n')
+  }, this)
+  this.showProgress()
+}
+
+log._format = function (msg, style) {
+  if (!stream) return
+
+  var output = ''
+  if (this.useColor()) {
+    style = style || {}
+    var settings = []
+    if (style.fg) settings.push(style.fg)
+    if (style.bg) settings.push('bg' + style.bg[0].toUpperCase() + style.bg.slice(1))
+    if (style.bold) settings.push('bold')
+    if (style.underline) settings.push('underline')
+    if (style.inverse) settings.push('inverse')
+    if (settings.length) output += consoleControl.color(settings)
+    if (style.beep) output += consoleControl.beep()
+  }
+  output += msg
+  if (this.useColor()) {
+    output += consoleControl.color('reset')
+  }
+  return output
+}
+
+log.write = function (msg, style) {
+  if (!stream) return
+
+  stream.write(this._format(msg, style))
+}
+
+log.addLevel = function (lvl, n, style, disp) {
+  // If 'disp' is null or undefined, use the lvl as a default
+  if (disp == null) disp = lvl
+  this.levels[lvl] = n
+  this.style[lvl] = style
+  if (!this[lvl]) {
+    this[lvl] = function () {
+      var a = new Array(arguments.length + 1)
+      a[0] = lvl
+      for (var i = 0; i < arguments.length; i++) {
+        a[i + 1] = arguments[i]
+      }
+      return this.log.apply(this, a)
+    }.bind(this)
+  }
+  this.disp[lvl] = disp
+}
+
+log.prefixStyle = { fg: 'magenta' }
+log.headingStyle = { fg: 'white', bg: 'black' }
+
+log.style = {}
+log.levels = {}
+log.disp = {}
+log.addLevel('silly', -Infinity, { inverse: true }, 'sill')
+log.addLevel('verbose', 1000, { fg: 'blue', bg: 'black' }, 'verb')
+log.addLevel('info', 2000, { fg: 'green' })
+log.addLevel('timing', 2500, { fg: 'green', bg: 'black' })
+log.addLevel('http', 3000, { fg: 'green', bg: 'black' })
+log.addLevel('notice', 3500, { fg: 'blue', bg: 'black' })
+log.addLevel('warn', 4000, { fg: 'black', bg: 'yellow' }, 'WARN')
+log.addLevel('error', 5000, { fg: 'red', bg: 'black' }, 'ERR!')
+log.addLevel('silent', Infinity)
+
+// allow 'error' prefix
+log.on('error', function () {})
 
 
 /***/ }),
@@ -38595,7 +39955,7 @@ module.exports = __webpack_require__(271).default;
 
 module.exports = LongBits;
 
-var util = __webpack_require__(729);
+var util = __webpack_require__(941);
 
 /**
  * Constructs new long bits.
@@ -38810,10 +40170,10 @@ parse.defaults = { keepCase: false };
 
 var tokenize  = __webpack_require__(909),
     Root      = __webpack_require__(700),
-    Type      = __webpack_require__(280),
+    Type      = __webpack_require__(666),
     Field     = __webpack_require__(290),
     MapField  = __webpack_require__(757),
-    OneOf     = __webpack_require__(533),
+    OneOf     = __webpack_require__(962),
     Enum      = __webpack_require__(976),
     Service   = __webpack_require__(58),
     Method    = __webpack_require__(84),
@@ -39756,7 +41116,7 @@ function _isUint8Array(obj) {
 /*</replacement>*/
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -40838,7 +42198,7 @@ function alignCenter (str, width) {
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 module.exports = (function() {
-  const $protobuf = __webpack_require__(835);
+  const $protobuf = __webpack_require__(72);
   const grpc = __webpack_require__(323);
   const registar = __webpack_require__(866);
   const util = __webpack_require__(949);
@@ -41637,7 +42997,64 @@ if (process.env.READABLE_STREAM === 'disable' && Stream) {
 /* 582 */,
 /* 583 */,
 /* 584 */,
-/* 585 */,
+/* 585 */
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+"use strict";
+
+module.exports = BufferReader;
+
+// extends Reader
+var Reader = __webpack_require__(468);
+(BufferReader.prototype = Object.create(Reader.prototype)).constructor = BufferReader;
+
+var util = __webpack_require__(941);
+
+/**
+ * Constructs a new buffer reader instance.
+ * @classdesc Wire format reader using node buffers.
+ * @extends Reader
+ * @constructor
+ * @param {Buffer} buffer Buffer to read from
+ */
+function BufferReader(buffer) {
+    Reader.call(this, buffer);
+
+    /**
+     * Read buffer.
+     * @name BufferReader#buf
+     * @type {Buffer}
+     */
+}
+
+BufferReader._configure = function () {
+    /* istanbul ignore else */
+    if (util.Buffer)
+        BufferReader.prototype._slice = util.Buffer.prototype.slice;
+};
+
+
+/**
+ * @override
+ */
+BufferReader.prototype.string = function read_string_buffer() {
+    var len = this.uint32(); // modifies pos
+    return this.buf.utf8Slice
+        ? this.buf.utf8Slice(this.pos, this.pos = Math.min(this.pos + len, this.len))
+        : this.buf.toString("utf-8", this.pos, this.pos = Math.min(this.pos + len, this.len));
+};
+
+/**
+ * Reads a sequence of bytes preceeded by its length as a varint.
+ * @name BufferReader#bytes
+ * @function
+ * @returns {Buffer} Value read
+ */
+
+BufferReader._configure();
+
+
+/***/ }),
 /* 586 */,
 /* 587 */,
 /* 588 */,
@@ -45482,1681 +46899,9 @@ module.exports = (function() {
 /* 603 */,
 /* 604 */,
 /* 605 */
-/***/ (function(module, __unusedexports, __webpack_require__) {
+/***/ (function(module) {
 
-module.exports = (function() {
-  const $protobuf = __webpack_require__(835);
-  const grpc = __webpack_require__(323);
-  const registar = __webpack_require__(866);
-  const util = __webpack_require__(949);
-  const yc = __webpack_require__(135);
-  const $Reader = $protobuf.Reader;
-  const $Writer = $protobuf.Writer;
-  const $util = $protobuf.util;
-  let root = {};
-  __webpack_require__(490);
-  __webpack_require__(109);
-  (function($root) {
-    $root.Function = (function() {
-      function Function(p) {
-        this.labels = {};
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      Function.prototype.id = '';
-      Function.prototype.folderId = '';
-      Function.prototype.createdAt = null;
-      Function.prototype.name = '';
-      Function.prototype.description = '';
-      Function.prototype.labels = $util.emptyObject;
-      Function.prototype.logGroupId = '';
-      Function.prototype.httpInvokeUrl = '';
-      Function.prototype.status = 0;
-      Function.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.id != null && m.hasOwnProperty('id')) w.uint32(10).string(m.id);
-        if (m.folderId != null && m.hasOwnProperty('folderId')) w.uint32(18).string(m.folderId);
-        if (m.createdAt != null && m.hasOwnProperty('createdAt')) $root.contrib.google.protobuf.Timestamp.encode(m.createdAt, w.uint32(26).fork()).ldelim();
-        if (m.name != null && m.hasOwnProperty('name')) w.uint32(34).string(m.name);
-        if (m.description != null && m.hasOwnProperty('description')) w.uint32(42).string(m.description);
-        if (m.labels != null && m.hasOwnProperty('labels')) {
-          for (let ks = Object.keys(m.labels), i = 0; i < ks.length; ++i) {
-            w.uint32(50)
-              .fork()
-              .uint32(10)
-              .string(ks[i])
-              .uint32(18)
-              .string(m.labels[ks[i]])
-              .ldelim();
-          }
-        }
-        if (m.logGroupId != null && m.hasOwnProperty('logGroupId')) w.uint32(58).string(m.logGroupId);
-        if (m.httpInvokeUrl != null && m.hasOwnProperty('httpInvokeUrl')) w.uint32(66).string(m.httpInvokeUrl);
-        if (m.status != null && m.hasOwnProperty('status')) w.uint32(72).int32(m.status);
-        return w;
-      };
-      Function.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.Function(),
-          k;
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.id = r.string();
-              break;
-            case 2:
-              m.folderId = r.string();
-              break;
-            case 3:
-              m.createdAt = $root.contrib.google.protobuf.Timestamp.decode(r, r.uint32());
-              break;
-            case 4:
-              m.name = r.string();
-              break;
-            case 5:
-              m.description = r.string();
-              break;
-            case 6:
-              r.skip().pos++;
-              if (m.labels === $util.emptyObject) m.labels = {};
-              k = r.string();
-              r.pos++;
-              m.labels[k] = r.string();
-              break;
-            case 7:
-              m.logGroupId = r.string();
-              break;
-            case 8:
-              m.httpInvokeUrl = r.string();
-              break;
-            case 9:
-              m.status = r.int32();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      let Status = (function() {
-        let valuesById = {},
-          values = Object.create(valuesById);
-        values[(valuesById[0] = 'STATUS_UNSPECIFIED')] = 0;
-        values[(valuesById[1] = 'CREATING')] = 1;
-        values[(valuesById[2] = 'ACTIVE')] = 2;
-        values[(valuesById[3] = 'DELETING')] = 3;
-        values[(valuesById[4] = 'ERROR')] = 4;
-        return values;
-      })();
-      Function.Status = Status;
-      return Function;
-    })();
-  })(root);
-  (function($root) {
-    $root.Version = (function() {
-      function Version(p) {
-        this.tags = [];
-        this.environment = {};
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      Version.prototype.id = '';
-      Version.prototype.functionId = '';
-      Version.prototype.description = '';
-      Version.prototype.createdAt = null;
-      Version.prototype.runtime = '';
-      Version.prototype.entrypoint = '';
-      Version.prototype.resources = null;
-      Version.prototype.executionTimeout = null;
-      Version.prototype.serviceAccountId = '';
-      Version.prototype.imageSize = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
-      Version.prototype.status = 0;
-      Version.prototype.tags = $util.emptyArray;
-      Version.prototype.logGroupId = '';
-      Version.prototype.environment = $util.emptyObject;
-      Version.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.id != null && m.hasOwnProperty('id')) w.uint32(10).string(m.id);
-        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(18).string(m.functionId);
-        if (m.description != null && m.hasOwnProperty('description')) w.uint32(26).string(m.description);
-        if (m.createdAt != null && m.hasOwnProperty('createdAt')) $root.contrib.google.protobuf.Timestamp.encode(m.createdAt, w.uint32(42).fork()).ldelim();
-        if (m.runtime != null && m.hasOwnProperty('runtime')) w.uint32(50).string(m.runtime);
-        if (m.entrypoint != null && m.hasOwnProperty('entrypoint')) w.uint32(58).string(m.entrypoint);
-        if (m.resources != null && m.hasOwnProperty('resources')) $root.api.serverless.functions.v1.Resources.encode(m.resources, w.uint32(66).fork()).ldelim();
-        if (m.executionTimeout != null && m.hasOwnProperty('executionTimeout')) $root.contrib.google.protobuf.Duration.encode(m.executionTimeout, w.uint32(74).fork()).ldelim();
-        if (m.serviceAccountId != null && m.hasOwnProperty('serviceAccountId')) w.uint32(82).string(m.serviceAccountId);
-        if (m.imageSize != null && m.hasOwnProperty('imageSize')) w.uint32(96).int64(m.imageSize);
-        if (m.status != null && m.hasOwnProperty('status')) w.uint32(104).int32(m.status);
-        if (m.tags != null && m.tags.length) {
-          for (let i = 0; i < m.tags.length; ++i) w.uint32(114).string(m.tags[i]);
-        }
-        if (m.logGroupId != null && m.hasOwnProperty('logGroupId')) w.uint32(122).string(m.logGroupId);
-        if (m.environment != null && m.hasOwnProperty('environment')) {
-          for (let ks = Object.keys(m.environment), i = 0; i < ks.length; ++i) {
-            w.uint32(130)
-              .fork()
-              .uint32(10)
-              .string(ks[i])
-              .uint32(18)
-              .string(m.environment[ks[i]])
-              .ldelim();
-          }
-        }
-        return w;
-      };
-      Version.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.Version(),
-          k;
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.id = r.string();
-              break;
-            case 2:
-              m.functionId = r.string();
-              break;
-            case 3:
-              m.description = r.string();
-              break;
-            case 5:
-              m.createdAt = $root.contrib.google.protobuf.Timestamp.decode(r, r.uint32());
-              break;
-            case 6:
-              m.runtime = r.string();
-              break;
-            case 7:
-              m.entrypoint = r.string();
-              break;
-            case 8:
-              m.resources = $root.api.serverless.functions.v1.Resources.decode(r, r.uint32());
-              break;
-            case 9:
-              m.executionTimeout = $root.contrib.google.protobuf.Duration.decode(r, r.uint32());
-              break;
-            case 10:
-              m.serviceAccountId = r.string();
-              break;
-            case 12:
-              m.imageSize = r.int64();
-              break;
-            case 13:
-              m.status = r.int32();
-              break;
-            case 14:
-              if (!(m.tags && m.tags.length)) m.tags = [];
-              m.tags.push(r.string());
-              break;
-            case 15:
-              m.logGroupId = r.string();
-              break;
-            case 16:
-              r.skip().pos++;
-              if (m.environment === $util.emptyObject) m.environment = {};
-              k = r.string();
-              r.pos++;
-              m.environment[k] = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      let Status = (function() {
-        let valuesById = {},
-          values = Object.create(valuesById);
-        values[(valuesById[0] = 'STATUS_UNSPECIFIED')] = 0;
-        values[(valuesById[1] = 'CREATING')] = 1;
-        values[(valuesById[2] = 'ACTIVE')] = 2;
-        return values;
-      })();
-      Version.Status = Status;
-      return Version;
-    })();
-  })(root);
-  (function($root) {
-    $root.Resources = (function() {
-      function Resources(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      Resources.prototype.memory = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
-      Resources.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.memory != null && m.hasOwnProperty('memory')) w.uint32(8).int64(m.memory);
-        return w;
-      };
-      Resources.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.Resources();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.memory = r.int64();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return Resources;
-    })();
-  })(root);
-  (function($root) {
-    $root.Package = (function() {
-      function Package(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      Package.prototype.bucketName = '';
-      Package.prototype.objectName = '';
-      Package.prototype.sha256 = '';
-      Package.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.bucketName != null && m.hasOwnProperty('bucketName')) w.uint32(10).string(m.bucketName);
-        if (m.objectName != null && m.hasOwnProperty('objectName')) w.uint32(18).string(m.objectName);
-        if (m.sha256 != null && m.hasOwnProperty('sha256')) w.uint32(26).string(m.sha256);
-        return w;
-      };
-      Package.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.Package();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.bucketName = r.string();
-              break;
-            case 2:
-              m.objectName = r.string();
-              break;
-            case 3:
-              m.sha256 = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return Package;
-    })();
-  })(root);
-  (function($root) {
-    $root.FunctionService = function(session) {
-      if (session === undefined) {
-        session = new yc.Session();
-      }
-      return session.client($root.FunctionService.makeGrpcConstructor());
-    };
-    $root.FunctionService.makeGrpcConstructor = () => {
-      let ctor = grpc.makeGenericClientConstructor({
-        get: {
-          path: '/yandex.cloud.serverless.functions.v1.FunctionService/Get',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.serverless.functions.v1.GetFunctionRequest,
-          responseType: $root.api.serverless.functions.v1.Function,
-          requestSerialize: r => {
-            return $root.api.serverless.functions.v1.GetFunctionRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.serverless.functions.v1.GetFunctionRequest.decode,
-          responseSerialize: r => {
-            return $root.api.serverless.functions.v1.Function.encode(r).finish();
-          },
-          responseDeserialize: $root.api.serverless.functions.v1.Function.decode
-        },
-        list: {
-          path: '/yandex.cloud.serverless.functions.v1.FunctionService/List',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.serverless.functions.v1.ListFunctionsRequest,
-          responseType: $root.api.serverless.functions.v1.ListFunctionsResponse,
-          requestSerialize: r => {
-            return $root.api.serverless.functions.v1.ListFunctionsRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.serverless.functions.v1.ListFunctionsRequest.decode,
-          responseSerialize: r => {
-            return $root.api.serverless.functions.v1.ListFunctionsResponse.encode(r).finish();
-          },
-          responseDeserialize: $root.api.serverless.functions.v1.ListFunctionsResponse.decode
-        },
-        create: {
-          path: '/yandex.cloud.serverless.functions.v1.FunctionService/Create',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.serverless.functions.v1.CreateFunctionRequest,
-          responseType: $root.api.operation.Operation,
-          requestSerialize: r => {
-            return $root.api.serverless.functions.v1.CreateFunctionRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.serverless.functions.v1.CreateFunctionRequest.decode,
-          responseSerialize: r => {
-            return $root.api.operation.Operation.encode(r).finish();
-          },
-          responseDeserialize: $root.api.operation.Operation.decode
-        },
-        update: {
-          path: '/yandex.cloud.serverless.functions.v1.FunctionService/Update',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.serverless.functions.v1.UpdateFunctionRequest,
-          responseType: $root.api.operation.Operation,
-          requestSerialize: r => {
-            return $root.api.serverless.functions.v1.UpdateFunctionRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.serverless.functions.v1.UpdateFunctionRequest.decode,
-          responseSerialize: r => {
-            return $root.api.operation.Operation.encode(r).finish();
-          },
-          responseDeserialize: $root.api.operation.Operation.decode
-        },
-        delete: {
-          path: '/yandex.cloud.serverless.functions.v1.FunctionService/Delete',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.serverless.functions.v1.DeleteFunctionRequest,
-          responseType: $root.api.operation.Operation,
-          requestSerialize: r => {
-            return $root.api.serverless.functions.v1.DeleteFunctionRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.serverless.functions.v1.DeleteFunctionRequest.decode,
-          responseSerialize: r => {
-            return $root.api.operation.Operation.encode(r).finish();
-          },
-          responseDeserialize: $root.api.operation.Operation.decode
-        },
-        getVersion: {
-          path: '/yandex.cloud.serverless.functions.v1.FunctionService/GetVersion',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.serverless.functions.v1.GetFunctionVersionRequest,
-          responseType: $root.api.serverless.functions.v1.Version,
-          requestSerialize: r => {
-            return $root.api.serverless.functions.v1.GetFunctionVersionRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.serverless.functions.v1.GetFunctionVersionRequest.decode,
-          responseSerialize: r => {
-            return $root.api.serverless.functions.v1.Version.encode(r).finish();
-          },
-          responseDeserialize: $root.api.serverless.functions.v1.Version.decode
-        },
-        getVersionByTag: {
-          path: '/yandex.cloud.serverless.functions.v1.FunctionService/GetVersionByTag',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.serverless.functions.v1.GetFunctionVersionByTagRequest,
-          responseType: $root.api.serverless.functions.v1.Version,
-          requestSerialize: r => {
-            return $root.api.serverless.functions.v1.GetFunctionVersionByTagRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.serverless.functions.v1.GetFunctionVersionByTagRequest.decode,
-          responseSerialize: r => {
-            return $root.api.serverless.functions.v1.Version.encode(r).finish();
-          },
-          responseDeserialize: $root.api.serverless.functions.v1.Version.decode
-        },
-        listVersions: {
-          path: '/yandex.cloud.serverless.functions.v1.FunctionService/ListVersions',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.serverless.functions.v1.ListFunctionsVersionsRequest,
-          responseType: $root.api.serverless.functions.v1.ListFunctionsVersionsResponse,
-          requestSerialize: r => {
-            return $root.api.serverless.functions.v1.ListFunctionsVersionsRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.serverless.functions.v1.ListFunctionsVersionsRequest.decode,
-          responseSerialize: r => {
-            return $root.api.serverless.functions.v1.ListFunctionsVersionsResponse.encode(r).finish();
-          },
-          responseDeserialize: $root.api.serverless.functions.v1.ListFunctionsVersionsResponse.decode
-        },
-        setTag: {
-          path: '/yandex.cloud.serverless.functions.v1.FunctionService/SetTag',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.serverless.functions.v1.SetFunctionTagRequest,
-          responseType: $root.api.operation.Operation,
-          requestSerialize: r => {
-            return $root.api.serverless.functions.v1.SetFunctionTagRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.serverless.functions.v1.SetFunctionTagRequest.decode,
-          responseSerialize: r => {
-            return $root.api.operation.Operation.encode(r).finish();
-          },
-          responseDeserialize: $root.api.operation.Operation.decode
-        },
-        removeTag: {
-          path: '/yandex.cloud.serverless.functions.v1.FunctionService/RemoveTag',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.serverless.functions.v1.RemoveFunctionTagRequest,
-          responseType: $root.api.operation.Operation,
-          requestSerialize: r => {
-            return $root.api.serverless.functions.v1.RemoveFunctionTagRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.serverless.functions.v1.RemoveFunctionTagRequest.decode,
-          responseSerialize: r => {
-            return $root.api.operation.Operation.encode(r).finish();
-          },
-          responseDeserialize: $root.api.operation.Operation.decode
-        },
-        listTagHistory: {
-          path: '/yandex.cloud.serverless.functions.v1.FunctionService/ListTagHistory',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.serverless.functions.v1.ListFunctionTagHistoryRequest,
-          responseType: $root.api.serverless.functions.v1.ListFunctionTagHistoryResponse,
-          requestSerialize: r => {
-            return $root.api.serverless.functions.v1.ListFunctionTagHistoryRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.serverless.functions.v1.ListFunctionTagHistoryRequest.decode,
-          responseSerialize: r => {
-            return $root.api.serverless.functions.v1.ListFunctionTagHistoryResponse.encode(r).finish();
-          },
-          responseDeserialize: $root.api.serverless.functions.v1.ListFunctionTagHistoryResponse.decode
-        },
-        createVersion: {
-          path: '/yandex.cloud.serverless.functions.v1.FunctionService/CreateVersion',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.serverless.functions.v1.CreateFunctionVersionRequest,
-          responseType: $root.api.operation.Operation,
-          requestSerialize: r => {
-            return $root.api.serverless.functions.v1.CreateFunctionVersionRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.serverless.functions.v1.CreateFunctionVersionRequest.decode,
-          responseSerialize: r => {
-            return $root.api.operation.Operation.encode(r).finish();
-          },
-          responseDeserialize: $root.api.operation.Operation.decode
-        },
-        listRuntimes: {
-          path: '/yandex.cloud.serverless.functions.v1.FunctionService/ListRuntimes',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.serverless.functions.v1.ListRuntimesRequest,
-          responseType: $root.api.serverless.functions.v1.ListRuntimesResponse,
-          requestSerialize: r => {
-            return $root.api.serverless.functions.v1.ListRuntimesRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.serverless.functions.v1.ListRuntimesRequest.decode,
-          responseSerialize: r => {
-            return $root.api.serverless.functions.v1.ListRuntimesResponse.encode(r).finish();
-          },
-          responseDeserialize: $root.api.serverless.functions.v1.ListRuntimesResponse.decode
-        },
-        listOperations: {
-          path: '/yandex.cloud.serverless.functions.v1.FunctionService/ListOperations',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.serverless.functions.v1.ListFunctionOperationsRequest,
-          responseType: $root.api.serverless.functions.v1.ListFunctionOperationsResponse,
-          requestSerialize: r => {
-            return $root.api.serverless.functions.v1.ListFunctionOperationsRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.serverless.functions.v1.ListFunctionOperationsRequest.decode,
-          responseSerialize: r => {
-            return $root.api.serverless.functions.v1.ListFunctionOperationsResponse.encode(r).finish();
-          },
-          responseDeserialize: $root.api.serverless.functions.v1.ListFunctionOperationsResponse.decode
-        },
-        listAccessBindings: {
-          path: '/yandex.cloud.serverless.functions.v1.FunctionService/ListAccessBindings',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.access.ListAccessBindingsRequest,
-          responseType: $root.api.access.ListAccessBindingsResponse,
-          requestSerialize: r => {
-            return $root.api.access.ListAccessBindingsRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.access.ListAccessBindingsRequest.decode,
-          responseSerialize: r => {
-            return $root.api.access.ListAccessBindingsResponse.encode(r).finish();
-          },
-          responseDeserialize: $root.api.access.ListAccessBindingsResponse.decode
-        },
-        setAccessBindings: {
-          path: '/yandex.cloud.serverless.functions.v1.FunctionService/SetAccessBindings',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.access.SetAccessBindingsRequest,
-          responseType: $root.api.operation.Operation,
-          requestSerialize: r => {
-            return $root.api.access.SetAccessBindingsRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.access.SetAccessBindingsRequest.decode,
-          responseSerialize: r => {
-            return $root.api.operation.Operation.encode(r).finish();
-          },
-          responseDeserialize: $root.api.operation.Operation.decode
-        },
-        updateAccessBindings: {
-          path: '/yandex.cloud.serverless.functions.v1.FunctionService/UpdateAccessBindings',
-          requestStream: false,
-          responseStream: false,
-          requestType: $root.api.access.UpdateAccessBindingsRequest,
-          responseType: $root.api.operation.Operation,
-          requestSerialize: r => {
-            return $root.api.access.UpdateAccessBindingsRequest.encode(r).finish();
-          },
-          requestDeserialize: $root.api.access.UpdateAccessBindingsRequest.decode,
-          responseSerialize: r => {
-            return $root.api.operation.Operation.encode(r).finish();
-          },
-          responseDeserialize: $root.api.operation.Operation.decode
-        }
-      });
-      ctor.__endpointId = 'serverless-functions';
-      return ctor;
-    };
-  })(root);
-  (function($root) {
-    $root.GetFunctionRequest = (function() {
-      function GetFunctionRequest(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      GetFunctionRequest.prototype.functionId = '';
-      GetFunctionRequest.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
-        return w;
-      };
-      GetFunctionRequest.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.GetFunctionRequest();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.functionId = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return GetFunctionRequest;
-    })();
-  })(root);
-  (function($root) {
-    $root.GetFunctionVersionRequest = (function() {
-      function GetFunctionVersionRequest(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      GetFunctionVersionRequest.prototype.functionVersionId = '';
-      GetFunctionVersionRequest.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.functionVersionId != null && m.hasOwnProperty('functionVersionId')) w.uint32(10).string(m.functionVersionId);
-        return w;
-      };
-      GetFunctionVersionRequest.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.GetFunctionVersionRequest();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.functionVersionId = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return GetFunctionVersionRequest;
-    })();
-  })(root);
-  (function($root) {
-    $root.GetFunctionVersionByTagRequest = (function() {
-      function GetFunctionVersionByTagRequest(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      GetFunctionVersionByTagRequest.prototype.functionId = '';
-      GetFunctionVersionByTagRequest.prototype.tag = '';
-      GetFunctionVersionByTagRequest.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
-        if (m.tag != null && m.hasOwnProperty('tag')) w.uint32(18).string(m.tag);
-        return w;
-      };
-      GetFunctionVersionByTagRequest.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.GetFunctionVersionByTagRequest();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.functionId = r.string();
-              break;
-            case 2:
-              m.tag = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return GetFunctionVersionByTagRequest;
-    })();
-  })(root);
-  (function($root) {
-    $root.ListFunctionsRequest = (function() {
-      function ListFunctionsRequest(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      ListFunctionsRequest.prototype.folderId = '';
-      ListFunctionsRequest.prototype.pageSize = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
-      ListFunctionsRequest.prototype.pageToken = '';
-      ListFunctionsRequest.prototype.filter = '';
-      ListFunctionsRequest.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.folderId != null && m.hasOwnProperty('folderId')) w.uint32(10).string(m.folderId);
-        if (m.pageSize != null && m.hasOwnProperty('pageSize')) w.uint32(16).int64(m.pageSize);
-        if (m.pageToken != null && m.hasOwnProperty('pageToken')) w.uint32(26).string(m.pageToken);
-        if (m.filter != null && m.hasOwnProperty('filter')) w.uint32(34).string(m.filter);
-        return w;
-      };
-      ListFunctionsRequest.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.ListFunctionsRequest();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.folderId = r.string();
-              break;
-            case 2:
-              m.pageSize = r.int64();
-              break;
-            case 3:
-              m.pageToken = r.string();
-              break;
-            case 4:
-              m.filter = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return ListFunctionsRequest;
-    })();
-  })(root);
-  (function($root) {
-    $root.ListFunctionsResponse = (function() {
-      function ListFunctionsResponse(p) {
-        this.functions = [];
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      ListFunctionsResponse.prototype.functions = $util.emptyArray;
-      ListFunctionsResponse.prototype.nextPageToken = '';
-      ListFunctionsResponse.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.functions != null && m.functions.length) {
-          for (let i = 0; i < m.functions.length; ++i) $root.api.serverless.functions.v1.Function.encode(m.functions[i], w.uint32(10).fork()).ldelim();
-        }
-        if (m.nextPageToken != null && m.hasOwnProperty('nextPageToken')) w.uint32(18).string(m.nextPageToken);
-        return w;
-      };
-      ListFunctionsResponse.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.ListFunctionsResponse();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              if (!(m.functions && m.functions.length)) m.functions = [];
-              m.functions.push($root.api.serverless.functions.v1.Function.decode(r, r.uint32()));
-              break;
-            case 2:
-              m.nextPageToken = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return ListFunctionsResponse;
-    })();
-  })(root);
-  (function($root) {
-    $root.CreateFunctionRequest = (function() {
-      function CreateFunctionRequest(p) {
-        this.labels = {};
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      CreateFunctionRequest.prototype.folderId = '';
-      CreateFunctionRequest.prototype.name = '';
-      CreateFunctionRequest.prototype.description = '';
-      CreateFunctionRequest.prototype.labels = $util.emptyObject;
-      CreateFunctionRequest.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.folderId != null && m.hasOwnProperty('folderId')) w.uint32(10).string(m.folderId);
-        if (m.name != null && m.hasOwnProperty('name')) w.uint32(18).string(m.name);
-        if (m.description != null && m.hasOwnProperty('description')) w.uint32(26).string(m.description);
-        if (m.labels != null && m.hasOwnProperty('labels')) {
-          for (let ks = Object.keys(m.labels), i = 0; i < ks.length; ++i) {
-            w.uint32(34)
-              .fork()
-              .uint32(10)
-              .string(ks[i])
-              .uint32(18)
-              .string(m.labels[ks[i]])
-              .ldelim();
-          }
-        }
-        return w;
-      };
-      CreateFunctionRequest.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.CreateFunctionRequest(),
-          k;
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.folderId = r.string();
-              break;
-            case 2:
-              m.name = r.string();
-              break;
-            case 3:
-              m.description = r.string();
-              break;
-            case 4:
-              r.skip().pos++;
-              if (m.labels === $util.emptyObject) m.labels = {};
-              k = r.string();
-              r.pos++;
-              m.labels[k] = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return CreateFunctionRequest;
-    })();
-  })(root);
-  (function($root) {
-    $root.CreateFunctionMetadata = (function() {
-      function CreateFunctionMetadata(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      CreateFunctionMetadata.prototype.functionId = '';
-      CreateFunctionMetadata.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
-        return w;
-      };
-      CreateFunctionMetadata.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.CreateFunctionMetadata();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.functionId = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return CreateFunctionMetadata;
-    })();
-  })(root);
-  (function($root) {
-    $root.UpdateFunctionRequest = (function() {
-      function UpdateFunctionRequest(p) {
-        this.labels = {};
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      UpdateFunctionRequest.prototype.functionId = '';
-      UpdateFunctionRequest.prototype.updateMask = null;
-      UpdateFunctionRequest.prototype.name = '';
-      UpdateFunctionRequest.prototype.description = '';
-      UpdateFunctionRequest.prototype.labels = $util.emptyObject;
-      UpdateFunctionRequest.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
-        if (m.updateMask != null && m.hasOwnProperty('updateMask')) $root.contrib.google.protobuf.FieldMask.encode(m.updateMask, w.uint32(18).fork()).ldelim();
-        if (m.name != null && m.hasOwnProperty('name')) w.uint32(26).string(m.name);
-        if (m.description != null && m.hasOwnProperty('description')) w.uint32(34).string(m.description);
-        if (m.labels != null && m.hasOwnProperty('labels')) {
-          for (let ks = Object.keys(m.labels), i = 0; i < ks.length; ++i) {
-            w.uint32(42)
-              .fork()
-              .uint32(10)
-              .string(ks[i])
-              .uint32(18)
-              .string(m.labels[ks[i]])
-              .ldelim();
-          }
-        }
-        return w;
-      };
-      UpdateFunctionRequest.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.UpdateFunctionRequest(),
-          k;
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.functionId = r.string();
-              break;
-            case 2:
-              m.updateMask = $root.contrib.google.protobuf.FieldMask.decode(r, r.uint32());
-              break;
-            case 3:
-              m.name = r.string();
-              break;
-            case 4:
-              m.description = r.string();
-              break;
-            case 5:
-              r.skip().pos++;
-              if (m.labels === $util.emptyObject) m.labels = {};
-              k = r.string();
-              r.pos++;
-              m.labels[k] = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return UpdateFunctionRequest;
-    })();
-  })(root);
-  (function($root) {
-    $root.UpdateFunctionMetadata = (function() {
-      function UpdateFunctionMetadata(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      UpdateFunctionMetadata.prototype.functionId = '';
-      UpdateFunctionMetadata.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
-        return w;
-      };
-      UpdateFunctionMetadata.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.UpdateFunctionMetadata();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.functionId = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return UpdateFunctionMetadata;
-    })();
-  })(root);
-  (function($root) {
-    $root.DeleteFunctionRequest = (function() {
-      function DeleteFunctionRequest(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      DeleteFunctionRequest.prototype.functionId = '';
-      DeleteFunctionRequest.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
-        return w;
-      };
-      DeleteFunctionRequest.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.DeleteFunctionRequest();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.functionId = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return DeleteFunctionRequest;
-    })();
-  })(root);
-  (function($root) {
-    $root.DeleteFunctionMetadata = (function() {
-      function DeleteFunctionMetadata(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      DeleteFunctionMetadata.prototype.functionId = '';
-      DeleteFunctionMetadata.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
-        return w;
-      };
-      DeleteFunctionMetadata.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.DeleteFunctionMetadata();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.functionId = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return DeleteFunctionMetadata;
-    })();
-  })(root);
-  (function($root) {
-    $root.ListRuntimesRequest = (function() {
-      function ListRuntimesRequest(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      ListRuntimesRequest.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        return w;
-      };
-      ListRuntimesRequest.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.ListRuntimesRequest();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return ListRuntimesRequest;
-    })();
-  })(root);
-  (function($root) {
-    $root.ListRuntimesResponse = (function() {
-      function ListRuntimesResponse(p) {
-        this.runtimes = [];
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      ListRuntimesResponse.prototype.runtimes = $util.emptyArray;
-      ListRuntimesResponse.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.runtimes != null && m.runtimes.length) {
-          for (let i = 0; i < m.runtimes.length; ++i) w.uint32(10).string(m.runtimes[i]);
-        }
-        return w;
-      };
-      ListRuntimesResponse.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.ListRuntimesResponse();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              if (!(m.runtimes && m.runtimes.length)) m.runtimes = [];
-              m.runtimes.push(r.string());
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return ListRuntimesResponse;
-    })();
-  })(root);
-  (function($root) {
-    $root.ListFunctionsVersionsRequest = (function() {
-      function ListFunctionsVersionsRequest(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      ListFunctionsVersionsRequest.prototype.folderId = '';
-      ListFunctionsVersionsRequest.prototype.functionId = '';
-      ListFunctionsVersionsRequest.prototype.pageSize = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
-      ListFunctionsVersionsRequest.prototype.pageToken = '';
-      ListFunctionsVersionsRequest.prototype.filter = '';
-      let $oneOfFields;
-      Object.defineProperty(ListFunctionsVersionsRequest.prototype, 'id', {
-        get: $util.oneOfGetter(($oneOfFields = ['folderId', 'functionId'])),
-        set: $util.oneOfSetter($oneOfFields)
-      });
-      ListFunctionsVersionsRequest.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.folderId != null && m.hasOwnProperty('folderId')) w.uint32(10).string(m.folderId);
-        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(18).string(m.functionId);
-        if (m.pageSize != null && m.hasOwnProperty('pageSize')) w.uint32(24).int64(m.pageSize);
-        if (m.pageToken != null && m.hasOwnProperty('pageToken')) w.uint32(34).string(m.pageToken);
-        if (m.filter != null && m.hasOwnProperty('filter')) w.uint32(42).string(m.filter);
-        return w;
-      };
-      ListFunctionsVersionsRequest.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.ListFunctionsVersionsRequest();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.folderId = r.string();
-              break;
-            case 2:
-              m.functionId = r.string();
-              break;
-            case 3:
-              m.pageSize = r.int64();
-              break;
-            case 4:
-              m.pageToken = r.string();
-              break;
-            case 5:
-              m.filter = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return ListFunctionsVersionsRequest;
-    })();
-  })(root);
-  (function($root) {
-    $root.ListFunctionsVersionsResponse = (function() {
-      function ListFunctionsVersionsResponse(p) {
-        this.versions = [];
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      ListFunctionsVersionsResponse.prototype.versions = $util.emptyArray;
-      ListFunctionsVersionsResponse.prototype.nextPageToken = '';
-      ListFunctionsVersionsResponse.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.versions != null && m.versions.length) {
-          for (let i = 0; i < m.versions.length; ++i) $root.api.serverless.functions.v1.Version.encode(m.versions[i], w.uint32(10).fork()).ldelim();
-        }
-        if (m.nextPageToken != null && m.hasOwnProperty('nextPageToken')) w.uint32(18).string(m.nextPageToken);
-        return w;
-      };
-      ListFunctionsVersionsResponse.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.ListFunctionsVersionsResponse();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              if (!(m.versions && m.versions.length)) m.versions = [];
-              m.versions.push($root.api.serverless.functions.v1.Version.decode(r, r.uint32()));
-              break;
-            case 2:
-              m.nextPageToken = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return ListFunctionsVersionsResponse;
-    })();
-  })(root);
-  (function($root) {
-    $root.ListFunctionOperationsRequest = (function() {
-      function ListFunctionOperationsRequest(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      ListFunctionOperationsRequest.prototype.functionId = '';
-      ListFunctionOperationsRequest.prototype.pageSize = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
-      ListFunctionOperationsRequest.prototype.pageToken = '';
-      ListFunctionOperationsRequest.prototype.filter = '';
-      ListFunctionOperationsRequest.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
-        if (m.pageSize != null && m.hasOwnProperty('pageSize')) w.uint32(16).int64(m.pageSize);
-        if (m.pageToken != null && m.hasOwnProperty('pageToken')) w.uint32(26).string(m.pageToken);
-        if (m.filter != null && m.hasOwnProperty('filter')) w.uint32(34).string(m.filter);
-        return w;
-      };
-      ListFunctionOperationsRequest.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.ListFunctionOperationsRequest();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.functionId = r.string();
-              break;
-            case 2:
-              m.pageSize = r.int64();
-              break;
-            case 3:
-              m.pageToken = r.string();
-              break;
-            case 4:
-              m.filter = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return ListFunctionOperationsRequest;
-    })();
-  })(root);
-  (function($root) {
-    $root.ListFunctionOperationsResponse = (function() {
-      function ListFunctionOperationsResponse(p) {
-        this.operations = [];
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      ListFunctionOperationsResponse.prototype.operations = $util.emptyArray;
-      ListFunctionOperationsResponse.prototype.nextPageToken = '';
-      ListFunctionOperationsResponse.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.operations != null && m.operations.length) {
-          for (let i = 0; i < m.operations.length; ++i) $root.api.operation.Operation.encode(m.operations[i], w.uint32(10).fork()).ldelim();
-        }
-        if (m.nextPageToken != null && m.hasOwnProperty('nextPageToken')) w.uint32(18).string(m.nextPageToken);
-        return w;
-      };
-      ListFunctionOperationsResponse.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.ListFunctionOperationsResponse();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              if (!(m.operations && m.operations.length)) m.operations = [];
-              m.operations.push($root.api.operation.Operation.decode(r, r.uint32()));
-              break;
-            case 2:
-              m.nextPageToken = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return ListFunctionOperationsResponse;
-    })();
-  })(root);
-  (function($root) {
-    $root.CreateFunctionVersionRequest = (function() {
-      function CreateFunctionVersionRequest(p) {
-        this.environment = {};
-        this.tag = [];
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      CreateFunctionVersionRequest.prototype.functionId = '';
-      CreateFunctionVersionRequest.prototype.runtime = '';
-      CreateFunctionVersionRequest.prototype.description = '';
-      CreateFunctionVersionRequest.prototype.entrypoint = '';
-      CreateFunctionVersionRequest.prototype.resources = null;
-      CreateFunctionVersionRequest.prototype.executionTimeout = null;
-      CreateFunctionVersionRequest.prototype.serviceAccountId = '';
-      CreateFunctionVersionRequest.prototype['package'] = null;
-      CreateFunctionVersionRequest.prototype.content = $util.newBuffer([]);
-      CreateFunctionVersionRequest.prototype.environment = $util.emptyObject;
-      CreateFunctionVersionRequest.prototype.tag = $util.emptyArray;
-      let $oneOfFields;
-      Object.defineProperty(CreateFunctionVersionRequest.prototype, 'packageSource', {
-        get: $util.oneOfGetter(($oneOfFields = ['package', 'content'])),
-        set: $util.oneOfSetter($oneOfFields)
-      });
-      CreateFunctionVersionRequest.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
-        if (m.runtime != null && m.hasOwnProperty('runtime')) w.uint32(18).string(m.runtime);
-        if (m.description != null && m.hasOwnProperty('description')) w.uint32(26).string(m.description);
-        if (m.entrypoint != null && m.hasOwnProperty('entrypoint')) w.uint32(34).string(m.entrypoint);
-        if (m.resources != null && m.hasOwnProperty('resources')) $root.api.serverless.functions.v1.Resources.encode(m.resources, w.uint32(42).fork()).ldelim();
-        if (m.executionTimeout != null && m.hasOwnProperty('executionTimeout')) $root.contrib.google.protobuf.Duration.encode(m.executionTimeout, w.uint32(50).fork()).ldelim();
-        if (m.serviceAccountId != null && m.hasOwnProperty('serviceAccountId')) w.uint32(58).string(m.serviceAccountId);
-        if (m['package'] != null && m.hasOwnProperty('package')) $root.api.serverless.functions.v1.Package.encode(m['package'], w.uint32(74).fork()).ldelim();
-        if (m.content != null && m.hasOwnProperty('content')) w.uint32(82).bytes(m.content);
-        if (m.environment != null && m.hasOwnProperty('environment')) {
-          for (let ks = Object.keys(m.environment), i = 0; i < ks.length; ++i) {
-            w.uint32(98)
-              .fork()
-              .uint32(10)
-              .string(ks[i])
-              .uint32(18)
-              .string(m.environment[ks[i]])
-              .ldelim();
-          }
-        }
-        if (m.tag != null && m.tag.length) {
-          for (let i = 0; i < m.tag.length; ++i) w.uint32(106).string(m.tag[i]);
-        }
-        return w;
-      };
-      CreateFunctionVersionRequest.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.CreateFunctionVersionRequest(),
-          k;
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.functionId = r.string();
-              break;
-            case 2:
-              m.runtime = r.string();
-              break;
-            case 3:
-              m.description = r.string();
-              break;
-            case 4:
-              m.entrypoint = r.string();
-              break;
-            case 5:
-              m.resources = $root.api.serverless.functions.v1.Resources.decode(r, r.uint32());
-              break;
-            case 6:
-              m.executionTimeout = $root.contrib.google.protobuf.Duration.decode(r, r.uint32());
-              break;
-            case 7:
-              m.serviceAccountId = r.string();
-              break;
-            case 9:
-              m['package'] = $root.api.serverless.functions.v1.Package.decode(r, r.uint32());
-              break;
-            case 10:
-              m.content = r.bytes();
-              break;
-            case 12:
-              r.skip().pos++;
-              if (m.environment === $util.emptyObject) m.environment = {};
-              k = r.string();
-              r.pos++;
-              m.environment[k] = r.string();
-              break;
-            case 13:
-              if (!(m.tag && m.tag.length)) m.tag = [];
-              m.tag.push(r.string());
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return CreateFunctionVersionRequest;
-    })();
-  })(root);
-  (function($root) {
-    $root.CreateFunctionVersionMetadata = (function() {
-      function CreateFunctionVersionMetadata(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      CreateFunctionVersionMetadata.prototype.functionVersionId = '';
-      CreateFunctionVersionMetadata.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.functionVersionId != null && m.hasOwnProperty('functionVersionId')) w.uint32(10).string(m.functionVersionId);
-        return w;
-      };
-      CreateFunctionVersionMetadata.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.CreateFunctionVersionMetadata();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.functionVersionId = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return CreateFunctionVersionMetadata;
-    })();
-  })(root);
-  (function($root) {
-    $root.SetFunctionTagRequest = (function() {
-      function SetFunctionTagRequest(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      SetFunctionTagRequest.prototype.functionVersionId = '';
-      SetFunctionTagRequest.prototype.tag = '';
-      SetFunctionTagRequest.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.functionVersionId != null && m.hasOwnProperty('functionVersionId')) w.uint32(10).string(m.functionVersionId);
-        if (m.tag != null && m.hasOwnProperty('tag')) w.uint32(18).string(m.tag);
-        return w;
-      };
-      SetFunctionTagRequest.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.SetFunctionTagRequest();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.functionVersionId = r.string();
-              break;
-            case 2:
-              m.tag = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return SetFunctionTagRequest;
-    })();
-  })(root);
-  (function($root) {
-    $root.RemoveFunctionTagRequest = (function() {
-      function RemoveFunctionTagRequest(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      RemoveFunctionTagRequest.prototype.functionVersionId = '';
-      RemoveFunctionTagRequest.prototype.tag = '';
-      RemoveFunctionTagRequest.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.functionVersionId != null && m.hasOwnProperty('functionVersionId')) w.uint32(10).string(m.functionVersionId);
-        if (m.tag != null && m.hasOwnProperty('tag')) w.uint32(18).string(m.tag);
-        return w;
-      };
-      RemoveFunctionTagRequest.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.RemoveFunctionTagRequest();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.functionVersionId = r.string();
-              break;
-            case 2:
-              m.tag = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return RemoveFunctionTagRequest;
-    })();
-  })(root);
-  (function($root) {
-    $root.SetFunctionTagMetadata = (function() {
-      function SetFunctionTagMetadata(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      SetFunctionTagMetadata.prototype.functionVersionId = '';
-      SetFunctionTagMetadata.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.functionVersionId != null && m.hasOwnProperty('functionVersionId')) w.uint32(10).string(m.functionVersionId);
-        return w;
-      };
-      SetFunctionTagMetadata.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.SetFunctionTagMetadata();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.functionVersionId = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return SetFunctionTagMetadata;
-    })();
-  })(root);
-  (function($root) {
-    $root.RemoveFunctionTagMetadata = (function() {
-      function RemoveFunctionTagMetadata(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      RemoveFunctionTagMetadata.prototype.functionVersionId = '';
-      RemoveFunctionTagMetadata.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.functionVersionId != null && m.hasOwnProperty('functionVersionId')) w.uint32(10).string(m.functionVersionId);
-        return w;
-      };
-      RemoveFunctionTagMetadata.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.RemoveFunctionTagMetadata();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.functionVersionId = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return RemoveFunctionTagMetadata;
-    })();
-  })(root);
-  (function($root) {
-    $root.ListFunctionTagHistoryRequest = (function() {
-      function ListFunctionTagHistoryRequest(p) {
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      ListFunctionTagHistoryRequest.prototype.functionId = '';
-      ListFunctionTagHistoryRequest.prototype.tag = '';
-      ListFunctionTagHistoryRequest.prototype.pageSize = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
-      ListFunctionTagHistoryRequest.prototype.pageToken = '';
-      ListFunctionTagHistoryRequest.prototype.filter = '';
-      ListFunctionTagHistoryRequest.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
-        if (m.tag != null && m.hasOwnProperty('tag')) w.uint32(18).string(m.tag);
-        if (m.pageSize != null && m.hasOwnProperty('pageSize')) w.uint32(24).int64(m.pageSize);
-        if (m.pageToken != null && m.hasOwnProperty('pageToken')) w.uint32(34).string(m.pageToken);
-        if (m.filter != null && m.hasOwnProperty('filter')) w.uint32(42).string(m.filter);
-        return w;
-      };
-      ListFunctionTagHistoryRequest.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.ListFunctionTagHistoryRequest();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              m.functionId = r.string();
-              break;
-            case 2:
-              m.tag = r.string();
-              break;
-            case 3:
-              m.pageSize = r.int64();
-              break;
-            case 4:
-              m.pageToken = r.string();
-              break;
-            case 5:
-              m.filter = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      return ListFunctionTagHistoryRequest;
-    })();
-  })(root);
-  (function($root) {
-    $root.ListFunctionTagHistoryResponse = (function() {
-      function ListFunctionTagHistoryResponse(p) {
-        this.functionTagHistoryRecord = [];
-        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-      }
-      ListFunctionTagHistoryResponse.prototype.functionTagHistoryRecord = $util.emptyArray;
-      ListFunctionTagHistoryResponse.prototype.nextPageToken = '';
-      ListFunctionTagHistoryResponse.encode = function encode(m, w) {
-        if (!w) w = $Writer.create();
-        if (m.functionTagHistoryRecord != null && m.functionTagHistoryRecord.length) {
-          for (let i = 0; i < m.functionTagHistoryRecord.length; ++i) $root.api.serverless.functions.v1.ListFunctionTagHistoryResponse.FunctionTagHistoryRecord.encode(m.functionTagHistoryRecord[i], w.uint32(10).fork()).ldelim();
-        }
-        if (m.nextPageToken != null && m.hasOwnProperty('nextPageToken')) w.uint32(18).string(m.nextPageToken);
-        return w;
-      };
-      ListFunctionTagHistoryResponse.decode = function decode(r, l) {
-        if (!(r instanceof $Reader)) r = $Reader.create(r);
-        let c = l === undefined ? r.len : r.pos + l,
-          m = new $root.api.serverless.functions.v1.ListFunctionTagHistoryResponse();
-        while (r.pos < c) {
-          let t = r.uint32();
-          switch (t >>> 3) {
-            case 1:
-              if (!(m.functionTagHistoryRecord && m.functionTagHistoryRecord.length)) m.functionTagHistoryRecord = [];
-              m.functionTagHistoryRecord.push($root.api.serverless.functions.v1.ListFunctionTagHistoryResponse.FunctionTagHistoryRecord.decode(r, r.uint32()));
-              break;
-            case 2:
-              m.nextPageToken = r.string();
-              break;
-            default:
-              r.skipType(t & 7);
-              break;
-          }
-        }
-        return m;
-      };
-      ListFunctionTagHistoryResponse.FunctionTagHistoryRecord = (function() {
-        function FunctionTagHistoryRecord(p) {
-          if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
-        }
-        FunctionTagHistoryRecord.prototype.functionId = '';
-        FunctionTagHistoryRecord.prototype.functionVersionId = '';
-        FunctionTagHistoryRecord.prototype.tag = '';
-        FunctionTagHistoryRecord.prototype.effectiveFrom = null;
-        FunctionTagHistoryRecord.prototype.effectiveTo = null;
-        FunctionTagHistoryRecord.encode = function encode(m, w) {
-          if (!w) w = $Writer.create();
-          if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
-          if (m.tag != null && m.hasOwnProperty('tag')) w.uint32(18).string(m.tag);
-          if (m.functionVersionId != null && m.hasOwnProperty('functionVersionId')) w.uint32(26).string(m.functionVersionId);
-          if (m.effectiveFrom != null && m.hasOwnProperty('effectiveFrom')) $root.contrib.google.protobuf.Timestamp.encode(m.effectiveFrom, w.uint32(34).fork()).ldelim();
-          if (m.effectiveTo != null && m.hasOwnProperty('effectiveTo')) $root.contrib.google.protobuf.Timestamp.encode(m.effectiveTo, w.uint32(42).fork()).ldelim();
-          return w;
-        };
-        FunctionTagHistoryRecord.decode = function decode(r, l) {
-          if (!(r instanceof $Reader)) r = $Reader.create(r);
-          let c = l === undefined ? r.len : r.pos + l,
-            m = new $root.api.serverless.functions.v1.ListFunctionTagHistoryResponse.FunctionTagHistoryRecord();
-          while (r.pos < c) {
-            let t = r.uint32();
-            switch (t >>> 3) {
-              case 1:
-                m.functionId = r.string();
-                break;
-              case 3:
-                m.functionVersionId = r.string();
-                break;
-              case 2:
-                m.tag = r.string();
-                break;
-              case 4:
-                m.effectiveFrom = $root.contrib.google.protobuf.Timestamp.decode(r, r.uint32());
-                break;
-              case 5:
-                m.effectiveTo = $root.contrib.google.protobuf.Timestamp.decode(r, r.uint32());
-                break;
-              default:
-                r.skipType(t & 7);
-                break;
-            }
-          }
-          return m;
-        };
-        return FunctionTagHistoryRecord;
-      })();
-      return ListFunctionTagHistoryResponse;
-    })();
-  })(root);
-  registar.register('api.serverless.functions.v1', root);
-  root.api = registar.lookup('api');
-  root.contrib = registar.lookup('contrib');
-  return root;
-})();
-
+module.exports = require("http");
 
 /***/ }),
 /* 606 */,
@@ -47192,7 +46937,7 @@ protobuf.build = "full";
 // Parser
 protobuf.tokenize         = __webpack_require__(909);
 protobuf.parse            = __webpack_require__(544);
-protobuf.common           = __webpack_require__(286);
+protobuf.common           = __webpack_require__(352);
 
 // Configure parser
 protobuf.Root._configure(protobuf.Type, protobuf.parse, protobuf.common);
@@ -47207,7 +46952,7 @@ protobuf.Root._configure(protobuf.Type, protobuf.parse, protobuf.common);
 
 module.exports = Writer;
 
-var util      = __webpack_require__(729);
+var util      = __webpack_require__(941);
 
 var BufferWriter; // cyclic
 
@@ -48692,7 +48437,7 @@ module.exports = Extract
  * Various utility functions.
  * @namespace
  */
-var util = module.exports = __webpack_require__(729);
+var util = module.exports = __webpack_require__(941);
 
 var roots = __webpack_require__(162);
 
@@ -48820,7 +48565,7 @@ util.decorateType = function decorateType(ctor, typeName) {
 
     /* istanbul ignore next */
     if (!Type)
-        Type = __webpack_require__(280);
+        Type = __webpack_require__(666);
 
     var type = new Type(typeName || ctor.name);
     util.decorateRoot.add(type);
@@ -48869,7 +48614,602 @@ Object.defineProperty(util, "decorateRoot", {
 /***/ }),
 /* 664 */,
 /* 665 */,
-/* 666 */,
+/* 666 */
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+"use strict";
+
+module.exports = Type;
+
+// extends Namespace
+var Namespace = __webpack_require__(884);
+((Type.prototype = Object.create(Namespace.prototype)).constructor = Type).className = "Type";
+
+var Enum      = __webpack_require__(976),
+    OneOf     = __webpack_require__(962),
+    Field     = __webpack_require__(290),
+    MapField  = __webpack_require__(757),
+    Service   = __webpack_require__(58),
+    Message   = __webpack_require__(692),
+    Reader    = __webpack_require__(468),
+    Writer    = __webpack_require__(613),
+    util      = __webpack_require__(663),
+    encoder   = __webpack_require__(469),
+    decoder   = __webpack_require__(187),
+    verifier  = __webpack_require__(283),
+    converter = __webpack_require__(223),
+    wrappers  = __webpack_require__(858);
+
+/**
+ * Constructs a new reflected message type instance.
+ * @classdesc Reflected message type.
+ * @extends NamespaceBase
+ * @constructor
+ * @param {string} name Message name
+ * @param {Object.<string,*>} [options] Declared options
+ */
+function Type(name, options) {
+    Namespace.call(this, name, options);
+
+    /**
+     * Message fields.
+     * @type {Object.<string,Field>}
+     */
+    this.fields = {};  // toJSON, marker
+
+    /**
+     * Oneofs declared within this namespace, if any.
+     * @type {Object.<string,OneOf>}
+     */
+    this.oneofs = undefined; // toJSON
+
+    /**
+     * Extension ranges, if any.
+     * @type {number[][]}
+     */
+    this.extensions = undefined; // toJSON
+
+    /**
+     * Reserved ranges, if any.
+     * @type {Array.<number[]|string>}
+     */
+    this.reserved = undefined; // toJSON
+
+    /*?
+     * Whether this type is a legacy group.
+     * @type {boolean|undefined}
+     */
+    this.group = undefined; // toJSON
+
+    /**
+     * Cached fields by id.
+     * @type {Object.<number,Field>|null}
+     * @private
+     */
+    this._fieldsById = null;
+
+    /**
+     * Cached fields as an array.
+     * @type {Field[]|null}
+     * @private
+     */
+    this._fieldsArray = null;
+
+    /**
+     * Cached oneofs as an array.
+     * @type {OneOf[]|null}
+     * @private
+     */
+    this._oneofsArray = null;
+
+    /**
+     * Cached constructor.
+     * @type {Constructor<{}>}
+     * @private
+     */
+    this._ctor = null;
+}
+
+Object.defineProperties(Type.prototype, {
+
+    /**
+     * Message fields by id.
+     * @name Type#fieldsById
+     * @type {Object.<number,Field>}
+     * @readonly
+     */
+    fieldsById: {
+        get: function() {
+
+            /* istanbul ignore if */
+            if (this._fieldsById)
+                return this._fieldsById;
+
+            this._fieldsById = {};
+            for (var names = Object.keys(this.fields), i = 0; i < names.length; ++i) {
+                var field = this.fields[names[i]],
+                    id = field.id;
+
+                /* istanbul ignore if */
+                if (this._fieldsById[id])
+                    throw Error("duplicate id " + id + " in " + this);
+
+                this._fieldsById[id] = field;
+            }
+            return this._fieldsById;
+        }
+    },
+
+    /**
+     * Fields of this message as an array for iteration.
+     * @name Type#fieldsArray
+     * @type {Field[]}
+     * @readonly
+     */
+    fieldsArray: {
+        get: function() {
+            return this._fieldsArray || (this._fieldsArray = util.toArray(this.fields));
+        }
+    },
+
+    /**
+     * Oneofs of this message as an array for iteration.
+     * @name Type#oneofsArray
+     * @type {OneOf[]}
+     * @readonly
+     */
+    oneofsArray: {
+        get: function() {
+            return this._oneofsArray || (this._oneofsArray = util.toArray(this.oneofs));
+        }
+    },
+
+    /**
+     * The registered constructor, if any registered, otherwise a generic constructor.
+     * Assigning a function replaces the internal constructor. If the function does not extend {@link Message} yet, its prototype will be setup accordingly and static methods will be populated. If it already extends {@link Message}, it will just replace the internal constructor.
+     * @name Type#ctor
+     * @type {Constructor<{}>}
+     */
+    ctor: {
+        get: function() {
+            return this._ctor || (this.ctor = Type.generateConstructor(this)());
+        },
+        set: function(ctor) {
+
+            // Ensure proper prototype
+            var prototype = ctor.prototype;
+            if (!(prototype instanceof Message)) {
+                (ctor.prototype = new Message()).constructor = ctor;
+                util.merge(ctor.prototype, prototype);
+            }
+
+            // Classes and messages reference their reflected type
+            ctor.$type = ctor.prototype.$type = this;
+
+            // Mix in static methods
+            util.merge(ctor, Message, true);
+
+            this._ctor = ctor;
+
+            // Messages have non-enumerable default values on their prototype
+            var i = 0;
+            for (; i < /* initializes */ this.fieldsArray.length; ++i)
+                this._fieldsArray[i].resolve(); // ensures a proper value
+
+            // Messages have non-enumerable getters and setters for each virtual oneof field
+            var ctorProperties = {};
+            for (i = 0; i < /* initializes */ this.oneofsArray.length; ++i)
+                ctorProperties[this._oneofsArray[i].resolve().name] = {
+                    get: util.oneOfGetter(this._oneofsArray[i].oneof),
+                    set: util.oneOfSetter(this._oneofsArray[i].oneof)
+                };
+            if (i)
+                Object.defineProperties(ctor.prototype, ctorProperties);
+        }
+    }
+});
+
+/**
+ * Generates a constructor function for the specified type.
+ * @param {Type} mtype Message type
+ * @returns {Codegen} Codegen instance
+ */
+Type.generateConstructor = function generateConstructor(mtype) {
+    /* eslint-disable no-unexpected-multiline */
+    var gen = util.codegen(["p"], mtype.name);
+    // explicitly initialize mutable object/array fields so that these aren't just inherited from the prototype
+    for (var i = 0, field; i < mtype.fieldsArray.length; ++i)
+        if ((field = mtype._fieldsArray[i]).map) gen
+            ("this%s={}", util.safeProp(field.name));
+        else if (field.repeated) gen
+            ("this%s=[]", util.safeProp(field.name));
+    return gen
+    ("if(p)for(var ks=Object.keys(p),i=0;i<ks.length;++i)if(p[ks[i]]!=null)") // omit undefined or null
+        ("this[ks[i]]=p[ks[i]]");
+    /* eslint-enable no-unexpected-multiline */
+};
+
+function clearCache(type) {
+    type._fieldsById = type._fieldsArray = type._oneofsArray = null;
+    delete type.encode;
+    delete type.decode;
+    delete type.verify;
+    return type;
+}
+
+/**
+ * Message type descriptor.
+ * @interface IType
+ * @extends INamespace
+ * @property {Object.<string,IOneOf>} [oneofs] Oneof descriptors
+ * @property {Object.<string,IField>} fields Field descriptors
+ * @property {number[][]} [extensions] Extension ranges
+ * @property {number[][]} [reserved] Reserved ranges
+ * @property {boolean} [group=false] Whether a legacy group or not
+ */
+
+/**
+ * Creates a message type from a message type descriptor.
+ * @param {string} name Message name
+ * @param {IType} json Message type descriptor
+ * @returns {Type} Created message type
+ */
+Type.fromJSON = function fromJSON(name, json) {
+    var type = new Type(name, json.options);
+    type.extensions = json.extensions;
+    type.reserved = json.reserved;
+    var names = Object.keys(json.fields),
+        i = 0;
+    for (; i < names.length; ++i)
+        type.add(
+            ( typeof json.fields[names[i]].keyType !== "undefined"
+            ? MapField.fromJSON
+            : Field.fromJSON )(names[i], json.fields[names[i]])
+        );
+    if (json.oneofs)
+        for (names = Object.keys(json.oneofs), i = 0; i < names.length; ++i)
+            type.add(OneOf.fromJSON(names[i], json.oneofs[names[i]]));
+    if (json.nested)
+        for (names = Object.keys(json.nested), i = 0; i < names.length; ++i) {
+            var nested = json.nested[names[i]];
+            type.add( // most to least likely
+                ( nested.id !== undefined
+                ? Field.fromJSON
+                : nested.fields !== undefined
+                ? Type.fromJSON
+                : nested.values !== undefined
+                ? Enum.fromJSON
+                : nested.methods !== undefined
+                ? Service.fromJSON
+                : Namespace.fromJSON )(names[i], nested)
+            );
+        }
+    if (json.extensions && json.extensions.length)
+        type.extensions = json.extensions;
+    if (json.reserved && json.reserved.length)
+        type.reserved = json.reserved;
+    if (json.group)
+        type.group = true;
+    if (json.comment)
+        type.comment = json.comment;
+    return type;
+};
+
+/**
+ * Converts this message type to a message type descriptor.
+ * @param {IToJSONOptions} [toJSONOptions] JSON conversion options
+ * @returns {IType} Message type descriptor
+ */
+Type.prototype.toJSON = function toJSON(toJSONOptions) {
+    var inherited = Namespace.prototype.toJSON.call(this, toJSONOptions);
+    var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
+    return util.toObject([
+        "options"    , inherited && inherited.options || undefined,
+        "oneofs"     , Namespace.arrayToJSON(this.oneofsArray, toJSONOptions),
+        "fields"     , Namespace.arrayToJSON(this.fieldsArray.filter(function(obj) { return !obj.declaringField; }), toJSONOptions) || {},
+        "extensions" , this.extensions && this.extensions.length ? this.extensions : undefined,
+        "reserved"   , this.reserved && this.reserved.length ? this.reserved : undefined,
+        "group"      , this.group || undefined,
+        "nested"     , inherited && inherited.nested || undefined,
+        "comment"    , keepComments ? this.comment : undefined
+    ]);
+};
+
+/**
+ * @override
+ */
+Type.prototype.resolveAll = function resolveAll() {
+    var fields = this.fieldsArray, i = 0;
+    while (i < fields.length)
+        fields[i++].resolve();
+    var oneofs = this.oneofsArray; i = 0;
+    while (i < oneofs.length)
+        oneofs[i++].resolve();
+    return Namespace.prototype.resolveAll.call(this);
+};
+
+/**
+ * @override
+ */
+Type.prototype.get = function get(name) {
+    return this.fields[name]
+        || this.oneofs && this.oneofs[name]
+        || this.nested && this.nested[name]
+        || null;
+};
+
+/**
+ * Adds a nested object to this type.
+ * @param {ReflectionObject} object Nested object to add
+ * @returns {Type} `this`
+ * @throws {TypeError} If arguments are invalid
+ * @throws {Error} If there is already a nested object with this name or, if a field, when there is already a field with this id
+ */
+Type.prototype.add = function add(object) {
+
+    if (this.get(object.name))
+        throw Error("duplicate name '" + object.name + "' in " + this);
+
+    if (object instanceof Field && object.extend === undefined) {
+        // NOTE: Extension fields aren't actual fields on the declaring type, but nested objects.
+        // The root object takes care of adding distinct sister-fields to the respective extended
+        // type instead.
+
+        // avoids calling the getter if not absolutely necessary because it's called quite frequently
+        if (this._fieldsById ? /* istanbul ignore next */ this._fieldsById[object.id] : this.fieldsById[object.id])
+            throw Error("duplicate id " + object.id + " in " + this);
+        if (this.isReservedId(object.id))
+            throw Error("id " + object.id + " is reserved in " + this);
+        if (this.isReservedName(object.name))
+            throw Error("name '" + object.name + "' is reserved in " + this);
+
+        if (object.parent)
+            object.parent.remove(object);
+        this.fields[object.name] = object;
+        object.message = this;
+        object.onAdd(this);
+        return clearCache(this);
+    }
+    if (object instanceof OneOf) {
+        if (!this.oneofs)
+            this.oneofs = {};
+        this.oneofs[object.name] = object;
+        object.onAdd(this);
+        return clearCache(this);
+    }
+    return Namespace.prototype.add.call(this, object);
+};
+
+/**
+ * Removes a nested object from this type.
+ * @param {ReflectionObject} object Nested object to remove
+ * @returns {Type} `this`
+ * @throws {TypeError} If arguments are invalid
+ * @throws {Error} If `object` is not a member of this type
+ */
+Type.prototype.remove = function remove(object) {
+    if (object instanceof Field && object.extend === undefined) {
+        // See Type#add for the reason why extension fields are excluded here.
+
+        /* istanbul ignore if */
+        if (!this.fields || this.fields[object.name] !== object)
+            throw Error(object + " is not a member of " + this);
+
+        delete this.fields[object.name];
+        object.parent = null;
+        object.onRemove(this);
+        return clearCache(this);
+    }
+    if (object instanceof OneOf) {
+
+        /* istanbul ignore if */
+        if (!this.oneofs || this.oneofs[object.name] !== object)
+            throw Error(object + " is not a member of " + this);
+
+        delete this.oneofs[object.name];
+        object.parent = null;
+        object.onRemove(this);
+        return clearCache(this);
+    }
+    return Namespace.prototype.remove.call(this, object);
+};
+
+/**
+ * Tests if the specified id is reserved.
+ * @param {number} id Id to test
+ * @returns {boolean} `true` if reserved, otherwise `false`
+ */
+Type.prototype.isReservedId = function isReservedId(id) {
+    return Namespace.isReservedId(this.reserved, id);
+};
+
+/**
+ * Tests if the specified name is reserved.
+ * @param {string} name Name to test
+ * @returns {boolean} `true` if reserved, otherwise `false`
+ */
+Type.prototype.isReservedName = function isReservedName(name) {
+    return Namespace.isReservedName(this.reserved, name);
+};
+
+/**
+ * Creates a new message of this type using the specified properties.
+ * @param {Object.<string,*>} [properties] Properties to set
+ * @returns {Message<{}>} Message instance
+ */
+Type.prototype.create = function create(properties) {
+    return new this.ctor(properties);
+};
+
+/**
+ * Sets up {@link Type#encode|encode}, {@link Type#decode|decode} and {@link Type#verify|verify}.
+ * @returns {Type} `this`
+ */
+Type.prototype.setup = function setup() {
+    // Sets up everything at once so that the prototype chain does not have to be re-evaluated
+    // multiple times (V8, soft-deopt prototype-check).
+
+    var fullName = this.fullName,
+        types    = [];
+    for (var i = 0; i < /* initializes */ this.fieldsArray.length; ++i)
+        types.push(this._fieldsArray[i].resolve().resolvedType);
+
+    // Replace setup methods with type-specific generated functions
+    this.encode = encoder(this)({
+        Writer : Writer,
+        types  : types,
+        util   : util
+    });
+    this.decode = decoder(this)({
+        Reader : Reader,
+        types  : types,
+        util   : util
+    });
+    this.verify = verifier(this)({
+        types : types,
+        util  : util
+    });
+    this.fromObject = converter.fromObject(this)({
+        types : types,
+        util  : util
+    });
+    this.toObject = converter.toObject(this)({
+        types : types,
+        util  : util
+    });
+
+    // Inject custom wrappers for common types
+    var wrapper = wrappers[fullName];
+    if (wrapper) {
+        var originalThis = Object.create(this);
+        // if (wrapper.fromObject) {
+            originalThis.fromObject = this.fromObject;
+            this.fromObject = wrapper.fromObject.bind(originalThis);
+        // }
+        // if (wrapper.toObject) {
+            originalThis.toObject = this.toObject;
+            this.toObject = wrapper.toObject.bind(originalThis);
+        // }
+    }
+
+    return this;
+};
+
+/**
+ * Encodes a message of this type. Does not implicitly {@link Type#verify|verify} messages.
+ * @param {Message<{}>|Object.<string,*>} message Message instance or plain object
+ * @param {Writer} [writer] Writer to encode to
+ * @returns {Writer} writer
+ */
+Type.prototype.encode = function encode_setup(message, writer) {
+    return this.setup().encode(message, writer); // overrides this method
+};
+
+/**
+ * Encodes a message of this type preceeded by its byte length as a varint. Does not implicitly {@link Type#verify|verify} messages.
+ * @param {Message<{}>|Object.<string,*>} message Message instance or plain object
+ * @param {Writer} [writer] Writer to encode to
+ * @returns {Writer} writer
+ */
+Type.prototype.encodeDelimited = function encodeDelimited(message, writer) {
+    return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+};
+
+/**
+ * Decodes a message of this type.
+ * @param {Reader|Uint8Array} reader Reader or buffer to decode from
+ * @param {number} [length] Length of the message, if known beforehand
+ * @returns {Message<{}>} Decoded message
+ * @throws {Error} If the payload is not a reader or valid buffer
+ * @throws {util.ProtocolError<{}>} If required fields are missing
+ */
+Type.prototype.decode = function decode_setup(reader, length) {
+    return this.setup().decode(reader, length); // overrides this method
+};
+
+/**
+ * Decodes a message of this type preceeded by its byte length as a varint.
+ * @param {Reader|Uint8Array} reader Reader or buffer to decode from
+ * @returns {Message<{}>} Decoded message
+ * @throws {Error} If the payload is not a reader or valid buffer
+ * @throws {util.ProtocolError} If required fields are missing
+ */
+Type.prototype.decodeDelimited = function decodeDelimited(reader) {
+    if (!(reader instanceof Reader))
+        reader = Reader.create(reader);
+    return this.decode(reader, reader.uint32());
+};
+
+/**
+ * Verifies that field values are valid and that required fields are present.
+ * @param {Object.<string,*>} message Plain object to verify
+ * @returns {null|string} `null` if valid, otherwise the reason why it is not
+ */
+Type.prototype.verify = function verify_setup(message) {
+    return this.setup().verify(message); // overrides this method
+};
+
+/**
+ * Creates a new message of this type from a plain object. Also converts values to their respective internal types.
+ * @param {Object.<string,*>} object Plain object to convert
+ * @returns {Message<{}>} Message instance
+ */
+Type.prototype.fromObject = function fromObject(object) {
+    return this.setup().fromObject(object);
+};
+
+/**
+ * Conversion options as used by {@link Type#toObject} and {@link Message.toObject}.
+ * @interface IConversionOptions
+ * @property {Function} [longs] Long conversion type.
+ * Valid values are `String` and `Number` (the global types).
+ * Defaults to copy the present value, which is a possibly unsafe number without and a {@link Long} with a long library.
+ * @property {Function} [enums] Enum value conversion type.
+ * Only valid value is `String` (the global type).
+ * Defaults to copy the present value, which is the numeric id.
+ * @property {Function} [bytes] Bytes value conversion type.
+ * Valid values are `Array` and (a base64 encoded) `String` (the global types).
+ * Defaults to copy the present value, which usually is a Buffer under node and an Uint8Array in the browser.
+ * @property {boolean} [defaults=false] Also sets default values on the resulting object
+ * @property {boolean} [arrays=false] Sets empty arrays for missing repeated fields even if `defaults=false`
+ * @property {boolean} [objects=false] Sets empty objects for missing map fields even if `defaults=false`
+ * @property {boolean} [oneofs=false] Includes virtual oneof properties set to the present field's name, if any
+ * @property {boolean} [json=false] Performs additional JSON compatibility conversions, i.e. NaN and Infinity to strings
+ */
+
+/**
+ * Creates a plain object from a message of this type. Also converts values to other types if specified.
+ * @param {Message<{}>} message Message instance
+ * @param {IConversionOptions} [options] Conversion options
+ * @returns {Object.<string,*>} Plain object
+ */
+Type.prototype.toObject = function toObject(message, options) {
+    return this.setup().toObject(message, options);
+};
+
+/**
+ * Decorator function as returned by {@link Type.d} (TypeScript).
+ * @typedef TypeDecorator
+ * @type {function}
+ * @param {Constructor<T>} target Target constructor
+ * @returns {undefined}
+ * @template T extends Message<T>
+ */
+
+/**
+ * Type decorator (TypeScript).
+ * @param {string} [typeName] Type name, defaults to the constructor's name
+ * @returns {TypeDecorator<T>} Decorator function
+ * @template T extends Message<T>
+ */
+Type.d = function decorateType(typeName) {
+    return function typeDecorator(target) {
+        util.decorateType(target, typeName);
+    };
+};
+
+
+/***/ }),
 /* 667 */,
 /* 668 */,
 /* 669 */
@@ -49444,119 +49784,7 @@ module.exports.win32 = win32;
 
 /***/ }),
 /* 682 */,
-/* 683 */
-/***/ (function(__unusedmodule, exports) {
-
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-// NOTE: These type checking functions intentionally don't use `instanceof`
-// because it is fragile and can be easily faked with `Object.create()`.
-
-function isArray(arg) {
-  if (Array.isArray) {
-    return Array.isArray(arg);
-  }
-  return objectToString(arg) === '[object Array]';
-}
-exports.isArray = isArray;
-
-function isBoolean(arg) {
-  return typeof arg === 'boolean';
-}
-exports.isBoolean = isBoolean;
-
-function isNull(arg) {
-  return arg === null;
-}
-exports.isNull = isNull;
-
-function isNullOrUndefined(arg) {
-  return arg == null;
-}
-exports.isNullOrUndefined = isNullOrUndefined;
-
-function isNumber(arg) {
-  return typeof arg === 'number';
-}
-exports.isNumber = isNumber;
-
-function isString(arg) {
-  return typeof arg === 'string';
-}
-exports.isString = isString;
-
-function isSymbol(arg) {
-  return typeof arg === 'symbol';
-}
-exports.isSymbol = isSymbol;
-
-function isUndefined(arg) {
-  return arg === void 0;
-}
-exports.isUndefined = isUndefined;
-
-function isRegExp(re) {
-  return objectToString(re) === '[object RegExp]';
-}
-exports.isRegExp = isRegExp;
-
-function isObject(arg) {
-  return typeof arg === 'object' && arg !== null;
-}
-exports.isObject = isObject;
-
-function isDate(d) {
-  return objectToString(d) === '[object Date]';
-}
-exports.isDate = isDate;
-
-function isError(e) {
-  return (objectToString(e) === '[object Error]' || e instanceof Error);
-}
-exports.isError = isError;
-
-function isFunction(arg) {
-  return typeof arg === 'function';
-}
-exports.isFunction = isFunction;
-
-function isPrimitive(arg) {
-  return arg === null ||
-         typeof arg === 'boolean' ||
-         typeof arg === 'number' ||
-         typeof arg === 'string' ||
-         typeof arg === 'symbol' ||  // ES6 symbol
-         typeof arg === 'undefined';
-}
-exports.isPrimitive = isPrimitive;
-
-exports.isBuffer = Buffer.isBuffer;
-
-function objectToString(o) {
-  return Object.prototype.toString.call(o);
-}
-
-
-/***/ }),
+/* 683 */,
 /* 684 */
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -49645,9 +49873,9 @@ protobuf.ReflectionObject = __webpack_require__(136);
 protobuf.Namespace        = __webpack_require__(884);
 protobuf.Root             = __webpack_require__(700);
 protobuf.Enum             = __webpack_require__(976);
-protobuf.Type             = __webpack_require__(280);
+protobuf.Type             = __webpack_require__(666);
 protobuf.Field            = __webpack_require__(290);
-protobuf.OneOf            = __webpack_require__(533);
+protobuf.OneOf            = __webpack_require__(962);
 protobuf.MapField         = __webpack_require__(757);
 protobuf.Service          = __webpack_require__(58);
 protobuf.Method           = __webpack_require__(84);
@@ -49696,7 +49924,7 @@ try {
 
 module.exports = Message;
 
-var util = __webpack_require__(729);
+var util = __webpack_require__(941);
 
 /**
  * Constructs a new message instance.
@@ -50034,7 +50262,7 @@ var objectKeys = Object.keys || function (obj) {
 module.exports = Duplex;
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -50131,8 +50359,8 @@ Duplex.prototype._destroy = function (err, cb) {
 module.exports = exports;
 
 var path = __webpack_require__(622);
-var semver = __webpack_require__(864);
-var url = __webpack_require__(414);
+var semver = __webpack_require__(280);
+var url = __webpack_require__(835);
 var detect_libc = __webpack_require__(143);
 var napi = __webpack_require__(141);
 
@@ -50474,7 +50702,7 @@ var Namespace = __webpack_require__(884);
 
 var Field   = __webpack_require__(290),
     Enum    = __webpack_require__(976),
-    OneOf   = __webpack_require__(533),
+    OneOf   = __webpack_require__(962),
     util    = __webpack_require__(663);
 
 var Type,   // cyclic
@@ -51038,25 +51266,26 @@ exports.default = crc16kermit;
 /***/ }),
 /* 711 */,
 /* 712 */
-/***/ (function(module) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-module.exports = inquire;
-
-/**
- * Requires a module only if available.
- * @memberof util
- * @param {string} moduleName Module to require
- * @returns {?Object} Required module if available and not empty, otherwise `null`
- */
-function inquire(moduleName) {
-    try {
-        var mod = eval("quire".replace(/^/,"re"))(moduleName); // eslint-disable-line no-eval
-        if (mod && (mod.length || Object.keys(mod).length))
-            return mod;
-    } catch (e) {} // eslint-disable-line no-empty
-    return null;
+var Stream = __webpack_require__(413);
+if (process.env.READABLE_STREAM === 'disable' && Stream) {
+  module.exports = Stream;
+  exports = module.exports = Stream.Readable;
+  exports.Readable = Stream.Readable;
+  exports.Writable = Stream.Writable;
+  exports.Duplex = Stream.Duplex;
+  exports.Transform = Stream.Transform;
+  exports.PassThrough = Stream.PassThrough;
+  exports.Stream = Stream;
+} else {
+  exports = module.exports = __webpack_require__(466);
+  exports.Stream = Stream || exports;
+  exports.Readable = exports;
+  exports.Writable = __webpack_require__(169);
+  exports.Duplex = __webpack_require__(168);
+  exports.Transform = __webpack_require__(217);
+  exports.PassThrough = __webpack_require__(810);
 }
 
 
@@ -52672,424 +52901,9 @@ exports.getLastListener = getLastListener;
 /* 727 */,
 /* 728 */,
 /* 729 */
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
+/***/ (function(module, __unusedexports, __webpack_require__) {
 
-"use strict";
-
-var util = exports;
-
-// used to return a Promise where callback is omitted
-util.asPromise = __webpack_require__(189);
-
-// converts to / from base64 encoded strings
-util.base64 = __webpack_require__(492);
-
-// base class of rpc.Service
-util.EventEmitter = __webpack_require__(45);
-
-// float handling accross browsers
-util.float = __webpack_require__(111);
-
-// requires modules optionally and hides the call from bundlers
-util.inquire = __webpack_require__(712);
-
-// converts to / from utf8 encoded strings
-util.utf8 = __webpack_require__(120);
-
-// provides a node-like buffer pool in the browser
-util.pool = __webpack_require__(391);
-
-// utility to work with the low and high bits of a 64 bit value
-util.LongBits = __webpack_require__(540);
-
-// global object reference
-util.global = typeof window !== "undefined" && window
-           || typeof global !== "undefined" && global
-           || typeof self   !== "undefined" && self
-           || this; // eslint-disable-line no-invalid-this
-
-/**
- * An immuable empty array.
- * @memberof util
- * @type {Array.<*>}
- * @const
- */
-util.emptyArray = Object.freeze ? Object.freeze([]) : /* istanbul ignore next */ []; // used on prototypes
-
-/**
- * An immutable empty object.
- * @type {Object}
- * @const
- */
-util.emptyObject = Object.freeze ? Object.freeze({}) : /* istanbul ignore next */ {}; // used on prototypes
-
-/**
- * Whether running within node or not.
- * @memberof util
- * @type {boolean}
- * @const
- */
-util.isNode = Boolean(util.global.process && util.global.process.versions && util.global.process.versions.node);
-
-/**
- * Tests if the specified value is an integer.
- * @function
- * @param {*} value Value to test
- * @returns {boolean} `true` if the value is an integer
- */
-util.isInteger = Number.isInteger || /* istanbul ignore next */ function isInteger(value) {
-    return typeof value === "number" && isFinite(value) && Math.floor(value) === value;
-};
-
-/**
- * Tests if the specified value is a string.
- * @param {*} value Value to test
- * @returns {boolean} `true` if the value is a string
- */
-util.isString = function isString(value) {
-    return typeof value === "string" || value instanceof String;
-};
-
-/**
- * Tests if the specified value is a non-null object.
- * @param {*} value Value to test
- * @returns {boolean} `true` if the value is a non-null object
- */
-util.isObject = function isObject(value) {
-    return value && typeof value === "object";
-};
-
-/**
- * Checks if a property on a message is considered to be present.
- * This is an alias of {@link util.isSet}.
- * @function
- * @param {Object} obj Plain object or message instance
- * @param {string} prop Property name
- * @returns {boolean} `true` if considered to be present, otherwise `false`
- */
-util.isset =
-
-/**
- * Checks if a property on a message is considered to be present.
- * @param {Object} obj Plain object or message instance
- * @param {string} prop Property name
- * @returns {boolean} `true` if considered to be present, otherwise `false`
- */
-util.isSet = function isSet(obj, prop) {
-    var value = obj[prop];
-    if (value != null && obj.hasOwnProperty(prop)) // eslint-disable-line eqeqeq, no-prototype-builtins
-        return typeof value !== "object" || (Array.isArray(value) ? value.length : Object.keys(value).length) > 0;
-    return false;
-};
-
-/**
- * Any compatible Buffer instance.
- * This is a minimal stand-alone definition of a Buffer instance. The actual type is that exported by node's typings.
- * @interface Buffer
- * @extends Uint8Array
- */
-
-/**
- * Node's Buffer class if available.
- * @type {Constructor<Buffer>}
- */
-util.Buffer = (function() {
-    try {
-        var Buffer = util.inquire("buffer").Buffer;
-        // refuse to use non-node buffers if not explicitly assigned (perf reasons):
-        return Buffer.prototype.utf8Write ? Buffer : /* istanbul ignore next */ null;
-    } catch (e) {
-        /* istanbul ignore next */
-        return null;
-    }
-})();
-
-// Internal alias of or polyfull for Buffer.from.
-util._Buffer_from = null;
-
-// Internal alias of or polyfill for Buffer.allocUnsafe.
-util._Buffer_allocUnsafe = null;
-
-/**
- * Creates a new buffer of whatever type supported by the environment.
- * @param {number|number[]} [sizeOrArray=0] Buffer size or number array
- * @returns {Uint8Array|Buffer} Buffer
- */
-util.newBuffer = function newBuffer(sizeOrArray) {
-    /* istanbul ignore next */
-    return typeof sizeOrArray === "number"
-        ? util.Buffer
-            ? util._Buffer_allocUnsafe(sizeOrArray)
-            : new util.Array(sizeOrArray)
-        : util.Buffer
-            ? util._Buffer_from(sizeOrArray)
-            : typeof Uint8Array === "undefined"
-                ? sizeOrArray
-                : new Uint8Array(sizeOrArray);
-};
-
-/**
- * Array implementation used in the browser. `Uint8Array` if supported, otherwise `Array`.
- * @type {Constructor<Uint8Array>}
- */
-util.Array = typeof Uint8Array !== "undefined" ? Uint8Array /* istanbul ignore next */ : Array;
-
-/**
- * Any compatible Long instance.
- * This is a minimal stand-alone definition of a Long instance. The actual type is that exported by long.js.
- * @interface Long
- * @property {number} low Low bits
- * @property {number} high High bits
- * @property {boolean} unsigned Whether unsigned or not
- */
-
-/**
- * Long.js's Long class if available.
- * @type {Constructor<Long>}
- */
-util.Long = /* istanbul ignore next */ util.global.dcodeIO && /* istanbul ignore next */ util.global.dcodeIO.Long
-         || /* istanbul ignore next */ util.global.Long
-         || util.inquire("long");
-
-/**
- * Regular expression used to verify 2 bit (`bool`) map keys.
- * @type {RegExp}
- * @const
- */
-util.key2Re = /^true|false|0|1$/;
-
-/**
- * Regular expression used to verify 32 bit (`int32` etc.) map keys.
- * @type {RegExp}
- * @const
- */
-util.key32Re = /^-?(?:0|[1-9][0-9]*)$/;
-
-/**
- * Regular expression used to verify 64 bit (`int64` etc.) map keys.
- * @type {RegExp}
- * @const
- */
-util.key64Re = /^(?:[\\x00-\\xff]{8}|-?(?:0|[1-9][0-9]*))$/;
-
-/**
- * Converts a number or long to an 8 characters long hash string.
- * @param {Long|number} value Value to convert
- * @returns {string} Hash
- */
-util.longToHash = function longToHash(value) {
-    return value
-        ? util.LongBits.from(value).toHash()
-        : util.LongBits.zeroHash;
-};
-
-/**
- * Converts an 8 characters long hash string to a long or number.
- * @param {string} hash Hash
- * @param {boolean} [unsigned=false] Whether unsigned or not
- * @returns {Long|number} Original value
- */
-util.longFromHash = function longFromHash(hash, unsigned) {
-    var bits = util.LongBits.fromHash(hash);
-    if (util.Long)
-        return util.Long.fromBits(bits.lo, bits.hi, unsigned);
-    return bits.toNumber(Boolean(unsigned));
-};
-
-/**
- * Merges the properties of the source object into the destination object.
- * @memberof util
- * @param {Object.<string,*>} dst Destination object
- * @param {Object.<string,*>} src Source object
- * @param {boolean} [ifNotSet=false] Merges only if the key is not already set
- * @returns {Object.<string,*>} Destination object
- */
-function merge(dst, src, ifNotSet) { // used by converters
-    for (var keys = Object.keys(src), i = 0; i < keys.length; ++i)
-        if (dst[keys[i]] === undefined || !ifNotSet)
-            dst[keys[i]] = src[keys[i]];
-    return dst;
-}
-
-util.merge = merge;
-
-/**
- * Converts the first character of a string to lower case.
- * @param {string} str String to convert
- * @returns {string} Converted string
- */
-util.lcFirst = function lcFirst(str) {
-    return str.charAt(0).toLowerCase() + str.substring(1);
-};
-
-/**
- * Creates a custom error constructor.
- * @memberof util
- * @param {string} name Error name
- * @returns {Constructor<Error>} Custom error constructor
- */
-function newError(name) {
-
-    function CustomError(message, properties) {
-
-        if (!(this instanceof CustomError))
-            return new CustomError(message, properties);
-
-        // Error.call(this, message);
-        // ^ just returns a new error instance because the ctor can be called as a function
-
-        Object.defineProperty(this, "message", { get: function() { return message; } });
-
-        /* istanbul ignore next */
-        if (Error.captureStackTrace) // node
-            Error.captureStackTrace(this, CustomError);
-        else
-            Object.defineProperty(this, "stack", { value: new Error().stack || "" });
-
-        if (properties)
-            merge(this, properties);
-    }
-
-    (CustomError.prototype = Object.create(Error.prototype)).constructor = CustomError;
-
-    Object.defineProperty(CustomError.prototype, "name", { get: function() { return name; } });
-
-    CustomError.prototype.toString = function toString() {
-        return this.name + ": " + this.message;
-    };
-
-    return CustomError;
-}
-
-util.newError = newError;
-
-/**
- * Constructs a new protocol error.
- * @classdesc Error subclass indicating a protocol specifc error.
- * @memberof util
- * @extends Error
- * @template T extends Message<T>
- * @constructor
- * @param {string} message Error message
- * @param {Object.<string,*>} [properties] Additional properties
- * @example
- * try {
- *     MyMessage.decode(someBuffer); // throws if required fields are missing
- * } catch (e) {
- *     if (e instanceof ProtocolError && e.instance)
- *         console.log("decoded so far: " + JSON.stringify(e.instance));
- * }
- */
-util.ProtocolError = newError("ProtocolError");
-
-/**
- * So far decoded message instance.
- * @name util.ProtocolError#instance
- * @type {Message<T>}
- */
-
-/**
- * A OneOf getter as returned by {@link util.oneOfGetter}.
- * @typedef OneOfGetter
- * @type {function}
- * @returns {string|undefined} Set field name, if any
- */
-
-/**
- * Builds a getter for a oneof's present field name.
- * @param {string[]} fieldNames Field names
- * @returns {OneOfGetter} Unbound getter
- */
-util.oneOfGetter = function getOneOf(fieldNames) {
-    var fieldMap = {};
-    for (var i = 0; i < fieldNames.length; ++i)
-        fieldMap[fieldNames[i]] = 1;
-
-    /**
-     * @returns {string|undefined} Set field name, if any
-     * @this Object
-     * @ignore
-     */
-    return function() { // eslint-disable-line consistent-return
-        for (var keys = Object.keys(this), i = keys.length - 1; i > -1; --i)
-            if (fieldMap[keys[i]] === 1 && this[keys[i]] !== undefined && this[keys[i]] !== null)
-                return keys[i];
-    };
-};
-
-/**
- * A OneOf setter as returned by {@link util.oneOfSetter}.
- * @typedef OneOfSetter
- * @type {function}
- * @param {string|undefined} value Field name
- * @returns {undefined}
- */
-
-/**
- * Builds a setter for a oneof's present field name.
- * @param {string[]} fieldNames Field names
- * @returns {OneOfSetter} Unbound setter
- */
-util.oneOfSetter = function setOneOf(fieldNames) {
-
-    /**
-     * @param {string} name Field name
-     * @returns {undefined}
-     * @this Object
-     * @ignore
-     */
-    return function(name) {
-        for (var i = 0; i < fieldNames.length; ++i)
-            if (fieldNames[i] !== name)
-                delete this[fieldNames[i]];
-    };
-};
-
-/**
- * Default conversion options used for {@link Message#toJSON} implementations.
- *
- * These options are close to proto3's JSON mapping with the exception that internal types like Any are handled just like messages. More precisely:
- *
- * - Longs become strings
- * - Enums become string keys
- * - Bytes become base64 encoded strings
- * - (Sub-)Messages become plain objects
- * - Maps become plain objects with all string keys
- * - Repeated fields become arrays
- * - NaN and Infinity for float and double fields become strings
- *
- * @type {IConversionOptions}
- * @see https://developers.google.com/protocol-buffers/docs/proto3?hl=en#json
- */
-util.toJSONOptions = {
-    longs: String,
-    enums: String,
-    bytes: String,
-    json: true
-};
-
-// Sets up buffer utility according to the environment (called in index-minimal)
-util._configure = function() {
-    var Buffer = util.Buffer;
-    /* istanbul ignore if */
-    if (!Buffer) {
-        util._Buffer_from = util._Buffer_allocUnsafe = null;
-        return;
-    }
-    // because node 4.x buffers are incompatible & immutable
-    // see: https://github.com/dcodeIO/protobuf.js/pull/665
-    util._Buffer_from = Buffer.from !== Uint8Array.from && Buffer.from ||
-        /* istanbul ignore next */
-        function Buffer_from(value, encoding) {
-            return new Buffer(value, encoding);
-        };
-    util._Buffer_allocUnsafe = Buffer.allocUnsafe ||
-        /* istanbul ignore next */
-        function Buffer_allocUnsafe(size) {
-            return new Buffer(size);
-        };
-};
-
+module.exports = require(__webpack_require__.ab + "src/node/extension_binary/node-v72-linux-x64-glibc/grpc_node.node")
 
 /***/ }),
 /* 730 */,
@@ -54159,7 +53973,7 @@ module.exports = flatten;
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 module.exports = (function() {
-  const $protobuf = __webpack_require__(835);
+  const $protobuf = __webpack_require__(72);
   const grpc = __webpack_require__(323);
   const registar = __webpack_require__(866);
   const util = __webpack_require__(949);
@@ -56851,7 +56665,7 @@ module.exports = PassThrough;
 var Transform = __webpack_require__(217);
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -57123,7 +56937,7 @@ function _isUint8Array(obj) {
 /*</replacement>*/
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -58728,14 +58542,9 @@ if (process.env.READABLE_STREAM === 'disable' && Stream) {
 /* 833 */,
 /* 834 */,
 /* 835 */
-/***/ (function(module, __unusedexports, __webpack_require__) {
+/***/ (function(module) {
 
-"use strict";
-// full library entry point.
-
-
-module.exports = __webpack_require__(611);
-
+module.exports = require("url");
 
 /***/ }),
 /* 836 */,
@@ -58832,322 +58641,7 @@ module.exports = {
 /* 848 */,
 /* 849 */,
 /* 850 */,
-/* 851 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var Progress = __webpack_require__(702)
-var Gauge = __webpack_require__(278)
-var EE = __webpack_require__(614).EventEmitter
-var log = exports = module.exports = new EE()
-var util = __webpack_require__(669)
-
-var setBlocking = __webpack_require__(658)
-var consoleControl = __webpack_require__(920)
-
-setBlocking(true)
-var stream = process.stderr
-Object.defineProperty(log, 'stream', {
-  set: function (newStream) {
-    stream = newStream
-    if (this.gauge) this.gauge.setWriteTo(stream, stream)
-  },
-  get: function () {
-    return stream
-  }
-})
-
-// by default, decide based on tty-ness.
-var colorEnabled
-log.useColor = function () {
-  return colorEnabled != null ? colorEnabled : stream.isTTY
-}
-
-log.enableColor = function () {
-  colorEnabled = true
-  this.gauge.setTheme({hasColor: colorEnabled, hasUnicode: unicodeEnabled})
-}
-log.disableColor = function () {
-  colorEnabled = false
-  this.gauge.setTheme({hasColor: colorEnabled, hasUnicode: unicodeEnabled})
-}
-
-// default level
-log.level = 'info'
-
-log.gauge = new Gauge(stream, {
-  enabled: false, // no progress bars unless asked
-  theme: {hasColor: log.useColor()},
-  template: [
-    {type: 'progressbar', length: 20},
-    {type: 'activityIndicator', kerning: 1, length: 1},
-    {type: 'section', default: ''},
-    ':',
-    {type: 'logline', kerning: 1, default: ''}
-  ]
-})
-
-log.tracker = new Progress.TrackerGroup()
-
-// we track this separately as we may need to temporarily disable the
-// display of the status bar for our own loggy purposes.
-log.progressEnabled = log.gauge.isEnabled()
-
-var unicodeEnabled
-
-log.enableUnicode = function () {
-  unicodeEnabled = true
-  this.gauge.setTheme({hasColor: this.useColor(), hasUnicode: unicodeEnabled})
-}
-
-log.disableUnicode = function () {
-  unicodeEnabled = false
-  this.gauge.setTheme({hasColor: this.useColor(), hasUnicode: unicodeEnabled})
-}
-
-log.setGaugeThemeset = function (themes) {
-  this.gauge.setThemeset(themes)
-}
-
-log.setGaugeTemplate = function (template) {
-  this.gauge.setTemplate(template)
-}
-
-log.enableProgress = function () {
-  if (this.progressEnabled) return
-  this.progressEnabled = true
-  this.tracker.on('change', this.showProgress)
-  if (this._pause) return
-  this.gauge.enable()
-}
-
-log.disableProgress = function () {
-  if (!this.progressEnabled) return
-  this.progressEnabled = false
-  this.tracker.removeListener('change', this.showProgress)
-  this.gauge.disable()
-}
-
-var trackerConstructors = ['newGroup', 'newItem', 'newStream']
-
-var mixinLog = function (tracker) {
-  // mixin the public methods from log into the tracker
-  // (except: conflicts and one's we handle specially)
-  Object.keys(log).forEach(function (P) {
-    if (P[0] === '_') return
-    if (trackerConstructors.filter(function (C) { return C === P }).length) return
-    if (tracker[P]) return
-    if (typeof log[P] !== 'function') return
-    var func = log[P]
-    tracker[P] = function () {
-      return func.apply(log, arguments)
-    }
-  })
-  // if the new tracker is a group, make sure any subtrackers get
-  // mixed in too
-  if (tracker instanceof Progress.TrackerGroup) {
-    trackerConstructors.forEach(function (C) {
-      var func = tracker[C]
-      tracker[C] = function () { return mixinLog(func.apply(tracker, arguments)) }
-    })
-  }
-  return tracker
-}
-
-// Add tracker constructors to the top level log object
-trackerConstructors.forEach(function (C) {
-  log[C] = function () { return mixinLog(this.tracker[C].apply(this.tracker, arguments)) }
-})
-
-log.clearProgress = function (cb) {
-  if (!this.progressEnabled) return cb && process.nextTick(cb)
-  this.gauge.hide(cb)
-}
-
-log.showProgress = function (name, completed) {
-  if (!this.progressEnabled) return
-  var values = {}
-  if (name) values.section = name
-  var last = log.record[log.record.length - 1]
-  if (last) {
-    values.subsection = last.prefix
-    var disp = log.disp[last.level] || last.level
-    var logline = this._format(disp, log.style[last.level])
-    if (last.prefix) logline += ' ' + this._format(last.prefix, this.prefixStyle)
-    logline += ' ' + last.message.split(/\r?\n/)[0]
-    values.logline = logline
-  }
-  values.completed = completed || this.tracker.completed()
-  this.gauge.show(values)
-}.bind(log) // bind for use in tracker's on-change listener
-
-// temporarily stop emitting, but don't drop
-log.pause = function () {
-  this._paused = true
-  if (this.progressEnabled) this.gauge.disable()
-}
-
-log.resume = function () {
-  if (!this._paused) return
-  this._paused = false
-
-  var b = this._buffer
-  this._buffer = []
-  b.forEach(function (m) {
-    this.emitLog(m)
-  }, this)
-  if (this.progressEnabled) this.gauge.enable()
-}
-
-log._buffer = []
-
-var id = 0
-log.record = []
-log.maxRecordSize = 10000
-log.log = function (lvl, prefix, message) {
-  var l = this.levels[lvl]
-  if (l === undefined) {
-    return this.emit('error', new Error(util.format(
-      'Undefined log level: %j', lvl)))
-  }
-
-  var a = new Array(arguments.length - 2)
-  var stack = null
-  for (var i = 2; i < arguments.length; i++) {
-    var arg = a[i - 2] = arguments[i]
-
-    // resolve stack traces to a plain string.
-    if (typeof arg === 'object' && arg &&
-        (arg instanceof Error) && arg.stack) {
-
-      Object.defineProperty(arg, 'stack', {
-        value: stack = arg.stack + '',
-        enumerable: true,
-        writable: true
-      })
-    }
-  }
-  if (stack) a.unshift(stack + '\n')
-  message = util.format.apply(util, a)
-
-  var m = { id: id++,
-            level: lvl,
-            prefix: String(prefix || ''),
-            message: message,
-            messageRaw: a }
-
-  this.emit('log', m)
-  this.emit('log.' + lvl, m)
-  if (m.prefix) this.emit(m.prefix, m)
-
-  this.record.push(m)
-  var mrs = this.maxRecordSize
-  var n = this.record.length - mrs
-  if (n > mrs / 10) {
-    var newSize = Math.floor(mrs * 0.9)
-    this.record = this.record.slice(-1 * newSize)
-  }
-
-  this.emitLog(m)
-}.bind(log)
-
-log.emitLog = function (m) {
-  if (this._paused) {
-    this._buffer.push(m)
-    return
-  }
-  if (this.progressEnabled) this.gauge.pulse(m.prefix)
-  var l = this.levels[m.level]
-  if (l === undefined) return
-  if (l < this.levels[this.level]) return
-  if (l > 0 && !isFinite(l)) return
-
-  // If 'disp' is null or undefined, use the lvl as a default
-  // Allows: '', 0 as valid disp
-  var disp = log.disp[m.level] != null ? log.disp[m.level] : m.level
-  this.clearProgress()
-  m.message.split(/\r?\n/).forEach(function (line) {
-    if (this.heading) {
-      this.write(this.heading, this.headingStyle)
-      this.write(' ')
-    }
-    this.write(disp, log.style[m.level])
-    var p = m.prefix || ''
-    if (p) this.write(' ')
-    this.write(p, this.prefixStyle)
-    this.write(' ' + line + '\n')
-  }, this)
-  this.showProgress()
-}
-
-log._format = function (msg, style) {
-  if (!stream) return
-
-  var output = ''
-  if (this.useColor()) {
-    style = style || {}
-    var settings = []
-    if (style.fg) settings.push(style.fg)
-    if (style.bg) settings.push('bg' + style.bg[0].toUpperCase() + style.bg.slice(1))
-    if (style.bold) settings.push('bold')
-    if (style.underline) settings.push('underline')
-    if (style.inverse) settings.push('inverse')
-    if (settings.length) output += consoleControl.color(settings)
-    if (style.beep) output += consoleControl.beep()
-  }
-  output += msg
-  if (this.useColor()) {
-    output += consoleControl.color('reset')
-  }
-  return output
-}
-
-log.write = function (msg, style) {
-  if (!stream) return
-
-  stream.write(this._format(msg, style))
-}
-
-log.addLevel = function (lvl, n, style, disp) {
-  // If 'disp' is null or undefined, use the lvl as a default
-  if (disp == null) disp = lvl
-  this.levels[lvl] = n
-  this.style[lvl] = style
-  if (!this[lvl]) {
-    this[lvl] = function () {
-      var a = new Array(arguments.length + 1)
-      a[0] = lvl
-      for (var i = 0; i < arguments.length; i++) {
-        a[i + 1] = arguments[i]
-      }
-      return this.log.apply(this, a)
-    }.bind(this)
-  }
-  this.disp[lvl] = disp
-}
-
-log.prefixStyle = { fg: 'magenta' }
-log.headingStyle = { fg: 'white', bg: 'black' }
-
-log.style = {}
-log.levels = {}
-log.disp = {}
-log.addLevel('silly', -Infinity, { inverse: true }, 'sill')
-log.addLevel('verbose', 1000, { fg: 'blue', bg: 'black' }, 'verb')
-log.addLevel('info', 2000, { fg: 'green' })
-log.addLevel('timing', 2500, { fg: 'green', bg: 'black' })
-log.addLevel('http', 3000, { fg: 'green', bg: 'black' })
-log.addLevel('notice', 3500, { fg: 'blue', bg: 'black' })
-log.addLevel('warn', 4000, { fg: 'black', bg: 'yellow' }, 'WARN')
-log.addLevel('error', 5000, { fg: 'red', bg: 'black' }, 'ERR!')
-log.addLevel('silent', Infinity)
-
-// allow 'error' prefix
-log.on('error', function () {})
-
-
-/***/ }),
+/* 851 */,
 /* 852 */,
 /* 853 */,
 /* 854 */,
@@ -59534,1495 +59028,7 @@ module.exports = function(path, stripTrailing) {
 /***/ }),
 /* 862 */,
 /* 863 */,
-/* 864 */
-/***/ (function(module, exports) {
-
-exports = module.exports = SemVer
-
-var debug
-/* istanbul ignore next */
-if (typeof process === 'object' &&
-    process.env &&
-    process.env.NODE_DEBUG &&
-    /\bsemver\b/i.test(process.env.NODE_DEBUG)) {
-  debug = function () {
-    var args = Array.prototype.slice.call(arguments, 0)
-    args.unshift('SEMVER')
-    console.log.apply(console, args)
-  }
-} else {
-  debug = function () {}
-}
-
-// Note: this is the semver.org version of the spec that it implements
-// Not necessarily the package version of this code.
-exports.SEMVER_SPEC_VERSION = '2.0.0'
-
-var MAX_LENGTH = 256
-var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER ||
-  /* istanbul ignore next */ 9007199254740991
-
-// Max safe segment length for coercion.
-var MAX_SAFE_COMPONENT_LENGTH = 16
-
-// The actual regexps go on exports.re
-var re = exports.re = []
-var src = exports.src = []
-var R = 0
-
-// The following Regular Expressions can be used for tokenizing,
-// validating, and parsing SemVer version strings.
-
-// ## Numeric Identifier
-// A single `0`, or a non-zero digit followed by zero or more digits.
-
-var NUMERICIDENTIFIER = R++
-src[NUMERICIDENTIFIER] = '0|[1-9]\\d*'
-var NUMERICIDENTIFIERLOOSE = R++
-src[NUMERICIDENTIFIERLOOSE] = '[0-9]+'
-
-// ## Non-numeric Identifier
-// Zero or more digits, followed by a letter or hyphen, and then zero or
-// more letters, digits, or hyphens.
-
-var NONNUMERICIDENTIFIER = R++
-src[NONNUMERICIDENTIFIER] = '\\d*[a-zA-Z-][a-zA-Z0-9-]*'
-
-// ## Main Version
-// Three dot-separated numeric identifiers.
-
-var MAINVERSION = R++
-src[MAINVERSION] = '(' + src[NUMERICIDENTIFIER] + ')\\.' +
-                   '(' + src[NUMERICIDENTIFIER] + ')\\.' +
-                   '(' + src[NUMERICIDENTIFIER] + ')'
-
-var MAINVERSIONLOOSE = R++
-src[MAINVERSIONLOOSE] = '(' + src[NUMERICIDENTIFIERLOOSE] + ')\\.' +
-                        '(' + src[NUMERICIDENTIFIERLOOSE] + ')\\.' +
-                        '(' + src[NUMERICIDENTIFIERLOOSE] + ')'
-
-// ## Pre-release Version Identifier
-// A numeric identifier, or a non-numeric identifier.
-
-var PRERELEASEIDENTIFIER = R++
-src[PRERELEASEIDENTIFIER] = '(?:' + src[NUMERICIDENTIFIER] +
-                            '|' + src[NONNUMERICIDENTIFIER] + ')'
-
-var PRERELEASEIDENTIFIERLOOSE = R++
-src[PRERELEASEIDENTIFIERLOOSE] = '(?:' + src[NUMERICIDENTIFIERLOOSE] +
-                                 '|' + src[NONNUMERICIDENTIFIER] + ')'
-
-// ## Pre-release Version
-// Hyphen, followed by one or more dot-separated pre-release version
-// identifiers.
-
-var PRERELEASE = R++
-src[PRERELEASE] = '(?:-(' + src[PRERELEASEIDENTIFIER] +
-                  '(?:\\.' + src[PRERELEASEIDENTIFIER] + ')*))'
-
-var PRERELEASELOOSE = R++
-src[PRERELEASELOOSE] = '(?:-?(' + src[PRERELEASEIDENTIFIERLOOSE] +
-                       '(?:\\.' + src[PRERELEASEIDENTIFIERLOOSE] + ')*))'
-
-// ## Build Metadata Identifier
-// Any combination of digits, letters, or hyphens.
-
-var BUILDIDENTIFIER = R++
-src[BUILDIDENTIFIER] = '[0-9A-Za-z-]+'
-
-// ## Build Metadata
-// Plus sign, followed by one or more period-separated build metadata
-// identifiers.
-
-var BUILD = R++
-src[BUILD] = '(?:\\+(' + src[BUILDIDENTIFIER] +
-             '(?:\\.' + src[BUILDIDENTIFIER] + ')*))'
-
-// ## Full Version String
-// A main version, followed optionally by a pre-release version and
-// build metadata.
-
-// Note that the only major, minor, patch, and pre-release sections of
-// the version string are capturing groups.  The build metadata is not a
-// capturing group, because it should not ever be used in version
-// comparison.
-
-var FULL = R++
-var FULLPLAIN = 'v?' + src[MAINVERSION] +
-                src[PRERELEASE] + '?' +
-                src[BUILD] + '?'
-
-src[FULL] = '^' + FULLPLAIN + '$'
-
-// like full, but allows v1.2.3 and =1.2.3, which people do sometimes.
-// also, 1.0.0alpha1 (prerelease without the hyphen) which is pretty
-// common in the npm registry.
-var LOOSEPLAIN = '[v=\\s]*' + src[MAINVERSIONLOOSE] +
-                 src[PRERELEASELOOSE] + '?' +
-                 src[BUILD] + '?'
-
-var LOOSE = R++
-src[LOOSE] = '^' + LOOSEPLAIN + '$'
-
-var GTLT = R++
-src[GTLT] = '((?:<|>)?=?)'
-
-// Something like "2.*" or "1.2.x".
-// Note that "x.x" is a valid xRange identifer, meaning "any version"
-// Only the first item is strictly required.
-var XRANGEIDENTIFIERLOOSE = R++
-src[XRANGEIDENTIFIERLOOSE] = src[NUMERICIDENTIFIERLOOSE] + '|x|X|\\*'
-var XRANGEIDENTIFIER = R++
-src[XRANGEIDENTIFIER] = src[NUMERICIDENTIFIER] + '|x|X|\\*'
-
-var XRANGEPLAIN = R++
-src[XRANGEPLAIN] = '[v=\\s]*(' + src[XRANGEIDENTIFIER] + ')' +
-                   '(?:\\.(' + src[XRANGEIDENTIFIER] + ')' +
-                   '(?:\\.(' + src[XRANGEIDENTIFIER] + ')' +
-                   '(?:' + src[PRERELEASE] + ')?' +
-                   src[BUILD] + '?' +
-                   ')?)?'
-
-var XRANGEPLAINLOOSE = R++
-src[XRANGEPLAINLOOSE] = '[v=\\s]*(' + src[XRANGEIDENTIFIERLOOSE] + ')' +
-                        '(?:\\.(' + src[XRANGEIDENTIFIERLOOSE] + ')' +
-                        '(?:\\.(' + src[XRANGEIDENTIFIERLOOSE] + ')' +
-                        '(?:' + src[PRERELEASELOOSE] + ')?' +
-                        src[BUILD] + '?' +
-                        ')?)?'
-
-var XRANGE = R++
-src[XRANGE] = '^' + src[GTLT] + '\\s*' + src[XRANGEPLAIN] + '$'
-var XRANGELOOSE = R++
-src[XRANGELOOSE] = '^' + src[GTLT] + '\\s*' + src[XRANGEPLAINLOOSE] + '$'
-
-// Coercion.
-// Extract anything that could conceivably be a part of a valid semver
-var COERCE = R++
-src[COERCE] = '(?:^|[^\\d])' +
-              '(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '})' +
-              '(?:\\.(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '}))?' +
-              '(?:\\.(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '}))?' +
-              '(?:$|[^\\d])'
-
-// Tilde ranges.
-// Meaning is "reasonably at or greater than"
-var LONETILDE = R++
-src[LONETILDE] = '(?:~>?)'
-
-var TILDETRIM = R++
-src[TILDETRIM] = '(\\s*)' + src[LONETILDE] + '\\s+'
-re[TILDETRIM] = new RegExp(src[TILDETRIM], 'g')
-var tildeTrimReplace = '$1~'
-
-var TILDE = R++
-src[TILDE] = '^' + src[LONETILDE] + src[XRANGEPLAIN] + '$'
-var TILDELOOSE = R++
-src[TILDELOOSE] = '^' + src[LONETILDE] + src[XRANGEPLAINLOOSE] + '$'
-
-// Caret ranges.
-// Meaning is "at least and backwards compatible with"
-var LONECARET = R++
-src[LONECARET] = '(?:\\^)'
-
-var CARETTRIM = R++
-src[CARETTRIM] = '(\\s*)' + src[LONECARET] + '\\s+'
-re[CARETTRIM] = new RegExp(src[CARETTRIM], 'g')
-var caretTrimReplace = '$1^'
-
-var CARET = R++
-src[CARET] = '^' + src[LONECARET] + src[XRANGEPLAIN] + '$'
-var CARETLOOSE = R++
-src[CARETLOOSE] = '^' + src[LONECARET] + src[XRANGEPLAINLOOSE] + '$'
-
-// A simple gt/lt/eq thing, or just "" to indicate "any version"
-var COMPARATORLOOSE = R++
-src[COMPARATORLOOSE] = '^' + src[GTLT] + '\\s*(' + LOOSEPLAIN + ')$|^$'
-var COMPARATOR = R++
-src[COMPARATOR] = '^' + src[GTLT] + '\\s*(' + FULLPLAIN + ')$|^$'
-
-// An expression to strip any whitespace between the gtlt and the thing
-// it modifies, so that `> 1.2.3` ==> `>1.2.3`
-var COMPARATORTRIM = R++
-src[COMPARATORTRIM] = '(\\s*)' + src[GTLT] +
-                      '\\s*(' + LOOSEPLAIN + '|' + src[XRANGEPLAIN] + ')'
-
-// this one has to use the /g flag
-re[COMPARATORTRIM] = new RegExp(src[COMPARATORTRIM], 'g')
-var comparatorTrimReplace = '$1$2$3'
-
-// Something like `1.2.3 - 1.2.4`
-// Note that these all use the loose form, because they'll be
-// checked against either the strict or loose comparator form
-// later.
-var HYPHENRANGE = R++
-src[HYPHENRANGE] = '^\\s*(' + src[XRANGEPLAIN] + ')' +
-                   '\\s+-\\s+' +
-                   '(' + src[XRANGEPLAIN] + ')' +
-                   '\\s*$'
-
-var HYPHENRANGELOOSE = R++
-src[HYPHENRANGELOOSE] = '^\\s*(' + src[XRANGEPLAINLOOSE] + ')' +
-                        '\\s+-\\s+' +
-                        '(' + src[XRANGEPLAINLOOSE] + ')' +
-                        '\\s*$'
-
-// Star ranges basically just allow anything at all.
-var STAR = R++
-src[STAR] = '(<|>)?=?\\s*\\*'
-
-// Compile to actual regexp objects.
-// All are flag-free, unless they were created above with a flag.
-for (var i = 0; i < R; i++) {
-  debug(i, src[i])
-  if (!re[i]) {
-    re[i] = new RegExp(src[i])
-  }
-}
-
-exports.parse = parse
-function parse (version, options) {
-  if (!options || typeof options !== 'object') {
-    options = {
-      loose: !!options,
-      includePrerelease: false
-    }
-  }
-
-  if (version instanceof SemVer) {
-    return version
-  }
-
-  if (typeof version !== 'string') {
-    return null
-  }
-
-  if (version.length > MAX_LENGTH) {
-    return null
-  }
-
-  var r = options.loose ? re[LOOSE] : re[FULL]
-  if (!r.test(version)) {
-    return null
-  }
-
-  try {
-    return new SemVer(version, options)
-  } catch (er) {
-    return null
-  }
-}
-
-exports.valid = valid
-function valid (version, options) {
-  var v = parse(version, options)
-  return v ? v.version : null
-}
-
-exports.clean = clean
-function clean (version, options) {
-  var s = parse(version.trim().replace(/^[=v]+/, ''), options)
-  return s ? s.version : null
-}
-
-exports.SemVer = SemVer
-
-function SemVer (version, options) {
-  if (!options || typeof options !== 'object') {
-    options = {
-      loose: !!options,
-      includePrerelease: false
-    }
-  }
-  if (version instanceof SemVer) {
-    if (version.loose === options.loose) {
-      return version
-    } else {
-      version = version.version
-    }
-  } else if (typeof version !== 'string') {
-    throw new TypeError('Invalid Version: ' + version)
-  }
-
-  if (version.length > MAX_LENGTH) {
-    throw new TypeError('version is longer than ' + MAX_LENGTH + ' characters')
-  }
-
-  if (!(this instanceof SemVer)) {
-    return new SemVer(version, options)
-  }
-
-  debug('SemVer', version, options)
-  this.options = options
-  this.loose = !!options.loose
-
-  var m = version.trim().match(options.loose ? re[LOOSE] : re[FULL])
-
-  if (!m) {
-    throw new TypeError('Invalid Version: ' + version)
-  }
-
-  this.raw = version
-
-  // these are actually numbers
-  this.major = +m[1]
-  this.minor = +m[2]
-  this.patch = +m[3]
-
-  if (this.major > MAX_SAFE_INTEGER || this.major < 0) {
-    throw new TypeError('Invalid major version')
-  }
-
-  if (this.minor > MAX_SAFE_INTEGER || this.minor < 0) {
-    throw new TypeError('Invalid minor version')
-  }
-
-  if (this.patch > MAX_SAFE_INTEGER || this.patch < 0) {
-    throw new TypeError('Invalid patch version')
-  }
-
-  // numberify any prerelease numeric ids
-  if (!m[4]) {
-    this.prerelease = []
-  } else {
-    this.prerelease = m[4].split('.').map(function (id) {
-      if (/^[0-9]+$/.test(id)) {
-        var num = +id
-        if (num >= 0 && num < MAX_SAFE_INTEGER) {
-          return num
-        }
-      }
-      return id
-    })
-  }
-
-  this.build = m[5] ? m[5].split('.') : []
-  this.format()
-}
-
-SemVer.prototype.format = function () {
-  this.version = this.major + '.' + this.minor + '.' + this.patch
-  if (this.prerelease.length) {
-    this.version += '-' + this.prerelease.join('.')
-  }
-  return this.version
-}
-
-SemVer.prototype.toString = function () {
-  return this.version
-}
-
-SemVer.prototype.compare = function (other) {
-  debug('SemVer.compare', this.version, this.options, other)
-  if (!(other instanceof SemVer)) {
-    other = new SemVer(other, this.options)
-  }
-
-  return this.compareMain(other) || this.comparePre(other)
-}
-
-SemVer.prototype.compareMain = function (other) {
-  if (!(other instanceof SemVer)) {
-    other = new SemVer(other, this.options)
-  }
-
-  return compareIdentifiers(this.major, other.major) ||
-         compareIdentifiers(this.minor, other.minor) ||
-         compareIdentifiers(this.patch, other.patch)
-}
-
-SemVer.prototype.comparePre = function (other) {
-  if (!(other instanceof SemVer)) {
-    other = new SemVer(other, this.options)
-  }
-
-  // NOT having a prerelease is > having one
-  if (this.prerelease.length && !other.prerelease.length) {
-    return -1
-  } else if (!this.prerelease.length && other.prerelease.length) {
-    return 1
-  } else if (!this.prerelease.length && !other.prerelease.length) {
-    return 0
-  }
-
-  var i = 0
-  do {
-    var a = this.prerelease[i]
-    var b = other.prerelease[i]
-    debug('prerelease compare', i, a, b)
-    if (a === undefined && b === undefined) {
-      return 0
-    } else if (b === undefined) {
-      return 1
-    } else if (a === undefined) {
-      return -1
-    } else if (a === b) {
-      continue
-    } else {
-      return compareIdentifiers(a, b)
-    }
-  } while (++i)
-}
-
-// preminor will bump the version up to the next minor release, and immediately
-// down to pre-release. premajor and prepatch work the same way.
-SemVer.prototype.inc = function (release, identifier) {
-  switch (release) {
-    case 'premajor':
-      this.prerelease.length = 0
-      this.patch = 0
-      this.minor = 0
-      this.major++
-      this.inc('pre', identifier)
-      break
-    case 'preminor':
-      this.prerelease.length = 0
-      this.patch = 0
-      this.minor++
-      this.inc('pre', identifier)
-      break
-    case 'prepatch':
-      // If this is already a prerelease, it will bump to the next version
-      // drop any prereleases that might already exist, since they are not
-      // relevant at this point.
-      this.prerelease.length = 0
-      this.inc('patch', identifier)
-      this.inc('pre', identifier)
-      break
-    // If the input is a non-prerelease version, this acts the same as
-    // prepatch.
-    case 'prerelease':
-      if (this.prerelease.length === 0) {
-        this.inc('patch', identifier)
-      }
-      this.inc('pre', identifier)
-      break
-
-    case 'major':
-      // If this is a pre-major version, bump up to the same major version.
-      // Otherwise increment major.
-      // 1.0.0-5 bumps to 1.0.0
-      // 1.1.0 bumps to 2.0.0
-      if (this.minor !== 0 ||
-          this.patch !== 0 ||
-          this.prerelease.length === 0) {
-        this.major++
-      }
-      this.minor = 0
-      this.patch = 0
-      this.prerelease = []
-      break
-    case 'minor':
-      // If this is a pre-minor version, bump up to the same minor version.
-      // Otherwise increment minor.
-      // 1.2.0-5 bumps to 1.2.0
-      // 1.2.1 bumps to 1.3.0
-      if (this.patch !== 0 || this.prerelease.length === 0) {
-        this.minor++
-      }
-      this.patch = 0
-      this.prerelease = []
-      break
-    case 'patch':
-      // If this is not a pre-release version, it will increment the patch.
-      // If it is a pre-release it will bump up to the same patch version.
-      // 1.2.0-5 patches to 1.2.0
-      // 1.2.0 patches to 1.2.1
-      if (this.prerelease.length === 0) {
-        this.patch++
-      }
-      this.prerelease = []
-      break
-    // This probably shouldn't be used publicly.
-    // 1.0.0 "pre" would become 1.0.0-0 which is the wrong direction.
-    case 'pre':
-      if (this.prerelease.length === 0) {
-        this.prerelease = [0]
-      } else {
-        var i = this.prerelease.length
-        while (--i >= 0) {
-          if (typeof this.prerelease[i] === 'number') {
-            this.prerelease[i]++
-            i = -2
-          }
-        }
-        if (i === -1) {
-          // didn't increment anything
-          this.prerelease.push(0)
-        }
-      }
-      if (identifier) {
-        // 1.2.0-beta.1 bumps to 1.2.0-beta.2,
-        // 1.2.0-beta.fooblz or 1.2.0-beta bumps to 1.2.0-beta.0
-        if (this.prerelease[0] === identifier) {
-          if (isNaN(this.prerelease[1])) {
-            this.prerelease = [identifier, 0]
-          }
-        } else {
-          this.prerelease = [identifier, 0]
-        }
-      }
-      break
-
-    default:
-      throw new Error('invalid increment argument: ' + release)
-  }
-  this.format()
-  this.raw = this.version
-  return this
-}
-
-exports.inc = inc
-function inc (version, release, loose, identifier) {
-  if (typeof (loose) === 'string') {
-    identifier = loose
-    loose = undefined
-  }
-
-  try {
-    return new SemVer(version, loose).inc(release, identifier).version
-  } catch (er) {
-    return null
-  }
-}
-
-exports.diff = diff
-function diff (version1, version2) {
-  if (eq(version1, version2)) {
-    return null
-  } else {
-    var v1 = parse(version1)
-    var v2 = parse(version2)
-    var prefix = ''
-    if (v1.prerelease.length || v2.prerelease.length) {
-      prefix = 'pre'
-      var defaultResult = 'prerelease'
-    }
-    for (var key in v1) {
-      if (key === 'major' || key === 'minor' || key === 'patch') {
-        if (v1[key] !== v2[key]) {
-          return prefix + key
-        }
-      }
-    }
-    return defaultResult // may be undefined
-  }
-}
-
-exports.compareIdentifiers = compareIdentifiers
-
-var numeric = /^[0-9]+$/
-function compareIdentifiers (a, b) {
-  var anum = numeric.test(a)
-  var bnum = numeric.test(b)
-
-  if (anum && bnum) {
-    a = +a
-    b = +b
-  }
-
-  return a === b ? 0
-    : (anum && !bnum) ? -1
-    : (bnum && !anum) ? 1
-    : a < b ? -1
-    : 1
-}
-
-exports.rcompareIdentifiers = rcompareIdentifiers
-function rcompareIdentifiers (a, b) {
-  return compareIdentifiers(b, a)
-}
-
-exports.major = major
-function major (a, loose) {
-  return new SemVer(a, loose).major
-}
-
-exports.minor = minor
-function minor (a, loose) {
-  return new SemVer(a, loose).minor
-}
-
-exports.patch = patch
-function patch (a, loose) {
-  return new SemVer(a, loose).patch
-}
-
-exports.compare = compare
-function compare (a, b, loose) {
-  return new SemVer(a, loose).compare(new SemVer(b, loose))
-}
-
-exports.compareLoose = compareLoose
-function compareLoose (a, b) {
-  return compare(a, b, true)
-}
-
-exports.rcompare = rcompare
-function rcompare (a, b, loose) {
-  return compare(b, a, loose)
-}
-
-exports.sort = sort
-function sort (list, loose) {
-  return list.sort(function (a, b) {
-    return exports.compare(a, b, loose)
-  })
-}
-
-exports.rsort = rsort
-function rsort (list, loose) {
-  return list.sort(function (a, b) {
-    return exports.rcompare(a, b, loose)
-  })
-}
-
-exports.gt = gt
-function gt (a, b, loose) {
-  return compare(a, b, loose) > 0
-}
-
-exports.lt = lt
-function lt (a, b, loose) {
-  return compare(a, b, loose) < 0
-}
-
-exports.eq = eq
-function eq (a, b, loose) {
-  return compare(a, b, loose) === 0
-}
-
-exports.neq = neq
-function neq (a, b, loose) {
-  return compare(a, b, loose) !== 0
-}
-
-exports.gte = gte
-function gte (a, b, loose) {
-  return compare(a, b, loose) >= 0
-}
-
-exports.lte = lte
-function lte (a, b, loose) {
-  return compare(a, b, loose) <= 0
-}
-
-exports.cmp = cmp
-function cmp (a, op, b, loose) {
-  switch (op) {
-    case '===':
-      if (typeof a === 'object')
-        a = a.version
-      if (typeof b === 'object')
-        b = b.version
-      return a === b
-
-    case '!==':
-      if (typeof a === 'object')
-        a = a.version
-      if (typeof b === 'object')
-        b = b.version
-      return a !== b
-
-    case '':
-    case '=':
-    case '==':
-      return eq(a, b, loose)
-
-    case '!=':
-      return neq(a, b, loose)
-
-    case '>':
-      return gt(a, b, loose)
-
-    case '>=':
-      return gte(a, b, loose)
-
-    case '<':
-      return lt(a, b, loose)
-
-    case '<=':
-      return lte(a, b, loose)
-
-    default:
-      throw new TypeError('Invalid operator: ' + op)
-  }
-}
-
-exports.Comparator = Comparator
-function Comparator (comp, options) {
-  if (!options || typeof options !== 'object') {
-    options = {
-      loose: !!options,
-      includePrerelease: false
-    }
-  }
-
-  if (comp instanceof Comparator) {
-    if (comp.loose === !!options.loose) {
-      return comp
-    } else {
-      comp = comp.value
-    }
-  }
-
-  if (!(this instanceof Comparator)) {
-    return new Comparator(comp, options)
-  }
-
-  debug('comparator', comp, options)
-  this.options = options
-  this.loose = !!options.loose
-  this.parse(comp)
-
-  if (this.semver === ANY) {
-    this.value = ''
-  } else {
-    this.value = this.operator + this.semver.version
-  }
-
-  debug('comp', this)
-}
-
-var ANY = {}
-Comparator.prototype.parse = function (comp) {
-  var r = this.options.loose ? re[COMPARATORLOOSE] : re[COMPARATOR]
-  var m = comp.match(r)
-
-  if (!m) {
-    throw new TypeError('Invalid comparator: ' + comp)
-  }
-
-  this.operator = m[1]
-  if (this.operator === '=') {
-    this.operator = ''
-  }
-
-  // if it literally is just '>' or '' then allow anything.
-  if (!m[2]) {
-    this.semver = ANY
-  } else {
-    this.semver = new SemVer(m[2], this.options.loose)
-  }
-}
-
-Comparator.prototype.toString = function () {
-  return this.value
-}
-
-Comparator.prototype.test = function (version) {
-  debug('Comparator.test', version, this.options.loose)
-
-  if (this.semver === ANY) {
-    return true
-  }
-
-  if (typeof version === 'string') {
-    version = new SemVer(version, this.options)
-  }
-
-  return cmp(version, this.operator, this.semver, this.options)
-}
-
-Comparator.prototype.intersects = function (comp, options) {
-  if (!(comp instanceof Comparator)) {
-    throw new TypeError('a Comparator is required')
-  }
-
-  if (!options || typeof options !== 'object') {
-    options = {
-      loose: !!options,
-      includePrerelease: false
-    }
-  }
-
-  var rangeTmp
-
-  if (this.operator === '') {
-    rangeTmp = new Range(comp.value, options)
-    return satisfies(this.value, rangeTmp, options)
-  } else if (comp.operator === '') {
-    rangeTmp = new Range(this.value, options)
-    return satisfies(comp.semver, rangeTmp, options)
-  }
-
-  var sameDirectionIncreasing =
-    (this.operator === '>=' || this.operator === '>') &&
-    (comp.operator === '>=' || comp.operator === '>')
-  var sameDirectionDecreasing =
-    (this.operator === '<=' || this.operator === '<') &&
-    (comp.operator === '<=' || comp.operator === '<')
-  var sameSemVer = this.semver.version === comp.semver.version
-  var differentDirectionsInclusive =
-    (this.operator === '>=' || this.operator === '<=') &&
-    (comp.operator === '>=' || comp.operator === '<=')
-  var oppositeDirectionsLessThan =
-    cmp(this.semver, '<', comp.semver, options) &&
-    ((this.operator === '>=' || this.operator === '>') &&
-    (comp.operator === '<=' || comp.operator === '<'))
-  var oppositeDirectionsGreaterThan =
-    cmp(this.semver, '>', comp.semver, options) &&
-    ((this.operator === '<=' || this.operator === '<') &&
-    (comp.operator === '>=' || comp.operator === '>'))
-
-  return sameDirectionIncreasing || sameDirectionDecreasing ||
-    (sameSemVer && differentDirectionsInclusive) ||
-    oppositeDirectionsLessThan || oppositeDirectionsGreaterThan
-}
-
-exports.Range = Range
-function Range (range, options) {
-  if (!options || typeof options !== 'object') {
-    options = {
-      loose: !!options,
-      includePrerelease: false
-    }
-  }
-
-  if (range instanceof Range) {
-    if (range.loose === !!options.loose &&
-        range.includePrerelease === !!options.includePrerelease) {
-      return range
-    } else {
-      return new Range(range.raw, options)
-    }
-  }
-
-  if (range instanceof Comparator) {
-    return new Range(range.value, options)
-  }
-
-  if (!(this instanceof Range)) {
-    return new Range(range, options)
-  }
-
-  this.options = options
-  this.loose = !!options.loose
-  this.includePrerelease = !!options.includePrerelease
-
-  // First, split based on boolean or ||
-  this.raw = range
-  this.set = range.split(/\s*\|\|\s*/).map(function (range) {
-    return this.parseRange(range.trim())
-  }, this).filter(function (c) {
-    // throw out any that are not relevant for whatever reason
-    return c.length
-  })
-
-  if (!this.set.length) {
-    throw new TypeError('Invalid SemVer Range: ' + range)
-  }
-
-  this.format()
-}
-
-Range.prototype.format = function () {
-  this.range = this.set.map(function (comps) {
-    return comps.join(' ').trim()
-  }).join('||').trim()
-  return this.range
-}
-
-Range.prototype.toString = function () {
-  return this.range
-}
-
-Range.prototype.parseRange = function (range) {
-  var loose = this.options.loose
-  range = range.trim()
-  // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
-  var hr = loose ? re[HYPHENRANGELOOSE] : re[HYPHENRANGE]
-  range = range.replace(hr, hyphenReplace)
-  debug('hyphen replace', range)
-  // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
-  range = range.replace(re[COMPARATORTRIM], comparatorTrimReplace)
-  debug('comparator trim', range, re[COMPARATORTRIM])
-
-  // `~ 1.2.3` => `~1.2.3`
-  range = range.replace(re[TILDETRIM], tildeTrimReplace)
-
-  // `^ 1.2.3` => `^1.2.3`
-  range = range.replace(re[CARETTRIM], caretTrimReplace)
-
-  // normalize spaces
-  range = range.split(/\s+/).join(' ')
-
-  // At this point, the range is completely trimmed and
-  // ready to be split into comparators.
-
-  var compRe = loose ? re[COMPARATORLOOSE] : re[COMPARATOR]
-  var set = range.split(' ').map(function (comp) {
-    return parseComparator(comp, this.options)
-  }, this).join(' ').split(/\s+/)
-  if (this.options.loose) {
-    // in loose mode, throw out any that are not valid comparators
-    set = set.filter(function (comp) {
-      return !!comp.match(compRe)
-    })
-  }
-  set = set.map(function (comp) {
-    return new Comparator(comp, this.options)
-  }, this)
-
-  return set
-}
-
-Range.prototype.intersects = function (range, options) {
-  if (!(range instanceof Range)) {
-    throw new TypeError('a Range is required')
-  }
-
-  return this.set.some(function (thisComparators) {
-    return thisComparators.every(function (thisComparator) {
-      return range.set.some(function (rangeComparators) {
-        return rangeComparators.every(function (rangeComparator) {
-          return thisComparator.intersects(rangeComparator, options)
-        })
-      })
-    })
-  })
-}
-
-// Mostly just for testing and legacy API reasons
-exports.toComparators = toComparators
-function toComparators (range, options) {
-  return new Range(range, options).set.map(function (comp) {
-    return comp.map(function (c) {
-      return c.value
-    }).join(' ').trim().split(' ')
-  })
-}
-
-// comprised of xranges, tildes, stars, and gtlt's at this point.
-// already replaced the hyphen ranges
-// turn into a set of JUST comparators.
-function parseComparator (comp, options) {
-  debug('comp', comp, options)
-  comp = replaceCarets(comp, options)
-  debug('caret', comp)
-  comp = replaceTildes(comp, options)
-  debug('tildes', comp)
-  comp = replaceXRanges(comp, options)
-  debug('xrange', comp)
-  comp = replaceStars(comp, options)
-  debug('stars', comp)
-  return comp
-}
-
-function isX (id) {
-  return !id || id.toLowerCase() === 'x' || id === '*'
-}
-
-// ~, ~> --> * (any, kinda silly)
-// ~2, ~2.x, ~2.x.x, ~>2, ~>2.x ~>2.x.x --> >=2.0.0 <3.0.0
-// ~2.0, ~2.0.x, ~>2.0, ~>2.0.x --> >=2.0.0 <2.1.0
-// ~1.2, ~1.2.x, ~>1.2, ~>1.2.x --> >=1.2.0 <1.3.0
-// ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0
-// ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0
-function replaceTildes (comp, options) {
-  return comp.trim().split(/\s+/).map(function (comp) {
-    return replaceTilde(comp, options)
-  }).join(' ')
-}
-
-function replaceTilde (comp, options) {
-  var r = options.loose ? re[TILDELOOSE] : re[TILDE]
-  return comp.replace(r, function (_, M, m, p, pr) {
-    debug('tilde', comp, _, M, m, p, pr)
-    var ret
-
-    if (isX(M)) {
-      ret = ''
-    } else if (isX(m)) {
-      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0'
-    } else if (isX(p)) {
-      // ~1.2 == >=1.2.0 <1.3.0
-      ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0'
-    } else if (pr) {
-      debug('replaceTilde pr', pr)
-      ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
-            ' <' + M + '.' + (+m + 1) + '.0'
-    } else {
-      // ~1.2.3 == >=1.2.3 <1.3.0
-      ret = '>=' + M + '.' + m + '.' + p +
-            ' <' + M + '.' + (+m + 1) + '.0'
-    }
-
-    debug('tilde return', ret)
-    return ret
-  })
-}
-
-// ^ --> * (any, kinda silly)
-// ^2, ^2.x, ^2.x.x --> >=2.0.0 <3.0.0
-// ^2.0, ^2.0.x --> >=2.0.0 <3.0.0
-// ^1.2, ^1.2.x --> >=1.2.0 <2.0.0
-// ^1.2.3 --> >=1.2.3 <2.0.0
-// ^1.2.0 --> >=1.2.0 <2.0.0
-function replaceCarets (comp, options) {
-  return comp.trim().split(/\s+/).map(function (comp) {
-    return replaceCaret(comp, options)
-  }).join(' ')
-}
-
-function replaceCaret (comp, options) {
-  debug('caret', comp, options)
-  var r = options.loose ? re[CARETLOOSE] : re[CARET]
-  return comp.replace(r, function (_, M, m, p, pr) {
-    debug('caret', comp, _, M, m, p, pr)
-    var ret
-
-    if (isX(M)) {
-      ret = ''
-    } else if (isX(m)) {
-      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0'
-    } else if (isX(p)) {
-      if (M === '0') {
-        ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0'
-      } else {
-        ret = '>=' + M + '.' + m + '.0 <' + (+M + 1) + '.0.0'
-      }
-    } else if (pr) {
-      debug('replaceCaret pr', pr)
-      if (M === '0') {
-        if (m === '0') {
-          ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
-                ' <' + M + '.' + m + '.' + (+p + 1)
-        } else {
-          ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
-                ' <' + M + '.' + (+m + 1) + '.0'
-        }
-      } else {
-        ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
-              ' <' + (+M + 1) + '.0.0'
-      }
-    } else {
-      debug('no pr')
-      if (M === '0') {
-        if (m === '0') {
-          ret = '>=' + M + '.' + m + '.' + p +
-                ' <' + M + '.' + m + '.' + (+p + 1)
-        } else {
-          ret = '>=' + M + '.' + m + '.' + p +
-                ' <' + M + '.' + (+m + 1) + '.0'
-        }
-      } else {
-        ret = '>=' + M + '.' + m + '.' + p +
-              ' <' + (+M + 1) + '.0.0'
-      }
-    }
-
-    debug('caret return', ret)
-    return ret
-  })
-}
-
-function replaceXRanges (comp, options) {
-  debug('replaceXRanges', comp, options)
-  return comp.split(/\s+/).map(function (comp) {
-    return replaceXRange(comp, options)
-  }).join(' ')
-}
-
-function replaceXRange (comp, options) {
-  comp = comp.trim()
-  var r = options.loose ? re[XRANGELOOSE] : re[XRANGE]
-  return comp.replace(r, function (ret, gtlt, M, m, p, pr) {
-    debug('xRange', comp, ret, gtlt, M, m, p, pr)
-    var xM = isX(M)
-    var xm = xM || isX(m)
-    var xp = xm || isX(p)
-    var anyX = xp
-
-    if (gtlt === '=' && anyX) {
-      gtlt = ''
-    }
-
-    if (xM) {
-      if (gtlt === '>' || gtlt === '<') {
-        // nothing is allowed
-        ret = '<0.0.0'
-      } else {
-        // nothing is forbidden
-        ret = '*'
-      }
-    } else if (gtlt && anyX) {
-      // we know patch is an x, because we have any x at all.
-      // replace X with 0
-      if (xm) {
-        m = 0
-      }
-      p = 0
-
-      if (gtlt === '>') {
-        // >1 => >=2.0.0
-        // >1.2 => >=1.3.0
-        // >1.2.3 => >= 1.2.4
-        gtlt = '>='
-        if (xm) {
-          M = +M + 1
-          m = 0
-          p = 0
-        } else {
-          m = +m + 1
-          p = 0
-        }
-      } else if (gtlt === '<=') {
-        // <=0.7.x is actually <0.8.0, since any 0.7.x should
-        // pass.  Similarly, <=7.x is actually <8.0.0, etc.
-        gtlt = '<'
-        if (xm) {
-          M = +M + 1
-        } else {
-          m = +m + 1
-        }
-      }
-
-      ret = gtlt + M + '.' + m + '.' + p
-    } else if (xm) {
-      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0'
-    } else if (xp) {
-      ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0'
-    }
-
-    debug('xRange return', ret)
-
-    return ret
-  })
-}
-
-// Because * is AND-ed with everything else in the comparator,
-// and '' means "any version", just remove the *s entirely.
-function replaceStars (comp, options) {
-  debug('replaceStars', comp, options)
-  // Looseness is ignored here.  star is always as loose as it gets!
-  return comp.trim().replace(re[STAR], '')
-}
-
-// This function is passed to string.replace(re[HYPHENRANGE])
-// M, m, patch, prerelease, build
-// 1.2 - 3.4.5 => >=1.2.0 <=3.4.5
-// 1.2.3 - 3.4 => >=1.2.0 <3.5.0 Any 3.4.x will do
-// 1.2 - 3.4 => >=1.2.0 <3.5.0
-function hyphenReplace ($0,
-  from, fM, fm, fp, fpr, fb,
-  to, tM, tm, tp, tpr, tb) {
-  if (isX(fM)) {
-    from = ''
-  } else if (isX(fm)) {
-    from = '>=' + fM + '.0.0'
-  } else if (isX(fp)) {
-    from = '>=' + fM + '.' + fm + '.0'
-  } else {
-    from = '>=' + from
-  }
-
-  if (isX(tM)) {
-    to = ''
-  } else if (isX(tm)) {
-    to = '<' + (+tM + 1) + '.0.0'
-  } else if (isX(tp)) {
-    to = '<' + tM + '.' + (+tm + 1) + '.0'
-  } else if (tpr) {
-    to = '<=' + tM + '.' + tm + '.' + tp + '-' + tpr
-  } else {
-    to = '<=' + to
-  }
-
-  return (from + ' ' + to).trim()
-}
-
-// if ANY of the sets match ALL of its comparators, then pass
-Range.prototype.test = function (version) {
-  if (!version) {
-    return false
-  }
-
-  if (typeof version === 'string') {
-    version = new SemVer(version, this.options)
-  }
-
-  for (var i = 0; i < this.set.length; i++) {
-    if (testSet(this.set[i], version, this.options)) {
-      return true
-    }
-  }
-  return false
-}
-
-function testSet (set, version, options) {
-  for (var i = 0; i < set.length; i++) {
-    if (!set[i].test(version)) {
-      return false
-    }
-  }
-
-  if (version.prerelease.length && !options.includePrerelease) {
-    // Find the set of versions that are allowed to have prereleases
-    // For example, ^1.2.3-pr.1 desugars to >=1.2.3-pr.1 <2.0.0
-    // That should allow `1.2.3-pr.2` to pass.
-    // However, `1.2.4-alpha.notready` should NOT be allowed,
-    // even though it's within the range set by the comparators.
-    for (i = 0; i < set.length; i++) {
-      debug(set[i].semver)
-      if (set[i].semver === ANY) {
-        continue
-      }
-
-      if (set[i].semver.prerelease.length > 0) {
-        var allowed = set[i].semver
-        if (allowed.major === version.major &&
-            allowed.minor === version.minor &&
-            allowed.patch === version.patch) {
-          return true
-        }
-      }
-    }
-
-    // Version has a -pre, but it's not one of the ones we like.
-    return false
-  }
-
-  return true
-}
-
-exports.satisfies = satisfies
-function satisfies (version, range, options) {
-  try {
-    range = new Range(range, options)
-  } catch (er) {
-    return false
-  }
-  return range.test(version)
-}
-
-exports.maxSatisfying = maxSatisfying
-function maxSatisfying (versions, range, options) {
-  var max = null
-  var maxSV = null
-  try {
-    var rangeObj = new Range(range, options)
-  } catch (er) {
-    return null
-  }
-  versions.forEach(function (v) {
-    if (rangeObj.test(v)) {
-      // satisfies(v, range, options)
-      if (!max || maxSV.compare(v) === -1) {
-        // compare(max, v, true)
-        max = v
-        maxSV = new SemVer(max, options)
-      }
-    }
-  })
-  return max
-}
-
-exports.minSatisfying = minSatisfying
-function minSatisfying (versions, range, options) {
-  var min = null
-  var minSV = null
-  try {
-    var rangeObj = new Range(range, options)
-  } catch (er) {
-    return null
-  }
-  versions.forEach(function (v) {
-    if (rangeObj.test(v)) {
-      // satisfies(v, range, options)
-      if (!min || minSV.compare(v) === 1) {
-        // compare(min, v, true)
-        min = v
-        minSV = new SemVer(min, options)
-      }
-    }
-  })
-  return min
-}
-
-exports.minVersion = minVersion
-function minVersion (range, loose) {
-  range = new Range(range, loose)
-
-  var minver = new SemVer('0.0.0')
-  if (range.test(minver)) {
-    return minver
-  }
-
-  minver = new SemVer('0.0.0-0')
-  if (range.test(minver)) {
-    return minver
-  }
-
-  minver = null
-  for (var i = 0; i < range.set.length; ++i) {
-    var comparators = range.set[i]
-
-    comparators.forEach(function (comparator) {
-      // Clone to avoid manipulating the comparator's semver object.
-      var compver = new SemVer(comparator.semver.version)
-      switch (comparator.operator) {
-        case '>':
-          if (compver.prerelease.length === 0) {
-            compver.patch++
-          } else {
-            compver.prerelease.push(0)
-          }
-          compver.raw = compver.format()
-          /* fallthrough */
-        case '':
-        case '>=':
-          if (!minver || gt(minver, compver)) {
-            minver = compver
-          }
-          break
-        case '<':
-        case '<=':
-          /* Ignore maximum versions */
-          break
-        /* istanbul ignore next */
-        default:
-          throw new Error('Unexpected operation: ' + comparator.operator)
-      }
-    })
-  }
-
-  if (minver && range.test(minver)) {
-    return minver
-  }
-
-  return null
-}
-
-exports.validRange = validRange
-function validRange (range, options) {
-  try {
-    // Return '*' instead of '' so that truthiness works.
-    // This will throw if it's invalid anyway
-    return new Range(range, options).range || '*'
-  } catch (er) {
-    return null
-  }
-}
-
-// Determine if version is less than all the versions possible in the range
-exports.ltr = ltr
-function ltr (version, range, options) {
-  return outside(version, range, '<', options)
-}
-
-// Determine if version is greater than all the versions possible in the range.
-exports.gtr = gtr
-function gtr (version, range, options) {
-  return outside(version, range, '>', options)
-}
-
-exports.outside = outside
-function outside (version, range, hilo, options) {
-  version = new SemVer(version, options)
-  range = new Range(range, options)
-
-  var gtfn, ltefn, ltfn, comp, ecomp
-  switch (hilo) {
-    case '>':
-      gtfn = gt
-      ltefn = lte
-      ltfn = lt
-      comp = '>'
-      ecomp = '>='
-      break
-    case '<':
-      gtfn = lt
-      ltefn = gte
-      ltfn = gt
-      comp = '<'
-      ecomp = '<='
-      break
-    default:
-      throw new TypeError('Must provide a hilo val of "<" or ">"')
-  }
-
-  // If it satisifes the range it is not outside
-  if (satisfies(version, range, options)) {
-    return false
-  }
-
-  // From now on, variable terms are as if we're in "gtr" mode.
-  // but note that everything is flipped for the "ltr" function.
-
-  for (var i = 0; i < range.set.length; ++i) {
-    var comparators = range.set[i]
-
-    var high = null
-    var low = null
-
-    comparators.forEach(function (comparator) {
-      if (comparator.semver === ANY) {
-        comparator = new Comparator('>=0.0.0')
-      }
-      high = high || comparator
-      low = low || comparator
-      if (gtfn(comparator.semver, high.semver, options)) {
-        high = comparator
-      } else if (ltfn(comparator.semver, low.semver, options)) {
-        low = comparator
-      }
-    })
-
-    // If the edge version comparator has a operator then our version
-    // isn't outside it
-    if (high.operator === comp || high.operator === ecomp) {
-      return false
-    }
-
-    // If the lowest version comparator has an operator and our version
-    // is less than it then it isn't higher than the range
-    if ((!low.operator || low.operator === comp) &&
-        ltefn(version, low.semver)) {
-      return false
-    } else if (low.operator === ecomp && ltfn(version, low.semver)) {
-      return false
-    }
-  }
-  return true
-}
-
-exports.prerelease = prerelease
-function prerelease (version, options) {
-  var parsed = parse(version, options)
-  return (parsed && parsed.prerelease.length) ? parsed.prerelease : null
-}
-
-exports.intersects = intersects
-function intersects (r1, r2, options) {
-  r1 = new Range(r1, options)
-  r2 = new Range(r2, options)
-  return r1.intersects(r2)
-}
-
-exports.coerce = coerce
-function coerce (version) {
-  if (version instanceof SemVer) {
-    return version
-  }
-
-  if (typeof version !== 'string') {
-    return null
-  }
-
-  var match = version.match(re[COERCE])
-
-  if (match == null) {
-    return null
-  }
-
-  return parse(match[1] +
-    '.' + (match[2] || '0') +
-    '.' + (match[3] || '0'))
-}
-
-
-/***/ }),
+/* 864 */,
 /* 865 */
 /***/ (function(module) {
 
@@ -61665,12 +59671,7 @@ SafeBuffer.allocUnsafeSlow = function (size) {
 /***/ }),
 /* 874 */,
 /* 875 */,
-/* 876 */
-/***/ (function(module) {
-
-module.exports = require("http");
-
-/***/ }),
+/* 876 */,
 /* 877 */
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -62183,7 +60184,7 @@ module.exports = Transform;
 var Duplex = __webpack_require__(445);
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -71945,7 +69946,7 @@ module.exports = __webpack_require__(413);
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 module.exports = (function() {
-  const $protobuf = __webpack_require__(835);
+  const $protobuf = __webpack_require__(72);
   const grpc = __webpack_require__(323);
   const registar = __webpack_require__(866);
   const util = __webpack_require__(949);
@@ -74931,7 +72932,1684 @@ module.exports = camelCase;
 /* 933 */,
 /* 934 */,
 /* 935 */,
-/* 936 */,
+/* 936 */
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+module.exports = (function() {
+  const $protobuf = __webpack_require__(72);
+  const grpc = __webpack_require__(323);
+  const registar = __webpack_require__(866);
+  const util = __webpack_require__(949);
+  const yc = __webpack_require__(135);
+  const $Reader = $protobuf.Reader;
+  const $Writer = $protobuf.Writer;
+  const $util = $protobuf.util;
+  let root = {};
+  __webpack_require__(490);
+  __webpack_require__(109);
+  (function($root) {
+    $root.Function = (function() {
+      function Function(p) {
+        this.labels = {};
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      Function.prototype.id = '';
+      Function.prototype.folderId = '';
+      Function.prototype.createdAt = null;
+      Function.prototype.name = '';
+      Function.prototype.description = '';
+      Function.prototype.labels = $util.emptyObject;
+      Function.prototype.logGroupId = '';
+      Function.prototype.httpInvokeUrl = '';
+      Function.prototype.status = 0;
+      Function.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.id != null && m.hasOwnProperty('id')) w.uint32(10).string(m.id);
+        if (m.folderId != null && m.hasOwnProperty('folderId')) w.uint32(18).string(m.folderId);
+        if (m.createdAt != null && m.hasOwnProperty('createdAt')) $root.contrib.google.protobuf.Timestamp.encode(m.createdAt, w.uint32(26).fork()).ldelim();
+        if (m.name != null && m.hasOwnProperty('name')) w.uint32(34).string(m.name);
+        if (m.description != null && m.hasOwnProperty('description')) w.uint32(42).string(m.description);
+        if (m.labels != null && m.hasOwnProperty('labels')) {
+          for (let ks = Object.keys(m.labels), i = 0; i < ks.length; ++i) {
+            w.uint32(50)
+              .fork()
+              .uint32(10)
+              .string(ks[i])
+              .uint32(18)
+              .string(m.labels[ks[i]])
+              .ldelim();
+          }
+        }
+        if (m.logGroupId != null && m.hasOwnProperty('logGroupId')) w.uint32(58).string(m.logGroupId);
+        if (m.httpInvokeUrl != null && m.hasOwnProperty('httpInvokeUrl')) w.uint32(66).string(m.httpInvokeUrl);
+        if (m.status != null && m.hasOwnProperty('status')) w.uint32(72).int32(m.status);
+        return w;
+      };
+      Function.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.Function(),
+          k;
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.id = r.string();
+              break;
+            case 2:
+              m.folderId = r.string();
+              break;
+            case 3:
+              m.createdAt = $root.contrib.google.protobuf.Timestamp.decode(r, r.uint32());
+              break;
+            case 4:
+              m.name = r.string();
+              break;
+            case 5:
+              m.description = r.string();
+              break;
+            case 6:
+              r.skip().pos++;
+              if (m.labels === $util.emptyObject) m.labels = {};
+              k = r.string();
+              r.pos++;
+              m.labels[k] = r.string();
+              break;
+            case 7:
+              m.logGroupId = r.string();
+              break;
+            case 8:
+              m.httpInvokeUrl = r.string();
+              break;
+            case 9:
+              m.status = r.int32();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      let Status = (function() {
+        let valuesById = {},
+          values = Object.create(valuesById);
+        values[(valuesById[0] = 'STATUS_UNSPECIFIED')] = 0;
+        values[(valuesById[1] = 'CREATING')] = 1;
+        values[(valuesById[2] = 'ACTIVE')] = 2;
+        values[(valuesById[3] = 'DELETING')] = 3;
+        values[(valuesById[4] = 'ERROR')] = 4;
+        return values;
+      })();
+      Function.Status = Status;
+      return Function;
+    })();
+  })(root);
+  (function($root) {
+    $root.Version = (function() {
+      function Version(p) {
+        this.tags = [];
+        this.environment = {};
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      Version.prototype.id = '';
+      Version.prototype.functionId = '';
+      Version.prototype.description = '';
+      Version.prototype.createdAt = null;
+      Version.prototype.runtime = '';
+      Version.prototype.entrypoint = '';
+      Version.prototype.resources = null;
+      Version.prototype.executionTimeout = null;
+      Version.prototype.serviceAccountId = '';
+      Version.prototype.imageSize = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
+      Version.prototype.status = 0;
+      Version.prototype.tags = $util.emptyArray;
+      Version.prototype.logGroupId = '';
+      Version.prototype.environment = $util.emptyObject;
+      Version.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.id != null && m.hasOwnProperty('id')) w.uint32(10).string(m.id);
+        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(18).string(m.functionId);
+        if (m.description != null && m.hasOwnProperty('description')) w.uint32(26).string(m.description);
+        if (m.createdAt != null && m.hasOwnProperty('createdAt')) $root.contrib.google.protobuf.Timestamp.encode(m.createdAt, w.uint32(42).fork()).ldelim();
+        if (m.runtime != null && m.hasOwnProperty('runtime')) w.uint32(50).string(m.runtime);
+        if (m.entrypoint != null && m.hasOwnProperty('entrypoint')) w.uint32(58).string(m.entrypoint);
+        if (m.resources != null && m.hasOwnProperty('resources')) $root.api.serverless.functions.v1.Resources.encode(m.resources, w.uint32(66).fork()).ldelim();
+        if (m.executionTimeout != null && m.hasOwnProperty('executionTimeout')) $root.contrib.google.protobuf.Duration.encode(m.executionTimeout, w.uint32(74).fork()).ldelim();
+        if (m.serviceAccountId != null && m.hasOwnProperty('serviceAccountId')) w.uint32(82).string(m.serviceAccountId);
+        if (m.imageSize != null && m.hasOwnProperty('imageSize')) w.uint32(96).int64(m.imageSize);
+        if (m.status != null && m.hasOwnProperty('status')) w.uint32(104).int32(m.status);
+        if (m.tags != null && m.tags.length) {
+          for (let i = 0; i < m.tags.length; ++i) w.uint32(114).string(m.tags[i]);
+        }
+        if (m.logGroupId != null && m.hasOwnProperty('logGroupId')) w.uint32(122).string(m.logGroupId);
+        if (m.environment != null && m.hasOwnProperty('environment')) {
+          for (let ks = Object.keys(m.environment), i = 0; i < ks.length; ++i) {
+            w.uint32(130)
+              .fork()
+              .uint32(10)
+              .string(ks[i])
+              .uint32(18)
+              .string(m.environment[ks[i]])
+              .ldelim();
+          }
+        }
+        return w;
+      };
+      Version.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.Version(),
+          k;
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.id = r.string();
+              break;
+            case 2:
+              m.functionId = r.string();
+              break;
+            case 3:
+              m.description = r.string();
+              break;
+            case 5:
+              m.createdAt = $root.contrib.google.protobuf.Timestamp.decode(r, r.uint32());
+              break;
+            case 6:
+              m.runtime = r.string();
+              break;
+            case 7:
+              m.entrypoint = r.string();
+              break;
+            case 8:
+              m.resources = $root.api.serverless.functions.v1.Resources.decode(r, r.uint32());
+              break;
+            case 9:
+              m.executionTimeout = $root.contrib.google.protobuf.Duration.decode(r, r.uint32());
+              break;
+            case 10:
+              m.serviceAccountId = r.string();
+              break;
+            case 12:
+              m.imageSize = r.int64();
+              break;
+            case 13:
+              m.status = r.int32();
+              break;
+            case 14:
+              if (!(m.tags && m.tags.length)) m.tags = [];
+              m.tags.push(r.string());
+              break;
+            case 15:
+              m.logGroupId = r.string();
+              break;
+            case 16:
+              r.skip().pos++;
+              if (m.environment === $util.emptyObject) m.environment = {};
+              k = r.string();
+              r.pos++;
+              m.environment[k] = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      let Status = (function() {
+        let valuesById = {},
+          values = Object.create(valuesById);
+        values[(valuesById[0] = 'STATUS_UNSPECIFIED')] = 0;
+        values[(valuesById[1] = 'CREATING')] = 1;
+        values[(valuesById[2] = 'ACTIVE')] = 2;
+        return values;
+      })();
+      Version.Status = Status;
+      return Version;
+    })();
+  })(root);
+  (function($root) {
+    $root.Resources = (function() {
+      function Resources(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      Resources.prototype.memory = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
+      Resources.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.memory != null && m.hasOwnProperty('memory')) w.uint32(8).int64(m.memory);
+        return w;
+      };
+      Resources.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.Resources();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.memory = r.int64();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return Resources;
+    })();
+  })(root);
+  (function($root) {
+    $root.Package = (function() {
+      function Package(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      Package.prototype.bucketName = '';
+      Package.prototype.objectName = '';
+      Package.prototype.sha256 = '';
+      Package.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.bucketName != null && m.hasOwnProperty('bucketName')) w.uint32(10).string(m.bucketName);
+        if (m.objectName != null && m.hasOwnProperty('objectName')) w.uint32(18).string(m.objectName);
+        if (m.sha256 != null && m.hasOwnProperty('sha256')) w.uint32(26).string(m.sha256);
+        return w;
+      };
+      Package.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.Package();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.bucketName = r.string();
+              break;
+            case 2:
+              m.objectName = r.string();
+              break;
+            case 3:
+              m.sha256 = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return Package;
+    })();
+  })(root);
+  (function($root) {
+    $root.FunctionService = function(session) {
+      if (session === undefined) {
+        session = new yc.Session();
+      }
+      return session.client($root.FunctionService.makeGrpcConstructor());
+    };
+    $root.FunctionService.makeGrpcConstructor = () => {
+      let ctor = grpc.makeGenericClientConstructor({
+        get: {
+          path: '/yandex.cloud.serverless.functions.v1.FunctionService/Get',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.serverless.functions.v1.GetFunctionRequest,
+          responseType: $root.api.serverless.functions.v1.Function,
+          requestSerialize: r => {
+            return $root.api.serverless.functions.v1.GetFunctionRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.serverless.functions.v1.GetFunctionRequest.decode,
+          responseSerialize: r => {
+            return $root.api.serverless.functions.v1.Function.encode(r).finish();
+          },
+          responseDeserialize: $root.api.serverless.functions.v1.Function.decode
+        },
+        list: {
+          path: '/yandex.cloud.serverless.functions.v1.FunctionService/List',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.serverless.functions.v1.ListFunctionsRequest,
+          responseType: $root.api.serverless.functions.v1.ListFunctionsResponse,
+          requestSerialize: r => {
+            return $root.api.serverless.functions.v1.ListFunctionsRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.serverless.functions.v1.ListFunctionsRequest.decode,
+          responseSerialize: r => {
+            return $root.api.serverless.functions.v1.ListFunctionsResponse.encode(r).finish();
+          },
+          responseDeserialize: $root.api.serverless.functions.v1.ListFunctionsResponse.decode
+        },
+        create: {
+          path: '/yandex.cloud.serverless.functions.v1.FunctionService/Create',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.serverless.functions.v1.CreateFunctionRequest,
+          responseType: $root.api.operation.Operation,
+          requestSerialize: r => {
+            return $root.api.serverless.functions.v1.CreateFunctionRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.serverless.functions.v1.CreateFunctionRequest.decode,
+          responseSerialize: r => {
+            return $root.api.operation.Operation.encode(r).finish();
+          },
+          responseDeserialize: $root.api.operation.Operation.decode
+        },
+        update: {
+          path: '/yandex.cloud.serverless.functions.v1.FunctionService/Update',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.serverless.functions.v1.UpdateFunctionRequest,
+          responseType: $root.api.operation.Operation,
+          requestSerialize: r => {
+            return $root.api.serverless.functions.v1.UpdateFunctionRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.serverless.functions.v1.UpdateFunctionRequest.decode,
+          responseSerialize: r => {
+            return $root.api.operation.Operation.encode(r).finish();
+          },
+          responseDeserialize: $root.api.operation.Operation.decode
+        },
+        delete: {
+          path: '/yandex.cloud.serverless.functions.v1.FunctionService/Delete',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.serverless.functions.v1.DeleteFunctionRequest,
+          responseType: $root.api.operation.Operation,
+          requestSerialize: r => {
+            return $root.api.serverless.functions.v1.DeleteFunctionRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.serverless.functions.v1.DeleteFunctionRequest.decode,
+          responseSerialize: r => {
+            return $root.api.operation.Operation.encode(r).finish();
+          },
+          responseDeserialize: $root.api.operation.Operation.decode
+        },
+        getVersion: {
+          path: '/yandex.cloud.serverless.functions.v1.FunctionService/GetVersion',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.serverless.functions.v1.GetFunctionVersionRequest,
+          responseType: $root.api.serverless.functions.v1.Version,
+          requestSerialize: r => {
+            return $root.api.serverless.functions.v1.GetFunctionVersionRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.serverless.functions.v1.GetFunctionVersionRequest.decode,
+          responseSerialize: r => {
+            return $root.api.serverless.functions.v1.Version.encode(r).finish();
+          },
+          responseDeserialize: $root.api.serverless.functions.v1.Version.decode
+        },
+        getVersionByTag: {
+          path: '/yandex.cloud.serverless.functions.v1.FunctionService/GetVersionByTag',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.serverless.functions.v1.GetFunctionVersionByTagRequest,
+          responseType: $root.api.serverless.functions.v1.Version,
+          requestSerialize: r => {
+            return $root.api.serverless.functions.v1.GetFunctionVersionByTagRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.serverless.functions.v1.GetFunctionVersionByTagRequest.decode,
+          responseSerialize: r => {
+            return $root.api.serverless.functions.v1.Version.encode(r).finish();
+          },
+          responseDeserialize: $root.api.serverless.functions.v1.Version.decode
+        },
+        listVersions: {
+          path: '/yandex.cloud.serverless.functions.v1.FunctionService/ListVersions',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.serverless.functions.v1.ListFunctionsVersionsRequest,
+          responseType: $root.api.serverless.functions.v1.ListFunctionsVersionsResponse,
+          requestSerialize: r => {
+            return $root.api.serverless.functions.v1.ListFunctionsVersionsRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.serverless.functions.v1.ListFunctionsVersionsRequest.decode,
+          responseSerialize: r => {
+            return $root.api.serverless.functions.v1.ListFunctionsVersionsResponse.encode(r).finish();
+          },
+          responseDeserialize: $root.api.serverless.functions.v1.ListFunctionsVersionsResponse.decode
+        },
+        setTag: {
+          path: '/yandex.cloud.serverless.functions.v1.FunctionService/SetTag',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.serverless.functions.v1.SetFunctionTagRequest,
+          responseType: $root.api.operation.Operation,
+          requestSerialize: r => {
+            return $root.api.serverless.functions.v1.SetFunctionTagRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.serverless.functions.v1.SetFunctionTagRequest.decode,
+          responseSerialize: r => {
+            return $root.api.operation.Operation.encode(r).finish();
+          },
+          responseDeserialize: $root.api.operation.Operation.decode
+        },
+        removeTag: {
+          path: '/yandex.cloud.serverless.functions.v1.FunctionService/RemoveTag',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.serverless.functions.v1.RemoveFunctionTagRequest,
+          responseType: $root.api.operation.Operation,
+          requestSerialize: r => {
+            return $root.api.serverless.functions.v1.RemoveFunctionTagRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.serverless.functions.v1.RemoveFunctionTagRequest.decode,
+          responseSerialize: r => {
+            return $root.api.operation.Operation.encode(r).finish();
+          },
+          responseDeserialize: $root.api.operation.Operation.decode
+        },
+        listTagHistory: {
+          path: '/yandex.cloud.serverless.functions.v1.FunctionService/ListTagHistory',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.serverless.functions.v1.ListFunctionTagHistoryRequest,
+          responseType: $root.api.serverless.functions.v1.ListFunctionTagHistoryResponse,
+          requestSerialize: r => {
+            return $root.api.serverless.functions.v1.ListFunctionTagHistoryRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.serverless.functions.v1.ListFunctionTagHistoryRequest.decode,
+          responseSerialize: r => {
+            return $root.api.serverless.functions.v1.ListFunctionTagHistoryResponse.encode(r).finish();
+          },
+          responseDeserialize: $root.api.serverless.functions.v1.ListFunctionTagHistoryResponse.decode
+        },
+        createVersion: {
+          path: '/yandex.cloud.serverless.functions.v1.FunctionService/CreateVersion',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.serverless.functions.v1.CreateFunctionVersionRequest,
+          responseType: $root.api.operation.Operation,
+          requestSerialize: r => {
+            return $root.api.serverless.functions.v1.CreateFunctionVersionRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.serverless.functions.v1.CreateFunctionVersionRequest.decode,
+          responseSerialize: r => {
+            return $root.api.operation.Operation.encode(r).finish();
+          },
+          responseDeserialize: $root.api.operation.Operation.decode
+        },
+        listRuntimes: {
+          path: '/yandex.cloud.serverless.functions.v1.FunctionService/ListRuntimes',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.serverless.functions.v1.ListRuntimesRequest,
+          responseType: $root.api.serverless.functions.v1.ListRuntimesResponse,
+          requestSerialize: r => {
+            return $root.api.serverless.functions.v1.ListRuntimesRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.serverless.functions.v1.ListRuntimesRequest.decode,
+          responseSerialize: r => {
+            return $root.api.serverless.functions.v1.ListRuntimesResponse.encode(r).finish();
+          },
+          responseDeserialize: $root.api.serverless.functions.v1.ListRuntimesResponse.decode
+        },
+        listOperations: {
+          path: '/yandex.cloud.serverless.functions.v1.FunctionService/ListOperations',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.serverless.functions.v1.ListFunctionOperationsRequest,
+          responseType: $root.api.serverless.functions.v1.ListFunctionOperationsResponse,
+          requestSerialize: r => {
+            return $root.api.serverless.functions.v1.ListFunctionOperationsRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.serverless.functions.v1.ListFunctionOperationsRequest.decode,
+          responseSerialize: r => {
+            return $root.api.serverless.functions.v1.ListFunctionOperationsResponse.encode(r).finish();
+          },
+          responseDeserialize: $root.api.serverless.functions.v1.ListFunctionOperationsResponse.decode
+        },
+        listAccessBindings: {
+          path: '/yandex.cloud.serverless.functions.v1.FunctionService/ListAccessBindings',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.access.ListAccessBindingsRequest,
+          responseType: $root.api.access.ListAccessBindingsResponse,
+          requestSerialize: r => {
+            return $root.api.access.ListAccessBindingsRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.access.ListAccessBindingsRequest.decode,
+          responseSerialize: r => {
+            return $root.api.access.ListAccessBindingsResponse.encode(r).finish();
+          },
+          responseDeserialize: $root.api.access.ListAccessBindingsResponse.decode
+        },
+        setAccessBindings: {
+          path: '/yandex.cloud.serverless.functions.v1.FunctionService/SetAccessBindings',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.access.SetAccessBindingsRequest,
+          responseType: $root.api.operation.Operation,
+          requestSerialize: r => {
+            return $root.api.access.SetAccessBindingsRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.access.SetAccessBindingsRequest.decode,
+          responseSerialize: r => {
+            return $root.api.operation.Operation.encode(r).finish();
+          },
+          responseDeserialize: $root.api.operation.Operation.decode
+        },
+        updateAccessBindings: {
+          path: '/yandex.cloud.serverless.functions.v1.FunctionService/UpdateAccessBindings',
+          requestStream: false,
+          responseStream: false,
+          requestType: $root.api.access.UpdateAccessBindingsRequest,
+          responseType: $root.api.operation.Operation,
+          requestSerialize: r => {
+            return $root.api.access.UpdateAccessBindingsRequest.encode(r).finish();
+          },
+          requestDeserialize: $root.api.access.UpdateAccessBindingsRequest.decode,
+          responseSerialize: r => {
+            return $root.api.operation.Operation.encode(r).finish();
+          },
+          responseDeserialize: $root.api.operation.Operation.decode
+        }
+      });
+      ctor.__endpointId = 'serverless-functions';
+      return ctor;
+    };
+  })(root);
+  (function($root) {
+    $root.GetFunctionRequest = (function() {
+      function GetFunctionRequest(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      GetFunctionRequest.prototype.functionId = '';
+      GetFunctionRequest.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
+        return w;
+      };
+      GetFunctionRequest.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.GetFunctionRequest();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.functionId = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return GetFunctionRequest;
+    })();
+  })(root);
+  (function($root) {
+    $root.GetFunctionVersionRequest = (function() {
+      function GetFunctionVersionRequest(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      GetFunctionVersionRequest.prototype.functionVersionId = '';
+      GetFunctionVersionRequest.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.functionVersionId != null && m.hasOwnProperty('functionVersionId')) w.uint32(10).string(m.functionVersionId);
+        return w;
+      };
+      GetFunctionVersionRequest.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.GetFunctionVersionRequest();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.functionVersionId = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return GetFunctionVersionRequest;
+    })();
+  })(root);
+  (function($root) {
+    $root.GetFunctionVersionByTagRequest = (function() {
+      function GetFunctionVersionByTagRequest(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      GetFunctionVersionByTagRequest.prototype.functionId = '';
+      GetFunctionVersionByTagRequest.prototype.tag = '';
+      GetFunctionVersionByTagRequest.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
+        if (m.tag != null && m.hasOwnProperty('tag')) w.uint32(18).string(m.tag);
+        return w;
+      };
+      GetFunctionVersionByTagRequest.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.GetFunctionVersionByTagRequest();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.functionId = r.string();
+              break;
+            case 2:
+              m.tag = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return GetFunctionVersionByTagRequest;
+    })();
+  })(root);
+  (function($root) {
+    $root.ListFunctionsRequest = (function() {
+      function ListFunctionsRequest(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      ListFunctionsRequest.prototype.folderId = '';
+      ListFunctionsRequest.prototype.pageSize = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
+      ListFunctionsRequest.prototype.pageToken = '';
+      ListFunctionsRequest.prototype.filter = '';
+      ListFunctionsRequest.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.folderId != null && m.hasOwnProperty('folderId')) w.uint32(10).string(m.folderId);
+        if (m.pageSize != null && m.hasOwnProperty('pageSize')) w.uint32(16).int64(m.pageSize);
+        if (m.pageToken != null && m.hasOwnProperty('pageToken')) w.uint32(26).string(m.pageToken);
+        if (m.filter != null && m.hasOwnProperty('filter')) w.uint32(34).string(m.filter);
+        return w;
+      };
+      ListFunctionsRequest.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.ListFunctionsRequest();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.folderId = r.string();
+              break;
+            case 2:
+              m.pageSize = r.int64();
+              break;
+            case 3:
+              m.pageToken = r.string();
+              break;
+            case 4:
+              m.filter = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return ListFunctionsRequest;
+    })();
+  })(root);
+  (function($root) {
+    $root.ListFunctionsResponse = (function() {
+      function ListFunctionsResponse(p) {
+        this.functions = [];
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      ListFunctionsResponse.prototype.functions = $util.emptyArray;
+      ListFunctionsResponse.prototype.nextPageToken = '';
+      ListFunctionsResponse.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.functions != null && m.functions.length) {
+          for (let i = 0; i < m.functions.length; ++i) $root.api.serverless.functions.v1.Function.encode(m.functions[i], w.uint32(10).fork()).ldelim();
+        }
+        if (m.nextPageToken != null && m.hasOwnProperty('nextPageToken')) w.uint32(18).string(m.nextPageToken);
+        return w;
+      };
+      ListFunctionsResponse.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.ListFunctionsResponse();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              if (!(m.functions && m.functions.length)) m.functions = [];
+              m.functions.push($root.api.serverless.functions.v1.Function.decode(r, r.uint32()));
+              break;
+            case 2:
+              m.nextPageToken = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return ListFunctionsResponse;
+    })();
+  })(root);
+  (function($root) {
+    $root.CreateFunctionRequest = (function() {
+      function CreateFunctionRequest(p) {
+        this.labels = {};
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      CreateFunctionRequest.prototype.folderId = '';
+      CreateFunctionRequest.prototype.name = '';
+      CreateFunctionRequest.prototype.description = '';
+      CreateFunctionRequest.prototype.labels = $util.emptyObject;
+      CreateFunctionRequest.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.folderId != null && m.hasOwnProperty('folderId')) w.uint32(10).string(m.folderId);
+        if (m.name != null && m.hasOwnProperty('name')) w.uint32(18).string(m.name);
+        if (m.description != null && m.hasOwnProperty('description')) w.uint32(26).string(m.description);
+        if (m.labels != null && m.hasOwnProperty('labels')) {
+          for (let ks = Object.keys(m.labels), i = 0; i < ks.length; ++i) {
+            w.uint32(34)
+              .fork()
+              .uint32(10)
+              .string(ks[i])
+              .uint32(18)
+              .string(m.labels[ks[i]])
+              .ldelim();
+          }
+        }
+        return w;
+      };
+      CreateFunctionRequest.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.CreateFunctionRequest(),
+          k;
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.folderId = r.string();
+              break;
+            case 2:
+              m.name = r.string();
+              break;
+            case 3:
+              m.description = r.string();
+              break;
+            case 4:
+              r.skip().pos++;
+              if (m.labels === $util.emptyObject) m.labels = {};
+              k = r.string();
+              r.pos++;
+              m.labels[k] = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return CreateFunctionRequest;
+    })();
+  })(root);
+  (function($root) {
+    $root.CreateFunctionMetadata = (function() {
+      function CreateFunctionMetadata(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      CreateFunctionMetadata.prototype.functionId = '';
+      CreateFunctionMetadata.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
+        return w;
+      };
+      CreateFunctionMetadata.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.CreateFunctionMetadata();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.functionId = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return CreateFunctionMetadata;
+    })();
+  })(root);
+  (function($root) {
+    $root.UpdateFunctionRequest = (function() {
+      function UpdateFunctionRequest(p) {
+        this.labels = {};
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      UpdateFunctionRequest.prototype.functionId = '';
+      UpdateFunctionRequest.prototype.updateMask = null;
+      UpdateFunctionRequest.prototype.name = '';
+      UpdateFunctionRequest.prototype.description = '';
+      UpdateFunctionRequest.prototype.labels = $util.emptyObject;
+      UpdateFunctionRequest.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
+        if (m.updateMask != null && m.hasOwnProperty('updateMask')) $root.contrib.google.protobuf.FieldMask.encode(m.updateMask, w.uint32(18).fork()).ldelim();
+        if (m.name != null && m.hasOwnProperty('name')) w.uint32(26).string(m.name);
+        if (m.description != null && m.hasOwnProperty('description')) w.uint32(34).string(m.description);
+        if (m.labels != null && m.hasOwnProperty('labels')) {
+          for (let ks = Object.keys(m.labels), i = 0; i < ks.length; ++i) {
+            w.uint32(42)
+              .fork()
+              .uint32(10)
+              .string(ks[i])
+              .uint32(18)
+              .string(m.labels[ks[i]])
+              .ldelim();
+          }
+        }
+        return w;
+      };
+      UpdateFunctionRequest.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.UpdateFunctionRequest(),
+          k;
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.functionId = r.string();
+              break;
+            case 2:
+              m.updateMask = $root.contrib.google.protobuf.FieldMask.decode(r, r.uint32());
+              break;
+            case 3:
+              m.name = r.string();
+              break;
+            case 4:
+              m.description = r.string();
+              break;
+            case 5:
+              r.skip().pos++;
+              if (m.labels === $util.emptyObject) m.labels = {};
+              k = r.string();
+              r.pos++;
+              m.labels[k] = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return UpdateFunctionRequest;
+    })();
+  })(root);
+  (function($root) {
+    $root.UpdateFunctionMetadata = (function() {
+      function UpdateFunctionMetadata(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      UpdateFunctionMetadata.prototype.functionId = '';
+      UpdateFunctionMetadata.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
+        return w;
+      };
+      UpdateFunctionMetadata.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.UpdateFunctionMetadata();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.functionId = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return UpdateFunctionMetadata;
+    })();
+  })(root);
+  (function($root) {
+    $root.DeleteFunctionRequest = (function() {
+      function DeleteFunctionRequest(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      DeleteFunctionRequest.prototype.functionId = '';
+      DeleteFunctionRequest.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
+        return w;
+      };
+      DeleteFunctionRequest.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.DeleteFunctionRequest();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.functionId = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return DeleteFunctionRequest;
+    })();
+  })(root);
+  (function($root) {
+    $root.DeleteFunctionMetadata = (function() {
+      function DeleteFunctionMetadata(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      DeleteFunctionMetadata.prototype.functionId = '';
+      DeleteFunctionMetadata.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
+        return w;
+      };
+      DeleteFunctionMetadata.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.DeleteFunctionMetadata();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.functionId = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return DeleteFunctionMetadata;
+    })();
+  })(root);
+  (function($root) {
+    $root.ListRuntimesRequest = (function() {
+      function ListRuntimesRequest(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      ListRuntimesRequest.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        return w;
+      };
+      ListRuntimesRequest.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.ListRuntimesRequest();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return ListRuntimesRequest;
+    })();
+  })(root);
+  (function($root) {
+    $root.ListRuntimesResponse = (function() {
+      function ListRuntimesResponse(p) {
+        this.runtimes = [];
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      ListRuntimesResponse.prototype.runtimes = $util.emptyArray;
+      ListRuntimesResponse.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.runtimes != null && m.runtimes.length) {
+          for (let i = 0; i < m.runtimes.length; ++i) w.uint32(10).string(m.runtimes[i]);
+        }
+        return w;
+      };
+      ListRuntimesResponse.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.ListRuntimesResponse();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              if (!(m.runtimes && m.runtimes.length)) m.runtimes = [];
+              m.runtimes.push(r.string());
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return ListRuntimesResponse;
+    })();
+  })(root);
+  (function($root) {
+    $root.ListFunctionsVersionsRequest = (function() {
+      function ListFunctionsVersionsRequest(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      ListFunctionsVersionsRequest.prototype.folderId = '';
+      ListFunctionsVersionsRequest.prototype.functionId = '';
+      ListFunctionsVersionsRequest.prototype.pageSize = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
+      ListFunctionsVersionsRequest.prototype.pageToken = '';
+      ListFunctionsVersionsRequest.prototype.filter = '';
+      let $oneOfFields;
+      Object.defineProperty(ListFunctionsVersionsRequest.prototype, 'id', {
+        get: $util.oneOfGetter(($oneOfFields = ['folderId', 'functionId'])),
+        set: $util.oneOfSetter($oneOfFields)
+      });
+      ListFunctionsVersionsRequest.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.folderId != null && m.hasOwnProperty('folderId')) w.uint32(10).string(m.folderId);
+        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(18).string(m.functionId);
+        if (m.pageSize != null && m.hasOwnProperty('pageSize')) w.uint32(24).int64(m.pageSize);
+        if (m.pageToken != null && m.hasOwnProperty('pageToken')) w.uint32(34).string(m.pageToken);
+        if (m.filter != null && m.hasOwnProperty('filter')) w.uint32(42).string(m.filter);
+        return w;
+      };
+      ListFunctionsVersionsRequest.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.ListFunctionsVersionsRequest();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.folderId = r.string();
+              break;
+            case 2:
+              m.functionId = r.string();
+              break;
+            case 3:
+              m.pageSize = r.int64();
+              break;
+            case 4:
+              m.pageToken = r.string();
+              break;
+            case 5:
+              m.filter = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return ListFunctionsVersionsRequest;
+    })();
+  })(root);
+  (function($root) {
+    $root.ListFunctionsVersionsResponse = (function() {
+      function ListFunctionsVersionsResponse(p) {
+        this.versions = [];
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      ListFunctionsVersionsResponse.prototype.versions = $util.emptyArray;
+      ListFunctionsVersionsResponse.prototype.nextPageToken = '';
+      ListFunctionsVersionsResponse.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.versions != null && m.versions.length) {
+          for (let i = 0; i < m.versions.length; ++i) $root.api.serverless.functions.v1.Version.encode(m.versions[i], w.uint32(10).fork()).ldelim();
+        }
+        if (m.nextPageToken != null && m.hasOwnProperty('nextPageToken')) w.uint32(18).string(m.nextPageToken);
+        return w;
+      };
+      ListFunctionsVersionsResponse.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.ListFunctionsVersionsResponse();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              if (!(m.versions && m.versions.length)) m.versions = [];
+              m.versions.push($root.api.serverless.functions.v1.Version.decode(r, r.uint32()));
+              break;
+            case 2:
+              m.nextPageToken = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return ListFunctionsVersionsResponse;
+    })();
+  })(root);
+  (function($root) {
+    $root.ListFunctionOperationsRequest = (function() {
+      function ListFunctionOperationsRequest(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      ListFunctionOperationsRequest.prototype.functionId = '';
+      ListFunctionOperationsRequest.prototype.pageSize = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
+      ListFunctionOperationsRequest.prototype.pageToken = '';
+      ListFunctionOperationsRequest.prototype.filter = '';
+      ListFunctionOperationsRequest.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
+        if (m.pageSize != null && m.hasOwnProperty('pageSize')) w.uint32(16).int64(m.pageSize);
+        if (m.pageToken != null && m.hasOwnProperty('pageToken')) w.uint32(26).string(m.pageToken);
+        if (m.filter != null && m.hasOwnProperty('filter')) w.uint32(34).string(m.filter);
+        return w;
+      };
+      ListFunctionOperationsRequest.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.ListFunctionOperationsRequest();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.functionId = r.string();
+              break;
+            case 2:
+              m.pageSize = r.int64();
+              break;
+            case 3:
+              m.pageToken = r.string();
+              break;
+            case 4:
+              m.filter = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return ListFunctionOperationsRequest;
+    })();
+  })(root);
+  (function($root) {
+    $root.ListFunctionOperationsResponse = (function() {
+      function ListFunctionOperationsResponse(p) {
+        this.operations = [];
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      ListFunctionOperationsResponse.prototype.operations = $util.emptyArray;
+      ListFunctionOperationsResponse.prototype.nextPageToken = '';
+      ListFunctionOperationsResponse.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.operations != null && m.operations.length) {
+          for (let i = 0; i < m.operations.length; ++i) $root.api.operation.Operation.encode(m.operations[i], w.uint32(10).fork()).ldelim();
+        }
+        if (m.nextPageToken != null && m.hasOwnProperty('nextPageToken')) w.uint32(18).string(m.nextPageToken);
+        return w;
+      };
+      ListFunctionOperationsResponse.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.ListFunctionOperationsResponse();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              if (!(m.operations && m.operations.length)) m.operations = [];
+              m.operations.push($root.api.operation.Operation.decode(r, r.uint32()));
+              break;
+            case 2:
+              m.nextPageToken = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return ListFunctionOperationsResponse;
+    })();
+  })(root);
+  (function($root) {
+    $root.CreateFunctionVersionRequest = (function() {
+      function CreateFunctionVersionRequest(p) {
+        this.environment = {};
+        this.tag = [];
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      CreateFunctionVersionRequest.prototype.functionId = '';
+      CreateFunctionVersionRequest.prototype.runtime = '';
+      CreateFunctionVersionRequest.prototype.description = '';
+      CreateFunctionVersionRequest.prototype.entrypoint = '';
+      CreateFunctionVersionRequest.prototype.resources = null;
+      CreateFunctionVersionRequest.prototype.executionTimeout = null;
+      CreateFunctionVersionRequest.prototype.serviceAccountId = '';
+      CreateFunctionVersionRequest.prototype['package'] = null;
+      CreateFunctionVersionRequest.prototype.content = $util.newBuffer([]);
+      CreateFunctionVersionRequest.prototype.environment = $util.emptyObject;
+      CreateFunctionVersionRequest.prototype.tag = $util.emptyArray;
+      let $oneOfFields;
+      Object.defineProperty(CreateFunctionVersionRequest.prototype, 'packageSource', {
+        get: $util.oneOfGetter(($oneOfFields = ['package', 'content'])),
+        set: $util.oneOfSetter($oneOfFields)
+      });
+      CreateFunctionVersionRequest.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
+        if (m.runtime != null && m.hasOwnProperty('runtime')) w.uint32(18).string(m.runtime);
+        if (m.description != null && m.hasOwnProperty('description')) w.uint32(26).string(m.description);
+        if (m.entrypoint != null && m.hasOwnProperty('entrypoint')) w.uint32(34).string(m.entrypoint);
+        if (m.resources != null && m.hasOwnProperty('resources')) $root.api.serverless.functions.v1.Resources.encode(m.resources, w.uint32(42).fork()).ldelim();
+        if (m.executionTimeout != null && m.hasOwnProperty('executionTimeout')) $root.contrib.google.protobuf.Duration.encode(m.executionTimeout, w.uint32(50).fork()).ldelim();
+        if (m.serviceAccountId != null && m.hasOwnProperty('serviceAccountId')) w.uint32(58).string(m.serviceAccountId);
+        if (m['package'] != null && m.hasOwnProperty('package')) $root.api.serverless.functions.v1.Package.encode(m['package'], w.uint32(74).fork()).ldelim();
+        if (m.content != null && m.hasOwnProperty('content')) w.uint32(82).bytes(m.content);
+        if (m.environment != null && m.hasOwnProperty('environment')) {
+          for (let ks = Object.keys(m.environment), i = 0; i < ks.length; ++i) {
+            w.uint32(98)
+              .fork()
+              .uint32(10)
+              .string(ks[i])
+              .uint32(18)
+              .string(m.environment[ks[i]])
+              .ldelim();
+          }
+        }
+        if (m.tag != null && m.tag.length) {
+          for (let i = 0; i < m.tag.length; ++i) w.uint32(106).string(m.tag[i]);
+        }
+        return w;
+      };
+      CreateFunctionVersionRequest.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.CreateFunctionVersionRequest(),
+          k;
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.functionId = r.string();
+              break;
+            case 2:
+              m.runtime = r.string();
+              break;
+            case 3:
+              m.description = r.string();
+              break;
+            case 4:
+              m.entrypoint = r.string();
+              break;
+            case 5:
+              m.resources = $root.api.serverless.functions.v1.Resources.decode(r, r.uint32());
+              break;
+            case 6:
+              m.executionTimeout = $root.contrib.google.protobuf.Duration.decode(r, r.uint32());
+              break;
+            case 7:
+              m.serviceAccountId = r.string();
+              break;
+            case 9:
+              m['package'] = $root.api.serverless.functions.v1.Package.decode(r, r.uint32());
+              break;
+            case 10:
+              m.content = r.bytes();
+              break;
+            case 12:
+              r.skip().pos++;
+              if (m.environment === $util.emptyObject) m.environment = {};
+              k = r.string();
+              r.pos++;
+              m.environment[k] = r.string();
+              break;
+            case 13:
+              if (!(m.tag && m.tag.length)) m.tag = [];
+              m.tag.push(r.string());
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return CreateFunctionVersionRequest;
+    })();
+  })(root);
+  (function($root) {
+    $root.CreateFunctionVersionMetadata = (function() {
+      function CreateFunctionVersionMetadata(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      CreateFunctionVersionMetadata.prototype.functionVersionId = '';
+      CreateFunctionVersionMetadata.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.functionVersionId != null && m.hasOwnProperty('functionVersionId')) w.uint32(10).string(m.functionVersionId);
+        return w;
+      };
+      CreateFunctionVersionMetadata.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.CreateFunctionVersionMetadata();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.functionVersionId = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return CreateFunctionVersionMetadata;
+    })();
+  })(root);
+  (function($root) {
+    $root.SetFunctionTagRequest = (function() {
+      function SetFunctionTagRequest(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      SetFunctionTagRequest.prototype.functionVersionId = '';
+      SetFunctionTagRequest.prototype.tag = '';
+      SetFunctionTagRequest.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.functionVersionId != null && m.hasOwnProperty('functionVersionId')) w.uint32(10).string(m.functionVersionId);
+        if (m.tag != null && m.hasOwnProperty('tag')) w.uint32(18).string(m.tag);
+        return w;
+      };
+      SetFunctionTagRequest.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.SetFunctionTagRequest();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.functionVersionId = r.string();
+              break;
+            case 2:
+              m.tag = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return SetFunctionTagRequest;
+    })();
+  })(root);
+  (function($root) {
+    $root.RemoveFunctionTagRequest = (function() {
+      function RemoveFunctionTagRequest(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      RemoveFunctionTagRequest.prototype.functionVersionId = '';
+      RemoveFunctionTagRequest.prototype.tag = '';
+      RemoveFunctionTagRequest.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.functionVersionId != null && m.hasOwnProperty('functionVersionId')) w.uint32(10).string(m.functionVersionId);
+        if (m.tag != null && m.hasOwnProperty('tag')) w.uint32(18).string(m.tag);
+        return w;
+      };
+      RemoveFunctionTagRequest.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.RemoveFunctionTagRequest();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.functionVersionId = r.string();
+              break;
+            case 2:
+              m.tag = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return RemoveFunctionTagRequest;
+    })();
+  })(root);
+  (function($root) {
+    $root.SetFunctionTagMetadata = (function() {
+      function SetFunctionTagMetadata(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      SetFunctionTagMetadata.prototype.functionVersionId = '';
+      SetFunctionTagMetadata.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.functionVersionId != null && m.hasOwnProperty('functionVersionId')) w.uint32(10).string(m.functionVersionId);
+        return w;
+      };
+      SetFunctionTagMetadata.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.SetFunctionTagMetadata();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.functionVersionId = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return SetFunctionTagMetadata;
+    })();
+  })(root);
+  (function($root) {
+    $root.RemoveFunctionTagMetadata = (function() {
+      function RemoveFunctionTagMetadata(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      RemoveFunctionTagMetadata.prototype.functionVersionId = '';
+      RemoveFunctionTagMetadata.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.functionVersionId != null && m.hasOwnProperty('functionVersionId')) w.uint32(10).string(m.functionVersionId);
+        return w;
+      };
+      RemoveFunctionTagMetadata.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.RemoveFunctionTagMetadata();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.functionVersionId = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return RemoveFunctionTagMetadata;
+    })();
+  })(root);
+  (function($root) {
+    $root.ListFunctionTagHistoryRequest = (function() {
+      function ListFunctionTagHistoryRequest(p) {
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      ListFunctionTagHistoryRequest.prototype.functionId = '';
+      ListFunctionTagHistoryRequest.prototype.tag = '';
+      ListFunctionTagHistoryRequest.prototype.pageSize = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
+      ListFunctionTagHistoryRequest.prototype.pageToken = '';
+      ListFunctionTagHistoryRequest.prototype.filter = '';
+      ListFunctionTagHistoryRequest.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
+        if (m.tag != null && m.hasOwnProperty('tag')) w.uint32(18).string(m.tag);
+        if (m.pageSize != null && m.hasOwnProperty('pageSize')) w.uint32(24).int64(m.pageSize);
+        if (m.pageToken != null && m.hasOwnProperty('pageToken')) w.uint32(34).string(m.pageToken);
+        if (m.filter != null && m.hasOwnProperty('filter')) w.uint32(42).string(m.filter);
+        return w;
+      };
+      ListFunctionTagHistoryRequest.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.ListFunctionTagHistoryRequest();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              m.functionId = r.string();
+              break;
+            case 2:
+              m.tag = r.string();
+              break;
+            case 3:
+              m.pageSize = r.int64();
+              break;
+            case 4:
+              m.pageToken = r.string();
+              break;
+            case 5:
+              m.filter = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      return ListFunctionTagHistoryRequest;
+    })();
+  })(root);
+  (function($root) {
+    $root.ListFunctionTagHistoryResponse = (function() {
+      function ListFunctionTagHistoryResponse(p) {
+        this.functionTagHistoryRecord = [];
+        if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+      }
+      ListFunctionTagHistoryResponse.prototype.functionTagHistoryRecord = $util.emptyArray;
+      ListFunctionTagHistoryResponse.prototype.nextPageToken = '';
+      ListFunctionTagHistoryResponse.encode = function encode(m, w) {
+        if (!w) w = $Writer.create();
+        if (m.functionTagHistoryRecord != null && m.functionTagHistoryRecord.length) {
+          for (let i = 0; i < m.functionTagHistoryRecord.length; ++i) $root.api.serverless.functions.v1.ListFunctionTagHistoryResponse.FunctionTagHistoryRecord.encode(m.functionTagHistoryRecord[i], w.uint32(10).fork()).ldelim();
+        }
+        if (m.nextPageToken != null && m.hasOwnProperty('nextPageToken')) w.uint32(18).string(m.nextPageToken);
+        return w;
+      };
+      ListFunctionTagHistoryResponse.decode = function decode(r, l) {
+        if (!(r instanceof $Reader)) r = $Reader.create(r);
+        let c = l === undefined ? r.len : r.pos + l,
+          m = new $root.api.serverless.functions.v1.ListFunctionTagHistoryResponse();
+        while (r.pos < c) {
+          let t = r.uint32();
+          switch (t >>> 3) {
+            case 1:
+              if (!(m.functionTagHistoryRecord && m.functionTagHistoryRecord.length)) m.functionTagHistoryRecord = [];
+              m.functionTagHistoryRecord.push($root.api.serverless.functions.v1.ListFunctionTagHistoryResponse.FunctionTagHistoryRecord.decode(r, r.uint32()));
+              break;
+            case 2:
+              m.nextPageToken = r.string();
+              break;
+            default:
+              r.skipType(t & 7);
+              break;
+          }
+        }
+        return m;
+      };
+      ListFunctionTagHistoryResponse.FunctionTagHistoryRecord = (function() {
+        function FunctionTagHistoryRecord(p) {
+          if (p) for (let ks = Object.keys(p), i = 0; i < ks.length; ++i) if (p[ks[i]] != null) this[ks[i]] = p[ks[i]];
+        }
+        FunctionTagHistoryRecord.prototype.functionId = '';
+        FunctionTagHistoryRecord.prototype.functionVersionId = '';
+        FunctionTagHistoryRecord.prototype.tag = '';
+        FunctionTagHistoryRecord.prototype.effectiveFrom = null;
+        FunctionTagHistoryRecord.prototype.effectiveTo = null;
+        FunctionTagHistoryRecord.encode = function encode(m, w) {
+          if (!w) w = $Writer.create();
+          if (m.functionId != null && m.hasOwnProperty('functionId')) w.uint32(10).string(m.functionId);
+          if (m.tag != null && m.hasOwnProperty('tag')) w.uint32(18).string(m.tag);
+          if (m.functionVersionId != null && m.hasOwnProperty('functionVersionId')) w.uint32(26).string(m.functionVersionId);
+          if (m.effectiveFrom != null && m.hasOwnProperty('effectiveFrom')) $root.contrib.google.protobuf.Timestamp.encode(m.effectiveFrom, w.uint32(34).fork()).ldelim();
+          if (m.effectiveTo != null && m.hasOwnProperty('effectiveTo')) $root.contrib.google.protobuf.Timestamp.encode(m.effectiveTo, w.uint32(42).fork()).ldelim();
+          return w;
+        };
+        FunctionTagHistoryRecord.decode = function decode(r, l) {
+          if (!(r instanceof $Reader)) r = $Reader.create(r);
+          let c = l === undefined ? r.len : r.pos + l,
+            m = new $root.api.serverless.functions.v1.ListFunctionTagHistoryResponse.FunctionTagHistoryRecord();
+          while (r.pos < c) {
+            let t = r.uint32();
+            switch (t >>> 3) {
+              case 1:
+                m.functionId = r.string();
+                break;
+              case 3:
+                m.functionVersionId = r.string();
+                break;
+              case 2:
+                m.tag = r.string();
+                break;
+              case 4:
+                m.effectiveFrom = $root.contrib.google.protobuf.Timestamp.decode(r, r.uint32());
+                break;
+              case 5:
+                m.effectiveTo = $root.contrib.google.protobuf.Timestamp.decode(r, r.uint32());
+                break;
+              default:
+                r.skipType(t & 7);
+                break;
+            }
+          }
+          return m;
+        };
+        return FunctionTagHistoryRecord;
+      })();
+      return ListFunctionTagHistoryResponse;
+    })();
+  })(root);
+  registar.register('api.serverless.functions.v1', root);
+  root.api = registar.lookup('api');
+  root.contrib = registar.lookup('contrib');
+  return root;
+})();
+
+
+/***/ }),
 /* 937 */
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -74983,7 +74661,7 @@ exports.default = crcjam;
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 module.exports = (function() {
-  const $protobuf = __webpack_require__(835);
+  const $protobuf = __webpack_require__(72);
   const grpc = __webpack_require__(323);
   const registar = __webpack_require__(866);
   const util = __webpack_require__(949);
@@ -75544,7 +75222,427 @@ module.exports = (function() {
 /***/ }),
 /* 939 */,
 /* 940 */,
-/* 941 */,
+/* 941 */
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var util = exports;
+
+// used to return a Promise where callback is omitted
+util.asPromise = __webpack_require__(189);
+
+// converts to / from base64 encoded strings
+util.base64 = __webpack_require__(492);
+
+// base class of rpc.Service
+util.EventEmitter = __webpack_require__(45);
+
+// float handling accross browsers
+util.float = __webpack_require__(111);
+
+// requires modules optionally and hides the call from bundlers
+util.inquire = __webpack_require__(358);
+
+// converts to / from utf8 encoded strings
+util.utf8 = __webpack_require__(120);
+
+// provides a node-like buffer pool in the browser
+util.pool = __webpack_require__(391);
+
+// utility to work with the low and high bits of a 64 bit value
+util.LongBits = __webpack_require__(540);
+
+// global object reference
+util.global = typeof window !== "undefined" && window
+           || typeof global !== "undefined" && global
+           || typeof self   !== "undefined" && self
+           || this; // eslint-disable-line no-invalid-this
+
+/**
+ * An immuable empty array.
+ * @memberof util
+ * @type {Array.<*>}
+ * @const
+ */
+util.emptyArray = Object.freeze ? Object.freeze([]) : /* istanbul ignore next */ []; // used on prototypes
+
+/**
+ * An immutable empty object.
+ * @type {Object}
+ * @const
+ */
+util.emptyObject = Object.freeze ? Object.freeze({}) : /* istanbul ignore next */ {}; // used on prototypes
+
+/**
+ * Whether running within node or not.
+ * @memberof util
+ * @type {boolean}
+ * @const
+ */
+util.isNode = Boolean(util.global.process && util.global.process.versions && util.global.process.versions.node);
+
+/**
+ * Tests if the specified value is an integer.
+ * @function
+ * @param {*} value Value to test
+ * @returns {boolean} `true` if the value is an integer
+ */
+util.isInteger = Number.isInteger || /* istanbul ignore next */ function isInteger(value) {
+    return typeof value === "number" && isFinite(value) && Math.floor(value) === value;
+};
+
+/**
+ * Tests if the specified value is a string.
+ * @param {*} value Value to test
+ * @returns {boolean} `true` if the value is a string
+ */
+util.isString = function isString(value) {
+    return typeof value === "string" || value instanceof String;
+};
+
+/**
+ * Tests if the specified value is a non-null object.
+ * @param {*} value Value to test
+ * @returns {boolean} `true` if the value is a non-null object
+ */
+util.isObject = function isObject(value) {
+    return value && typeof value === "object";
+};
+
+/**
+ * Checks if a property on a message is considered to be present.
+ * This is an alias of {@link util.isSet}.
+ * @function
+ * @param {Object} obj Plain object or message instance
+ * @param {string} prop Property name
+ * @returns {boolean} `true` if considered to be present, otherwise `false`
+ */
+util.isset =
+
+/**
+ * Checks if a property on a message is considered to be present.
+ * @param {Object} obj Plain object or message instance
+ * @param {string} prop Property name
+ * @returns {boolean} `true` if considered to be present, otherwise `false`
+ */
+util.isSet = function isSet(obj, prop) {
+    var value = obj[prop];
+    if (value != null && obj.hasOwnProperty(prop)) // eslint-disable-line eqeqeq, no-prototype-builtins
+        return typeof value !== "object" || (Array.isArray(value) ? value.length : Object.keys(value).length) > 0;
+    return false;
+};
+
+/**
+ * Any compatible Buffer instance.
+ * This is a minimal stand-alone definition of a Buffer instance. The actual type is that exported by node's typings.
+ * @interface Buffer
+ * @extends Uint8Array
+ */
+
+/**
+ * Node's Buffer class if available.
+ * @type {Constructor<Buffer>}
+ */
+util.Buffer = (function() {
+    try {
+        var Buffer = util.inquire("buffer").Buffer;
+        // refuse to use non-node buffers if not explicitly assigned (perf reasons):
+        return Buffer.prototype.utf8Write ? Buffer : /* istanbul ignore next */ null;
+    } catch (e) {
+        /* istanbul ignore next */
+        return null;
+    }
+})();
+
+// Internal alias of or polyfull for Buffer.from.
+util._Buffer_from = null;
+
+// Internal alias of or polyfill for Buffer.allocUnsafe.
+util._Buffer_allocUnsafe = null;
+
+/**
+ * Creates a new buffer of whatever type supported by the environment.
+ * @param {number|number[]} [sizeOrArray=0] Buffer size or number array
+ * @returns {Uint8Array|Buffer} Buffer
+ */
+util.newBuffer = function newBuffer(sizeOrArray) {
+    /* istanbul ignore next */
+    return typeof sizeOrArray === "number"
+        ? util.Buffer
+            ? util._Buffer_allocUnsafe(sizeOrArray)
+            : new util.Array(sizeOrArray)
+        : util.Buffer
+            ? util._Buffer_from(sizeOrArray)
+            : typeof Uint8Array === "undefined"
+                ? sizeOrArray
+                : new Uint8Array(sizeOrArray);
+};
+
+/**
+ * Array implementation used in the browser. `Uint8Array` if supported, otherwise `Array`.
+ * @type {Constructor<Uint8Array>}
+ */
+util.Array = typeof Uint8Array !== "undefined" ? Uint8Array /* istanbul ignore next */ : Array;
+
+/**
+ * Any compatible Long instance.
+ * This is a minimal stand-alone definition of a Long instance. The actual type is that exported by long.js.
+ * @interface Long
+ * @property {number} low Low bits
+ * @property {number} high High bits
+ * @property {boolean} unsigned Whether unsigned or not
+ */
+
+/**
+ * Long.js's Long class if available.
+ * @type {Constructor<Long>}
+ */
+util.Long = /* istanbul ignore next */ util.global.dcodeIO && /* istanbul ignore next */ util.global.dcodeIO.Long
+         || /* istanbul ignore next */ util.global.Long
+         || util.inquire("long");
+
+/**
+ * Regular expression used to verify 2 bit (`bool`) map keys.
+ * @type {RegExp}
+ * @const
+ */
+util.key2Re = /^true|false|0|1$/;
+
+/**
+ * Regular expression used to verify 32 bit (`int32` etc.) map keys.
+ * @type {RegExp}
+ * @const
+ */
+util.key32Re = /^-?(?:0|[1-9][0-9]*)$/;
+
+/**
+ * Regular expression used to verify 64 bit (`int64` etc.) map keys.
+ * @type {RegExp}
+ * @const
+ */
+util.key64Re = /^(?:[\\x00-\\xff]{8}|-?(?:0|[1-9][0-9]*))$/;
+
+/**
+ * Converts a number or long to an 8 characters long hash string.
+ * @param {Long|number} value Value to convert
+ * @returns {string} Hash
+ */
+util.longToHash = function longToHash(value) {
+    return value
+        ? util.LongBits.from(value).toHash()
+        : util.LongBits.zeroHash;
+};
+
+/**
+ * Converts an 8 characters long hash string to a long or number.
+ * @param {string} hash Hash
+ * @param {boolean} [unsigned=false] Whether unsigned or not
+ * @returns {Long|number} Original value
+ */
+util.longFromHash = function longFromHash(hash, unsigned) {
+    var bits = util.LongBits.fromHash(hash);
+    if (util.Long)
+        return util.Long.fromBits(bits.lo, bits.hi, unsigned);
+    return bits.toNumber(Boolean(unsigned));
+};
+
+/**
+ * Merges the properties of the source object into the destination object.
+ * @memberof util
+ * @param {Object.<string,*>} dst Destination object
+ * @param {Object.<string,*>} src Source object
+ * @param {boolean} [ifNotSet=false] Merges only if the key is not already set
+ * @returns {Object.<string,*>} Destination object
+ */
+function merge(dst, src, ifNotSet) { // used by converters
+    for (var keys = Object.keys(src), i = 0; i < keys.length; ++i)
+        if (dst[keys[i]] === undefined || !ifNotSet)
+            dst[keys[i]] = src[keys[i]];
+    return dst;
+}
+
+util.merge = merge;
+
+/**
+ * Converts the first character of a string to lower case.
+ * @param {string} str String to convert
+ * @returns {string} Converted string
+ */
+util.lcFirst = function lcFirst(str) {
+    return str.charAt(0).toLowerCase() + str.substring(1);
+};
+
+/**
+ * Creates a custom error constructor.
+ * @memberof util
+ * @param {string} name Error name
+ * @returns {Constructor<Error>} Custom error constructor
+ */
+function newError(name) {
+
+    function CustomError(message, properties) {
+
+        if (!(this instanceof CustomError))
+            return new CustomError(message, properties);
+
+        // Error.call(this, message);
+        // ^ just returns a new error instance because the ctor can be called as a function
+
+        Object.defineProperty(this, "message", { get: function() { return message; } });
+
+        /* istanbul ignore next */
+        if (Error.captureStackTrace) // node
+            Error.captureStackTrace(this, CustomError);
+        else
+            Object.defineProperty(this, "stack", { value: new Error().stack || "" });
+
+        if (properties)
+            merge(this, properties);
+    }
+
+    (CustomError.prototype = Object.create(Error.prototype)).constructor = CustomError;
+
+    Object.defineProperty(CustomError.prototype, "name", { get: function() { return name; } });
+
+    CustomError.prototype.toString = function toString() {
+        return this.name + ": " + this.message;
+    };
+
+    return CustomError;
+}
+
+util.newError = newError;
+
+/**
+ * Constructs a new protocol error.
+ * @classdesc Error subclass indicating a protocol specifc error.
+ * @memberof util
+ * @extends Error
+ * @template T extends Message<T>
+ * @constructor
+ * @param {string} message Error message
+ * @param {Object.<string,*>} [properties] Additional properties
+ * @example
+ * try {
+ *     MyMessage.decode(someBuffer); // throws if required fields are missing
+ * } catch (e) {
+ *     if (e instanceof ProtocolError && e.instance)
+ *         console.log("decoded so far: " + JSON.stringify(e.instance));
+ * }
+ */
+util.ProtocolError = newError("ProtocolError");
+
+/**
+ * So far decoded message instance.
+ * @name util.ProtocolError#instance
+ * @type {Message<T>}
+ */
+
+/**
+ * A OneOf getter as returned by {@link util.oneOfGetter}.
+ * @typedef OneOfGetter
+ * @type {function}
+ * @returns {string|undefined} Set field name, if any
+ */
+
+/**
+ * Builds a getter for a oneof's present field name.
+ * @param {string[]} fieldNames Field names
+ * @returns {OneOfGetter} Unbound getter
+ */
+util.oneOfGetter = function getOneOf(fieldNames) {
+    var fieldMap = {};
+    for (var i = 0; i < fieldNames.length; ++i)
+        fieldMap[fieldNames[i]] = 1;
+
+    /**
+     * @returns {string|undefined} Set field name, if any
+     * @this Object
+     * @ignore
+     */
+    return function() { // eslint-disable-line consistent-return
+        for (var keys = Object.keys(this), i = keys.length - 1; i > -1; --i)
+            if (fieldMap[keys[i]] === 1 && this[keys[i]] !== undefined && this[keys[i]] !== null)
+                return keys[i];
+    };
+};
+
+/**
+ * A OneOf setter as returned by {@link util.oneOfSetter}.
+ * @typedef OneOfSetter
+ * @type {function}
+ * @param {string|undefined} value Field name
+ * @returns {undefined}
+ */
+
+/**
+ * Builds a setter for a oneof's present field name.
+ * @param {string[]} fieldNames Field names
+ * @returns {OneOfSetter} Unbound setter
+ */
+util.oneOfSetter = function setOneOf(fieldNames) {
+
+    /**
+     * @param {string} name Field name
+     * @returns {undefined}
+     * @this Object
+     * @ignore
+     */
+    return function(name) {
+        for (var i = 0; i < fieldNames.length; ++i)
+            if (fieldNames[i] !== name)
+                delete this[fieldNames[i]];
+    };
+};
+
+/**
+ * Default conversion options used for {@link Message#toJSON} implementations.
+ *
+ * These options are close to proto3's JSON mapping with the exception that internal types like Any are handled just like messages. More precisely:
+ *
+ * - Longs become strings
+ * - Enums become string keys
+ * - Bytes become base64 encoded strings
+ * - (Sub-)Messages become plain objects
+ * - Maps become plain objects with all string keys
+ * - Repeated fields become arrays
+ * - NaN and Infinity for float and double fields become strings
+ *
+ * @type {IConversionOptions}
+ * @see https://developers.google.com/protocol-buffers/docs/proto3?hl=en#json
+ */
+util.toJSONOptions = {
+    longs: String,
+    enums: String,
+    bytes: String,
+    json: true
+};
+
+// Sets up buffer utility according to the environment (called in index-minimal)
+util._configure = function() {
+    var Buffer = util.Buffer;
+    /* istanbul ignore if */
+    if (!Buffer) {
+        util._Buffer_from = util._Buffer_allocUnsafe = null;
+        return;
+    }
+    // because node 4.x buffers are incompatible & immutable
+    // see: https://github.com/dcodeIO/protobuf.js/pull/665
+    util._Buffer_from = Buffer.from !== Uint8Array.from && Buffer.from ||
+        /* istanbul ignore next */
+        function Buffer_from(value, encoding) {
+            return new Buffer(value, encoding);
+        };
+    util._Buffer_allocUnsafe = Buffer.allocUnsafe ||
+        /* istanbul ignore next */
+        function Buffer_allocUnsafe(size) {
+            return new Buffer(size);
+        };
+};
+
+
+/***/ }),
 /* 942 */,
 /* 943 */
 /***/ (function(module) {
@@ -75583,10 +75681,11 @@ function clone (obj) {
 const jsutil = __webpack_require__(669);
 const registar = __webpack_require__(866);
 
-    __webpack_require__(558);
-    __webpack_require__(807);
-    __webpack_require__(938);
-    __webpack_require__(986);
+// import all required contribs
+__webpack_require__(558);
+__webpack_require__(807);
+__webpack_require__(938);
+__webpack_require__(986);
 
 module.exports.pimpServiceInstance = function(instance) {
     for (let methodName of Object.keys(instance.$method_definitions)) {
@@ -75922,7 +76021,216 @@ exports.default = crc24;
 /* 959 */,
 /* 960 */,
 /* 961 */,
-/* 962 */,
+/* 962 */
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+"use strict";
+
+module.exports = OneOf;
+
+// extends ReflectionObject
+var ReflectionObject = __webpack_require__(136);
+((OneOf.prototype = Object.create(ReflectionObject.prototype)).constructor = OneOf).className = "OneOf";
+
+var Field = __webpack_require__(290),
+    util  = __webpack_require__(663);
+
+/**
+ * Constructs a new oneof instance.
+ * @classdesc Reflected oneof.
+ * @extends ReflectionObject
+ * @constructor
+ * @param {string} name Oneof name
+ * @param {string[]|Object.<string,*>} [fieldNames] Field names
+ * @param {Object.<string,*>} [options] Declared options
+ * @param {string} [comment] Comment associated with this field
+ */
+function OneOf(name, fieldNames, options, comment) {
+    if (!Array.isArray(fieldNames)) {
+        options = fieldNames;
+        fieldNames = undefined;
+    }
+    ReflectionObject.call(this, name, options);
+
+    /* istanbul ignore if */
+    if (!(fieldNames === undefined || Array.isArray(fieldNames)))
+        throw TypeError("fieldNames must be an Array");
+
+    /**
+     * Field names that belong to this oneof.
+     * @type {string[]}
+     */
+    this.oneof = fieldNames || []; // toJSON, marker
+
+    /**
+     * Fields that belong to this oneof as an array for iteration.
+     * @type {Field[]}
+     * @readonly
+     */
+    this.fieldsArray = []; // declared readonly for conformance, possibly not yet added to parent
+
+    /**
+     * Comment for this field.
+     * @type {string|null}
+     */
+    this.comment = comment;
+}
+
+/**
+ * Oneof descriptor.
+ * @interface IOneOf
+ * @property {Array.<string>} oneof Oneof field names
+ * @property {Object.<string,*>} [options] Oneof options
+ */
+
+/**
+ * Constructs a oneof from a oneof descriptor.
+ * @param {string} name Oneof name
+ * @param {IOneOf} json Oneof descriptor
+ * @returns {OneOf} Created oneof
+ * @throws {TypeError} If arguments are invalid
+ */
+OneOf.fromJSON = function fromJSON(name, json) {
+    return new OneOf(name, json.oneof, json.options, json.comment);
+};
+
+/**
+ * Converts this oneof to a oneof descriptor.
+ * @param {IToJSONOptions} [toJSONOptions] JSON conversion options
+ * @returns {IOneOf} Oneof descriptor
+ */
+OneOf.prototype.toJSON = function toJSON(toJSONOptions) {
+    var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
+    return util.toObject([
+        "options" , this.options,
+        "oneof"   , this.oneof,
+        "comment" , keepComments ? this.comment : undefined
+    ]);
+};
+
+/**
+ * Adds the fields of the specified oneof to the parent if not already done so.
+ * @param {OneOf} oneof The oneof
+ * @returns {undefined}
+ * @inner
+ * @ignore
+ */
+function addFieldsToParent(oneof) {
+    if (oneof.parent)
+        for (var i = 0; i < oneof.fieldsArray.length; ++i)
+            if (!oneof.fieldsArray[i].parent)
+                oneof.parent.add(oneof.fieldsArray[i]);
+}
+
+/**
+ * Adds a field to this oneof and removes it from its current parent, if any.
+ * @param {Field} field Field to add
+ * @returns {OneOf} `this`
+ */
+OneOf.prototype.add = function add(field) {
+
+    /* istanbul ignore if */
+    if (!(field instanceof Field))
+        throw TypeError("field must be a Field");
+
+    if (field.parent && field.parent !== this.parent)
+        field.parent.remove(field);
+    this.oneof.push(field.name);
+    this.fieldsArray.push(field);
+    field.partOf = this; // field.parent remains null
+    addFieldsToParent(this);
+    return this;
+};
+
+/**
+ * Removes a field from this oneof and puts it back to the oneof's parent.
+ * @param {Field} field Field to remove
+ * @returns {OneOf} `this`
+ */
+OneOf.prototype.remove = function remove(field) {
+
+    /* istanbul ignore if */
+    if (!(field instanceof Field))
+        throw TypeError("field must be a Field");
+
+    var index = this.fieldsArray.indexOf(field);
+
+    /* istanbul ignore if */
+    if (index < 0)
+        throw Error(field + " is not a member of " + this);
+
+    this.fieldsArray.splice(index, 1);
+    index = this.oneof.indexOf(field.name);
+
+    /* istanbul ignore else */
+    if (index > -1) // theoretical
+        this.oneof.splice(index, 1);
+
+    field.partOf = null;
+    return this;
+};
+
+/**
+ * @override
+ */
+OneOf.prototype.onAdd = function onAdd(parent) {
+    ReflectionObject.prototype.onAdd.call(this, parent);
+    var self = this;
+    // Collect present fields
+    for (var i = 0; i < this.oneof.length; ++i) {
+        var field = parent.get(this.oneof[i]);
+        if (field && !field.partOf) {
+            field.partOf = self;
+            self.fieldsArray.push(field);
+        }
+    }
+    // Add not yet present fields
+    addFieldsToParent(this);
+};
+
+/**
+ * @override
+ */
+OneOf.prototype.onRemove = function onRemove(parent) {
+    for (var i = 0, field; i < this.fieldsArray.length; ++i)
+        if ((field = this.fieldsArray[i]).parent)
+            field.parent.remove(field);
+    ReflectionObject.prototype.onRemove.call(this, parent);
+};
+
+/**
+ * Decorator function as returned by {@link OneOf.d} (TypeScript).
+ * @typedef OneOfDecorator
+ * @type {function}
+ * @param {Object} prototype Target prototype
+ * @param {string} oneofName OneOf name
+ * @returns {undefined}
+ */
+
+/**
+ * OneOf decorator (TypeScript).
+ * @function
+ * @param {...string} fieldNames Field names
+ * @returns {OneOfDecorator} Decorator function
+ * @template T extends string
+ */
+OneOf.d = function decorateOneOf() {
+    var fieldNames = new Array(arguments.length),
+        index = 0;
+    while (index < arguments.length)
+        fieldNames[index] = arguments[index++];
+    return function oneOfDecorator(prototype, oneofName) {
+        util.decorateType(prototype.constructor)
+            .add(new OneOf(oneofName, fieldNames));
+        Object.defineProperty(prototype, oneofName, {
+            get: util.oneOfGetter(fieldNames),
+            set: util.oneOfSetter(fieldNames)
+        });
+    };
+};
+
+
+/***/ }),
 /* 963 */,
 /* 964 */,
 /* 965 */,
@@ -76320,7 +76628,7 @@ var Duplex;
 Writable.WritableState = WritableState;
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(683));
+var util = Object.create(__webpack_require__(286));
 util.inherits = __webpack_require__(689);
 /*</replacement>*/
 
@@ -76946,315 +77254,7 @@ Writable.prototype._destroy = function (err, cb) {
 /* 978 */,
 /* 979 */,
 /* 980 */,
-/* 981 */
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-var pathModule = __webpack_require__(622);
-var isWindows = process.platform === 'win32';
-var fs = __webpack_require__(747);
-
-// JavaScript implementation of realpath, ported from node pre-v6
-
-var DEBUG = process.env.NODE_DEBUG && /fs/.test(process.env.NODE_DEBUG);
-
-function rethrow() {
-  // Only enable in debug mode. A backtrace uses ~1000 bytes of heap space and
-  // is fairly slow to generate.
-  var callback;
-  if (DEBUG) {
-    var backtrace = new Error;
-    callback = debugCallback;
-  } else
-    callback = missingCallback;
-
-  return callback;
-
-  function debugCallback(err) {
-    if (err) {
-      backtrace.message = err.message;
-      err = backtrace;
-      missingCallback(err);
-    }
-  }
-
-  function missingCallback(err) {
-    if (err) {
-      if (process.throwDeprecation)
-        throw err;  // Forgot a callback but don't know where? Use NODE_DEBUG=fs
-      else if (!process.noDeprecation) {
-        var msg = 'fs: missing callback ' + (err.stack || err.message);
-        if (process.traceDeprecation)
-          console.trace(msg);
-        else
-          console.error(msg);
-      }
-    }
-  }
-}
-
-function maybeCallback(cb) {
-  return typeof cb === 'function' ? cb : rethrow();
-}
-
-var normalize = pathModule.normalize;
-
-// Regexp that finds the next partion of a (partial) path
-// result is [base_with_slash, base], e.g. ['somedir/', 'somedir']
-if (isWindows) {
-  var nextPartRe = /(.*?)(?:[\/\\]+|$)/g;
-} else {
-  var nextPartRe = /(.*?)(?:[\/]+|$)/g;
-}
-
-// Regex to find the device root, including trailing slash. E.g. 'c:\\'.
-if (isWindows) {
-  var splitRootRe = /^(?:[a-zA-Z]:|[\\\/]{2}[^\\\/]+[\\\/][^\\\/]+)?[\\\/]*/;
-} else {
-  var splitRootRe = /^[\/]*/;
-}
-
-exports.realpathSync = function realpathSync(p, cache) {
-  // make p is absolute
-  p = pathModule.resolve(p);
-
-  if (cache && Object.prototype.hasOwnProperty.call(cache, p)) {
-    return cache[p];
-  }
-
-  var original = p,
-      seenLinks = {},
-      knownHard = {};
-
-  // current character position in p
-  var pos;
-  // the partial path so far, including a trailing slash if any
-  var current;
-  // the partial path without a trailing slash (except when pointing at a root)
-  var base;
-  // the partial path scanned in the previous round, with slash
-  var previous;
-
-  start();
-
-  function start() {
-    // Skip over roots
-    var m = splitRootRe.exec(p);
-    pos = m[0].length;
-    current = m[0];
-    base = m[0];
-    previous = '';
-
-    // On windows, check that the root exists. On unix there is no need.
-    if (isWindows && !knownHard[base]) {
-      fs.lstatSync(base);
-      knownHard[base] = true;
-    }
-  }
-
-  // walk down the path, swapping out linked pathparts for their real
-  // values
-  // NB: p.length changes.
-  while (pos < p.length) {
-    // find the next part
-    nextPartRe.lastIndex = pos;
-    var result = nextPartRe.exec(p);
-    previous = current;
-    current += result[0];
-    base = previous + result[1];
-    pos = nextPartRe.lastIndex;
-
-    // continue if not a symlink
-    if (knownHard[base] || (cache && cache[base] === base)) {
-      continue;
-    }
-
-    var resolvedLink;
-    if (cache && Object.prototype.hasOwnProperty.call(cache, base)) {
-      // some known symbolic link.  no need to stat again.
-      resolvedLink = cache[base];
-    } else {
-      var stat = fs.lstatSync(base);
-      if (!stat.isSymbolicLink()) {
-        knownHard[base] = true;
-        if (cache) cache[base] = base;
-        continue;
-      }
-
-      // read the link if it wasn't read before
-      // dev/ino always return 0 on windows, so skip the check.
-      var linkTarget = null;
-      if (!isWindows) {
-        var id = stat.dev.toString(32) + ':' + stat.ino.toString(32);
-        if (seenLinks.hasOwnProperty(id)) {
-          linkTarget = seenLinks[id];
-        }
-      }
-      if (linkTarget === null) {
-        fs.statSync(base);
-        linkTarget = fs.readlinkSync(base);
-      }
-      resolvedLink = pathModule.resolve(previous, linkTarget);
-      // track this, if given a cache.
-      if (cache) cache[base] = resolvedLink;
-      if (!isWindows) seenLinks[id] = linkTarget;
-    }
-
-    // resolve the link, then start over
-    p = pathModule.resolve(resolvedLink, p.slice(pos));
-    start();
-  }
-
-  if (cache) cache[original] = p;
-
-  return p;
-};
-
-
-exports.realpath = function realpath(p, cache, cb) {
-  if (typeof cb !== 'function') {
-    cb = maybeCallback(cache);
-    cache = null;
-  }
-
-  // make p is absolute
-  p = pathModule.resolve(p);
-
-  if (cache && Object.prototype.hasOwnProperty.call(cache, p)) {
-    return process.nextTick(cb.bind(null, null, cache[p]));
-  }
-
-  var original = p,
-      seenLinks = {},
-      knownHard = {};
-
-  // current character position in p
-  var pos;
-  // the partial path so far, including a trailing slash if any
-  var current;
-  // the partial path without a trailing slash (except when pointing at a root)
-  var base;
-  // the partial path scanned in the previous round, with slash
-  var previous;
-
-  start();
-
-  function start() {
-    // Skip over roots
-    var m = splitRootRe.exec(p);
-    pos = m[0].length;
-    current = m[0];
-    base = m[0];
-    previous = '';
-
-    // On windows, check that the root exists. On unix there is no need.
-    if (isWindows && !knownHard[base]) {
-      fs.lstat(base, function(err) {
-        if (err) return cb(err);
-        knownHard[base] = true;
-        LOOP();
-      });
-    } else {
-      process.nextTick(LOOP);
-    }
-  }
-
-  // walk down the path, swapping out linked pathparts for their real
-  // values
-  function LOOP() {
-    // stop if scanned past end of path
-    if (pos >= p.length) {
-      if (cache) cache[original] = p;
-      return cb(null, p);
-    }
-
-    // find the next part
-    nextPartRe.lastIndex = pos;
-    var result = nextPartRe.exec(p);
-    previous = current;
-    current += result[0];
-    base = previous + result[1];
-    pos = nextPartRe.lastIndex;
-
-    // continue if not a symlink
-    if (knownHard[base] || (cache && cache[base] === base)) {
-      return process.nextTick(LOOP);
-    }
-
-    if (cache && Object.prototype.hasOwnProperty.call(cache, base)) {
-      // known symbolic link.  no need to stat again.
-      return gotResolvedLink(cache[base]);
-    }
-
-    return fs.lstat(base, gotStat);
-  }
-
-  function gotStat(err, stat) {
-    if (err) return cb(err);
-
-    // if not a symlink, skip to the next path part
-    if (!stat.isSymbolicLink()) {
-      knownHard[base] = true;
-      if (cache) cache[base] = base;
-      return process.nextTick(LOOP);
-    }
-
-    // stat & read the link if not read before
-    // call gotTarget as soon as the link target is known
-    // dev/ino always return 0 on windows, so skip the check.
-    if (!isWindows) {
-      var id = stat.dev.toString(32) + ':' + stat.ino.toString(32);
-      if (seenLinks.hasOwnProperty(id)) {
-        return gotTarget(null, seenLinks[id], base);
-      }
-    }
-    fs.stat(base, function(err) {
-      if (err) return cb(err);
-
-      fs.readlink(base, function(err, target) {
-        if (!isWindows) seenLinks[id] = target;
-        gotTarget(err, target);
-      });
-    });
-  }
-
-  function gotTarget(err, target, base) {
-    if (err) return cb(err);
-
-    var resolvedLink = pathModule.resolve(previous, target);
-    if (cache) cache[base] = resolvedLink;
-    gotResolvedLink(resolvedLink);
-  }
-
-  function gotResolvedLink(resolvedLink) {
-    // resolve the link, then start over
-    p = pathModule.resolve(resolvedLink, p.slice(pos));
-    start();
-  }
-};
-
-
-/***/ }),
+/* 981 */,
 /* 982 */,
 /* 983 */
 /***/ (function(module, __unusedexports, __webpack_require__) {
@@ -78225,7 +78225,7 @@ module.exports = Archiver;
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 module.exports = (function() {
-  const $protobuf = __webpack_require__(835);
+  const $protobuf = __webpack_require__(72);
   const grpc = __webpack_require__(323);
   const registar = __webpack_require__(866);
   const util = __webpack_require__(949);
