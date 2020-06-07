@@ -26981,7 +26981,7 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const inputFunctionId = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("function_id", { required: true });
-            const inputToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("iam_token", { required: true });
+            const inputToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("token", { required: true });
             const inputRuntime = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("runtime", { required: true });
             const inputEntrypoint = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("entrypoint", { required: true });
             const inputMemory = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("memory", { required: false });

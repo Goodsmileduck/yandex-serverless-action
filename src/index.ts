@@ -44,7 +44,7 @@ function parseEnvironmentVariables(env: string): { [s: string]: string } {
 async function run() {
     try {
         const inputFunctionId = core.getInput("function_id", { required: true });
-        const inputToken = core.getInput("iam_token", { required: true });
+        const inputToken = core.getInput("token", { required: true });
         const inputRuntime = core.getInput("runtime", { required: true });
         const inputEntrypoint = core.getInput("entrypoint", { required: true });
         const inputMemory = core.getInput("memory", { required: false });

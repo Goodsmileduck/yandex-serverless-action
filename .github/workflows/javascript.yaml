@@ -4,19 +4,33 @@ name: Javascript action
 on: [push]
 
 jobs:
-  deploy:
+  deploy_from_folder:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
     - uses: goodsmileduck/yandex-serverless-action@javascript
       with:
         source: 'example'
-        zone: 'ru-central1-a'
         function_id: 'hello'
         runtime: 'python37'
         entrypoint: handler.hello
         environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
-        cloud_id: ${{ secrets.CLOUD_ID }}
-        folder_id: ${{ secrets.FOLDER_ID }}
         iam_token: ${{ secrets.TOKEN }}
         execution_timeout: '600'
+
+  deploy_from_bucket:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: goodsmileduck/yandex-serverless-action@javascript
+      with:
+        source: 'example'
+        function_id: 'hello-bucket'
+        runtime: 'python37'
+        entrypoint: handler.hello
+        environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
+        iam_token: ${{ secrets.TOKEN }}
+        execution_timeout: '600'
+        bucket: 'yandex-functions'
+        access_key: ${{ secrets.ACCESS_KEY }}
+        secret_key: ${{ secrets.SECRET_KEY }}
