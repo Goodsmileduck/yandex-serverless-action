@@ -28,6 +28,8 @@ async function run() {
         if (!fileContents)
             throw Error("buffer error");
 
+        core.info(`Buffer size: ${Buffer.byteLength(fileContents)}`);
+
         // IAM token
         // Initialize SDK with your token
         const session = new Session({ iamToken: inputToken });

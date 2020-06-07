@@ -26966,6 +26966,7 @@ function run() {
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Archive inmemory buffer created");
             if (!fileContents)
                 throw Error("buffer error");
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Buffer size: ${Buffer.byteLength(fileContents)}`);
             // IAM token
             // Initialize SDK with your token
             const session = new yandex_cloud__WEBPACK_IMPORTED_MODULE_4__.Session({ iamToken: inputToken });
