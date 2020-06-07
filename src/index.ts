@@ -7,6 +7,8 @@ import { Session } from "yandex-cloud";
 import archiver from "archiver";
 
 async function run() {
+    core.setCommandEcho(true);
+
     try {
         const inputFunctionId = core.getInput("function_id", { required: true });
         const inputToken = core.getInput("token", { required: true });

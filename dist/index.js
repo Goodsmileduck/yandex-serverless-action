@@ -26951,6 +26951,7 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.setCommandEcho(true);
         try {
             const inputFunctionId = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("function_id", { required: true });
             const inputToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("token", { required: true });
