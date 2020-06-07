@@ -29385,10 +29385,10 @@ function run() {
                 content: fileContents,
                 executionTimeout: { seconds: long__WEBPACK_IMPORTED_MODULE_4___default().fromNumber(executionTimeout) }
             });
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Operation complete ${inputFunctionId}, ${inputRuntime}, ${inputEntrypoint}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Operation complete");
             if (operation.error)
                 throw Error(`${operation.error.code}: ${operation.error.message}`);
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Operation success ${operation.response.value}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Operation success");
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.setOutput("time", new Date().toTimeString());
         }
         catch (error) {

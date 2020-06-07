@@ -64,12 +64,12 @@ async function run() {
             executionTimeout: { seconds: Long.fromNumber(executionTimeout) }
         });
 
-        core.info(`Operation complete ${inputFunctionId}, ${inputRuntime}, ${inputEntrypoint}`);
+        core.info("Operation complete");
 
         if (operation.error)
             throw Error(`${operation.error.code}: ${operation.error.message}`);
 
-        core.info(`Operation success ${operation.response.value}`);
+        core.info("Operation success");
 
         core.setOutput("time", new Date().toTimeString());
     }
