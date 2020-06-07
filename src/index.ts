@@ -28,11 +28,11 @@ async function run() {
         if (!fileContents)
             throw Error("buffer error");
 
-        core.info(`Buffer size: ${Buffer.byteLength(fileContents)}`);
+        core.info(`Buffer size: ${Buffer.byteLength(fileContents)}b`);
 
         // IAM token
         // Initialize SDK with your token
-        const session = new Session({ iamToken: inputToken });
+        const session = new Session({ oauthToken: inputToken });
 
         core.info("Session created with token");
 

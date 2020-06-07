@@ -26966,10 +26966,10 @@ function run() {
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Archive inmemory buffer created");
             if (!fileContents)
                 throw Error("buffer error");
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Buffer size: ${Buffer.byteLength(fileContents)}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Buffer size: ${Buffer.byteLength(fileContents)}b`);
             // IAM token
             // Initialize SDK with your token
-            const session = new yandex_cloud__WEBPACK_IMPORTED_MODULE_4__.Session({ iamToken: inputToken });
+            const session = new yandex_cloud__WEBPACK_IMPORTED_MODULE_4__.Session({ oauthToken: inputToken });
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Session created with token");
             // Create function
             const functionService = new yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_2__.FunctionService(session);
