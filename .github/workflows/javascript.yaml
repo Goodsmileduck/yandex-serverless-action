@@ -12,6 +12,7 @@ jobs:
       with:
         source: 'example'
         function_name: 'hello'
+        folder_id: ${{ secrets.FOLDER_ID }}
         runtime: 'python37'
         entrypoint: handler.hello
         environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
@@ -26,6 +27,7 @@ jobs:
       with:
         source: 'example'
         function_name: 'hello-bucket'
+        folder_id: ${{ secrets.FOLDER_ID }}
         runtime: 'python37'
         entrypoint: handler.hello
         environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
