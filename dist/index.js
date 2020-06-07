@@ -29412,8 +29412,11 @@ function getOrCreateFunction(functionService, inputs) {
     return __awaiter(this, void 0, void 0, function* () {
         // Check if Function exist
         const functions = yield getFunctions(functionService, inputs);
-        if (functions.length == 1)
-            return functions[0];
+        if (functions.length == 1) {
+            let result = functions[0];
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function found: ${result.id}, ${result.name}`);
+            return result;
+        }
         _actions_core__WEBPACK_IMPORTED_MODULE_1__.startGroup("Get or Create function");
         try {
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function ${inputs.folderId}/${inputs.functionName}`);

@@ -106,8 +106,12 @@ function handleOperationError(operation: Operation) {
 async function getOrCreateFunction(functionService: FunctionService, inputs: ActionInputs) {
     // Check if Function exist
     const functions = await getFunctions(functionService, inputs);
-    if (functions.length == 1)
-        return functions[0];
+    if (functions.length == 1) {
+        let result = functions[0];
+        core.info(`Function found: ${result.id}, ${result.name}`);
+
+        return result;
+    }
 
     core.startGroup("Get or Create function");
     try {
