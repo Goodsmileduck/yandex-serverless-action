@@ -73,12 +73,14 @@ async function getFunctions(functionService: FunctionService, inputs: ActionInpu
     try {
         let functionListResponse = await functionService.list({
             folderId: inputs.folderId,
-            filter: inputs.functionName
+            pageSize: undefined,
+            //filter: inputs.functionName
         });
 
-        const functions = functionListResponse.functions;
-        if (!functions)
+        if (!functionListResponse.functions)
             throw Error(`Functions get error (undefined response)`);
+
+        const functions = functionListResponse.functions.filter(x => x.name == inputs.functionName);
 
         if (functions.length > 1)
             throw Error(`Multiple functions found by name ${inputs.functionName}`);

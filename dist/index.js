@@ -29384,11 +29384,11 @@ function getFunctions(functionService, inputs) {
         try {
             let functionListResponse = yield functionService.list({
                 folderId: inputs.folderId,
-                filter: inputs.functionName
+                pageSize: undefined,
             });
-            const functions = functionListResponse.functions;
-            if (!functions)
+            if (!functionListResponse.functions)
                 throw Error(`Functions get error (undefined response)`);
+            const functions = functionListResponse.functions.filter(x => x.name == inputs.functionName);
             if (functions.length > 1)
                 throw Error(`Multiple functions found by name ${inputs.functionName}`);
             return functions;
