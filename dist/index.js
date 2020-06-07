@@ -29358,17 +29358,11 @@ function run() {
             };
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Parsed inputs");
             const fileContents = yield zipDirectory(inputs.source);
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Archive inmemory buffer created");
-            if (!fileContents)
-                throw Error("buffer error");
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Buffer size: ${Buffer.byteLength(fileContents)}b`);
-            // IAM token
+            // OAuth token
             // Initialize SDK with your token
             const session = new yandex_cloud__WEBPACK_IMPORTED_MODULE_0__.Session({ oauthToken: inputs.token });
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Session created with token");
-            // Create function
             const functionService = new yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_3__.FunctionService(session);
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Function service created");
             const functionObject = yield getOrCreateFunction(functionService, inputs);
             yield createFunctionVersion(functionService, functionObject, fileContents, inputs);
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.setOutput("time", new Date().toTimeString());
@@ -29486,7 +29480,9 @@ function zipDirectory(source) {
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Archive finalized");
             outputStreamBuffer.end();
             let buffer = outputStreamBuffer.getContents();
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Buffer is set");
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Buffer object created");
+            if (!buffer)
+                throw Error("Buffer get error");
             return buffer;
         }
         finally {

@@ -40,22 +40,12 @@ async function run() {
 
         const fileContents = await zipDirectory(inputs.source);
 
-        core.info("Archive inmemory buffer created");
-
-        if (!fileContents)
-            throw Error("buffer error");
-
         core.info(`Buffer size: ${Buffer.byteLength(fileContents)}b`);
 
-        // IAM token
+        // OAuth token
         // Initialize SDK with your token
         const session = new cloud.Session({ oauthToken: inputs.token });
-
-        core.info("Session created with token");
-
-        // Create function
         const functionService = new FunctionService(session);
-        core.info("Function service created");
 
         const functionObject = await getOrCreateFunction(functionService, inputs);
 
@@ -196,7 +186,10 @@ async function zipDirectory(source: string) {
 
         outputStreamBuffer.end();
         let buffer = outputStreamBuffer.getContents();
-        core.info("Buffer is set");
+        core.info("Buffer object created");
+
+        if (!buffer)
+            throw Error("Buffer get error");
 
         return buffer;
     }

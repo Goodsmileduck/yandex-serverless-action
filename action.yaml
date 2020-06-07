@@ -34,7 +34,7 @@ inputs:
     default: ''
     required: false
   token:
-    description: 'Oauth token'
+    description: 'OAuth token'
     default: ''
     required: false
   execution_timeout:
