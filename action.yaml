@@ -5,8 +5,12 @@ branding:
   color: 'blue'
   icon: 'upload-cloud'
 inputs:
-  function_id:
-    description: 'Function ID in Yandex Cloud'
+  function_name:
+    description: 'Function Name in Yandex Cloud'
+    default: ''
+    required: true
+  folder_id:
+    description: 'Folder Id in Yandex Cloud'
     default: ''
     required: true
   runtime:

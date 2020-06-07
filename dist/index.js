@@ -29345,54 +29345,113 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         _actions_core__WEBPACK_IMPORTED_MODULE_1__.setCommandEcho(true);
         try {
-            const inputFunctionId = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("function_id", { required: true });
-            const inputToken = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("token", { required: true });
-            const inputRuntime = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("runtime", { required: true });
-            const inputEntrypoint = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("entrypoint", { required: true });
-            const inputMemory = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("memory", { required: false });
-            const inputSource = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("source", { required: false });
-            const inputExecutionTimeout = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("execution_timeout", { required: false });
-            const inputEnvironment = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("environment", { required: false });
+            let inputs = {
+                functionName: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("function_name", { required: true }),
+                folderId: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("folder_id", { required: true }),
+                token: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("token", { required: true }),
+                runtime: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("runtime", { required: true }),
+                entrypoint: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("entrypoint", { required: true }),
+                memory: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("memory", { required: false }),
+                source: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("source", { required: false }),
+                executionTimeout: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("execution_timeout", { required: false }),
+                environment: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("environment", { required: false })
+            };
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Parsed inputs");
-            const fileContents = yield zipDirectory(inputSource);
+            const fileContents = yield zipDirectory(inputs.source);
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Archive inmemory buffer created");
             if (!fileContents)
                 throw Error("buffer error");
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Buffer size: ${Buffer.byteLength(fileContents)}b`);
             // IAM token
             // Initialize SDK with your token
-            const session = new yandex_cloud__WEBPACK_IMPORTED_MODULE_0__.Session({ oauthToken: inputToken });
+            const session = new yandex_cloud__WEBPACK_IMPORTED_MODULE_0__.Session({ oauthToken: inputs.token });
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Session created with token");
             // Create function
             const functionService = new yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_3__.FunctionService(session);
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Function service created");
-            // Check if FunctionId exist
-            //let exist = functionService.get({ functionId: inputFunctionId });
-            //conver variables
-            let memory = Number.parseFloat(inputMemory);
+            const functionObject = yield getOrCreateFunction(functionService, inputs);
+            yield createFunctionVersion(functionService, functionObject, fileContents, inputs);
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.setOutput("time", new Date().toTimeString());
+        }
+        catch (error) {
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.setFailed(error.message);
+        }
+    });
+}
+function getFunctions(functionService, inputs) {
+    return __awaiter(this, void 0, void 0, function* () {
+        _actions_core__WEBPACK_IMPORTED_MODULE_1__.startGroup("Get functions");
+        try {
+            let functionListResponse = yield functionService.list({
+                folderId: inputs.folderId,
+                filter: inputs.functionName
+            });
+            const functions = functionListResponse.functions;
+            if (!functions)
+                throw Error(`Functions get error (undefined response)`);
+            if (functions.length > 1)
+                throw Error(`Multiple functions found by name ${inputs.functionName}`);
+            return functions;
+        }
+        finally {
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.endGroup();
+        }
+    });
+}
+function getOrCreateFunction(functionService, inputs) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Check if Function exist
+        const functions = yield getFunctions(functionService, inputs);
+        if (functions.length == 1)
+            return functions[0];
+        _actions_core__WEBPACK_IMPORTED_MODULE_1__.startGroup("Get or Create function");
+        try {
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function ${inputs.folderId}/${inputs.functionName}`);
+            // Create new function
+            let operation = yield functionService.create({
+                folderId: inputs.folderId,
+                name: inputs.functionName
+            });
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Operation complete");
+            if (operation.error)
+                throw Error(`${operation.error.code}: ${operation.error.message}`);
+            const functionsResult = yield getFunctions(functionService, inputs);
+            if (functionsResult.length == 1)
+                return functionsResult[0];
+        }
+        finally {
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.endGroup();
+        }
+    });
+}
+function createFunctionVersion(functionService, targetFunction, fileContents, inputs) {
+    return __awaiter(this, void 0, void 0, function* () {
+        _actions_core__WEBPACK_IMPORTED_MODULE_1__.startGroup("Create function version");
+        try {
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function ${inputs.folderId}/${inputs.functionName}`);
+            //convert variables
+            let memory = Number.parseFloat(inputs.memory);
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Parsed memory ${memory}`);
-            let executionTimeout = Number.parseFloat(inputExecutionTimeout);
+            let executionTimeout = Number.parseFloat(inputs.executionTimeout);
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Parsed timeout ${executionTimeout}`);
             // Create new version
             let operation = yield functionService.createVersion({
-                functionId: inputFunctionId,
-                runtime: inputRuntime,
-                entrypoint: inputEntrypoint,
+                functionId: targetFunction.id,
+                runtime: inputs.runtime,
+                entrypoint: inputs.entrypoint,
                 resources: {
                     memory: memory ? long__WEBPACK_IMPORTED_MODULE_4___default().fromNumber(memory * 1024 * 1024) : undefined,
                 },
-                environment: parseEnvironmentVariables(inputEnvironment),
+                environment: parseEnvironmentVariables(inputs.environment),
                 content: fileContents,
                 executionTimeout: { seconds: long__WEBPACK_IMPORTED_MODULE_4___default().fromNumber(executionTimeout) }
             });
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Operation complete");
             if (operation.error)
                 throw Error(`${operation.error.code}: ${operation.error.message}`);
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Operation success");
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.setOutput("time", new Date().toTimeString());
         }
-        catch (error) {
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.setFailed(error.message);
+        finally {
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.endGroup();
         }
     });
 }
