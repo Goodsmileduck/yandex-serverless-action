@@ -26949,6 +26949,58 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 
 
+function run() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const inputFunctionId = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("function_id", { required: true });
+            const inputToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("token", { required: true });
+            const inputRuntime = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("runtime", { required: true });
+            const inputEntrypoint = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("entrypoint", { required: true });
+            const inputMemory = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("memory", { required: false });
+            const inputSource = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("source", { required: false });
+            const inputExecutionTimeout = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("execution_timeout", { required: false });
+            const inputEnvironment = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("environment", { required: false });
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug("Parsed inputs");
+            const fileContents = yield zipDirectory(inputSource);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug("Archive inmemory buffer created");
+            // IAM token
+            // Initialize SDK with your token
+            const session = new yandex_cloud__WEBPACK_IMPORTED_MODULE_4__.Session({ iamToken: inputToken });
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug("Session created with token");
+            // Create function
+            const functionService = new yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_2__.FunctionService(session);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug("Function service created");
+            // Check if FunctionId exist
+            //let exist = functionService.get({ functionId: inputFunctionId });
+            //conver variables
+            let memory = Number.parseFloat(inputMemory);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug(`Parsed memory ${memory}`);
+            let executionTimeout = Number.parseFloat(inputExecutionTimeout);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug(`Parsed timeout ${executionTimeout}`);
+            // Create new version
+            let operation = yield functionService.createVersion({
+                functionId: inputFunctionId,
+                runtime: inputRuntime,
+                entrypoint: inputEntrypoint,
+                resources: {
+                    memory: memory ? long__WEBPACK_IMPORTED_MODULE_3___default().fromNumber(memory * 1024 * 1024) : undefined,
+                },
+                environment: parseEnvironmentVariables(inputEnvironment),
+                content: fileContents,
+                executionTimeout: { seconds: long__WEBPACK_IMPORTED_MODULE_3___default().fromNumber(executionTimeout) }
+            });
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug(`Operation complete ${inputFunctionId}, ${inputRuntime}, ${inputEntrypoint}`);
+            if (operation.error)
+                throw Error(`${operation.error.code}: ${operation.error.message}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug(`Operation success ${operation.response.value}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput("time", new Date().toTimeString());
+        }
+        catch (error) {
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.error(`Operation error ${error.message}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
+        }
+    });
+}
 function zipDirectory(source) {
     let outputStreamBuffer = new stream_buffers__WEBPACK_IMPORTED_MODULE_1__.WritableStreamBuffer({
         initialSize: (1000 * 1024),
@@ -26976,49 +27028,6 @@ function zipDirectory(source) {
 function parseEnvironmentVariables(env) {
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug(`Environment string: ${env}`);
     return {};
-}
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const inputFunctionId = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("function_id", { required: true });
-            const inputToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("token", { required: true });
-            const inputRuntime = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("runtime", { required: true });
-            const inputEntrypoint = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("entrypoint", { required: true });
-            const inputMemory = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("memory", { required: false });
-            const inputSource = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("source", { required: false });
-            const inputExecutionTimeout = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("execution_timeout", { required: false });
-            const inputEnvironment = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("environment", { required: false });
-            const fileContents = yield zipDirectory(inputSource);
-            // IAM token
-            // Initialize SDK with your token
-            const session = new yandex_cloud__WEBPACK_IMPORTED_MODULE_4__.Session({ iamToken: inputToken });
-            // Create function
-            const functionService = new yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_2__.FunctionService(session);
-            // Check if FunctionId exist
-            //let exist = functionService.get({ functionId: inputFunctionId });
-            //conver variables
-            let memory = inputMemory ? Number.parseFloat(inputMemory) : undefined;
-            let executionTimeout = inputExecutionTimeout ? Number.parseFloat(inputExecutionTimeout) : 60;
-            // Create new version
-            let operation = yield functionService.createVersion({
-                functionId: inputFunctionId,
-                runtime: inputRuntime,
-                entrypoint: inputEntrypoint,
-                resources: {
-                    memory: memory ? long__WEBPACK_IMPORTED_MODULE_3___default().fromNumber(memory * 1024 * 1024) : undefined,
-                },
-                environment: parseEnvironmentVariables(inputEnvironment),
-                content: fileContents,
-                executionTimeout: { seconds: long__WEBPACK_IMPORTED_MODULE_3___default().fromNumber(executionTimeout) }
-            });
-            if (operation.error)
-                throw Error(`${operation.error.code}: ${operation.error.message}`);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput("time", new Date().toTimeString());
-        }
-        catch (error) {
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
-        }
-    });
 }
 run();
 
