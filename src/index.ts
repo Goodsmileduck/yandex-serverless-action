@@ -5,6 +5,7 @@ import * as streamBuffers from "stream-buffers";
 import { Function, FunctionService } from "yandex-cloud/api/serverless/functions/v1";
 
 import Long from "long";
+import { Operation } from "yandex-cloud/api/operation";
 import archiver from "archiver";
 
 type ActionInputs = {
@@ -74,13 +75,13 @@ async function getFunctions(functionService: FunctionService, inputs: ActionInpu
         let functionListResponse = await functionService.list({
             folderId: inputs.folderId,
             pageSize: undefined,
-            //filter: inputs.functionName
+            filter: inputs.functionName
         });
 
         if (!functionListResponse.functions)
             throw Error(`Functions get error (undefined response)`);
 
-        const functions = functionListResponse.functions.filter(x => x.name == inputs.functionName);
+        const functions = functionListResponse.functions;
 
         if (functions.length > 1)
             throw Error(`Multiple functions found by name ${inputs.functionName}`);
@@ -89,6 +90,16 @@ async function getFunctions(functionService: FunctionService, inputs: ActionInpu
     }
     finally {
         core.endGroup();
+    }
+}
+
+function handleOperationError(operation: Operation) {
+    if (operation.error) {
+        let details = operation.error?.details;
+        if (details)
+            throw Error(`${operation.error.code}: ${operation.error.message} (${details.join(", ")})`);
+
+        throw Error(`${operation.error.code}: ${operation.error.message}`);
     }
 }
 
@@ -110,12 +121,15 @@ async function getOrCreateFunction(functionService: FunctionService, inputs: Act
 
         core.info("Operation complete");
 
-        if (operation.error)
-            throw Error(`${operation.error.code}: ${operation.error.message}`);
+        handleOperationError(operation);
 
         const functionsResult = await getFunctions(functionService, inputs);
-        if (functionsResult.length == 1)
-            return functionsResult[0];
+        if (functionsResult.length == 1) {
+            let result = functionsResult[0];
+            core.info(`Function found: ${result.id}, ${result.name}`);
+
+            return result;
+        }
     }
     finally {
         core.endGroup();
@@ -149,8 +163,7 @@ async function createFunctionVersion(functionService: FunctionService, targetFun
 
         core.info("Operation complete");
 
-        if (operation.error)
-            throw Error(`${operation.error.code}: ${operation.error.message}`);
+        handleOperationError(operation);
     }
     finally {
         core.endGroup();
@@ -158,32 +171,50 @@ async function createFunctionVersion(functionService: FunctionService, targetFun
 }
 
 async function zipDirectory(source: string) {
-    let outputStreamBuffer = new streamBuffers.WritableStreamBuffer({
-        initialSize: (1000 * 1024),   // start at 1000 kilobytes.
-        incrementAmount: (1000 * 1024) // grow by 1000 kilobytes each time buffer overflows.
-    });
+    core.startGroup("ZipDirectory");
 
-    const archive = archiver("zip", { zlib: { level: 9 } });
-    core.info("Archive initialize");
+    try {
+        let outputStreamBuffer = new streamBuffers.WritableStreamBuffer({
+            initialSize: (1000 * 1024),   // start at 1000 kilobytes.
+            incrementAmount: (1000 * 1024) // grow by 1000 kilobytes each time buffer overflows.
+        });
 
-    archive.pipe(outputStreamBuffer);
+        const archive = archiver("zip", { zlib: { level: 9 } });
+        core.info("Archive initialize");
 
-    await archive
-        .directory(source, false)
-        .finalize();
+        archive.pipe(outputStreamBuffer);
 
-    core.info("Archive finalized");
+        await archive
+            .directory(source, false)
+            .finalize();
 
-    outputStreamBuffer.end();
-    let buffer = outputStreamBuffer.getContents();
-    core.info("Buffer is set");
-    return buffer;
+        core.info("Archive finalized");
+
+        outputStreamBuffer.end();
+        let buffer = outputStreamBuffer.getContents();
+        core.info("Buffer is set");
+
+        return buffer;
+    }
+    finally {
+        core.endGroup();
+    }
 }
 
 function parseEnvironmentVariables(env: string): { [s: string]: string } {
     core.info(`Environment string: ${env}`);
 
-    return {};
+    let envObject = {};
+    var kvs = env.split(",");
+    kvs.forEach(kv => {
+        let res = kv.split("=");
+        let key = res[0];
+        let value = res[1];
+        envObject[key] = value;
+    });
+
+    core.info(`EnvObject: ${JSON.stringify(envObject)}`)
+    return envObject;
 }
 
 run();

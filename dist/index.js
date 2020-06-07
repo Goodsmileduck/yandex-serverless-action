@@ -29385,10 +29385,11 @@ function getFunctions(functionService, inputs) {
             let functionListResponse = yield functionService.list({
                 folderId: inputs.folderId,
                 pageSize: undefined,
+                filter: inputs.functionName
             });
             if (!functionListResponse.functions)
                 throw Error(`Functions get error (undefined response)`);
-            const functions = functionListResponse.functions.filter(x => x.name == inputs.functionName);
+            const functions = functionListResponse.functions;
             if (functions.length > 1)
                 throw Error(`Multiple functions found by name ${inputs.functionName}`);
             return functions;
@@ -29397,6 +29398,15 @@ function getFunctions(functionService, inputs) {
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.endGroup();
         }
     });
+}
+function handleOperationError(operation) {
+    var _a;
+    if (operation.error) {
+        let details = (_a = operation.error) === null || _a === void 0 ? void 0 : _a.details;
+        if (details)
+            throw Error(`${operation.error.code}: ${operation.error.message} (${details.join(", ")})`);
+        throw Error(`${operation.error.code}: ${operation.error.message}`);
+    }
 }
 function getOrCreateFunction(functionService, inputs) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -29413,11 +29423,13 @@ function getOrCreateFunction(functionService, inputs) {
                 name: inputs.functionName
             });
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Operation complete");
-            if (operation.error)
-                throw Error(`${operation.error.code}: ${operation.error.message}`);
+            handleOperationError(operation);
             const functionsResult = yield getFunctions(functionService, inputs);
-            if (functionsResult.length == 1)
-                return functionsResult[0];
+            if (functionsResult.length == 1) {
+                let result = functionsResult[0];
+                _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function found: ${result.id}, ${result.name}`);
+                return result;
+            }
         }
         finally {
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.endGroup();
@@ -29447,8 +29459,7 @@ function createFunctionVersion(functionService, targetFunction, fileContents, in
                 executionTimeout: { seconds: long__WEBPACK_IMPORTED_MODULE_4___default().fromNumber(executionTimeout) }
             });
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Operation complete");
-            if (operation.error)
-                throw Error(`${operation.error.code}: ${operation.error.message}`);
+            handleOperationError(operation);
         }
         finally {
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.endGroup();
@@ -29457,26 +29468,41 @@ function createFunctionVersion(functionService, targetFunction, fileContents, in
 }
 function zipDirectory(source) {
     return __awaiter(this, void 0, void 0, function* () {
-        let outputStreamBuffer = new stream_buffers__WEBPACK_IMPORTED_MODULE_2__.WritableStreamBuffer({
-            initialSize: (1000 * 1024),
-            incrementAmount: (1000 * 1024) // grow by 1000 kilobytes each time buffer overflows.
-        });
-        const archive = archiver__WEBPACK_IMPORTED_MODULE_5___default()("zip", { zlib: { level: 9 } });
-        _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Archive initialize");
-        archive.pipe(outputStreamBuffer);
-        yield archive
-            .directory(source, false)
-            .finalize();
-        _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Archive finalized");
-        outputStreamBuffer.end();
-        let buffer = outputStreamBuffer.getContents();
-        _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Buffer is set");
-        return buffer;
+        _actions_core__WEBPACK_IMPORTED_MODULE_1__.startGroup("ZipDirectory");
+        try {
+            let outputStreamBuffer = new stream_buffers__WEBPACK_IMPORTED_MODULE_2__.WritableStreamBuffer({
+                initialSize: (1000 * 1024),
+                incrementAmount: (1000 * 1024) // grow by 1000 kilobytes each time buffer overflows.
+            });
+            const archive = archiver__WEBPACK_IMPORTED_MODULE_5___default()("zip", { zlib: { level: 9 } });
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Archive initialize");
+            archive.pipe(outputStreamBuffer);
+            yield archive
+                .directory(source, false)
+                .finalize();
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Archive finalized");
+            outputStreamBuffer.end();
+            let buffer = outputStreamBuffer.getContents();
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Buffer is set");
+            return buffer;
+        }
+        finally {
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.endGroup();
+        }
     });
 }
 function parseEnvironmentVariables(env) {
     _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Environment string: ${env}`);
-    return {};
+    let envObject = {};
+    var kvs = env.split(",");
+    kvs.forEach(kv => {
+        let res = kv.split("=");
+        let key = res[0];
+        let value = res[1];
+        envObject[key] = value;
+    });
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`EnvObject: ${JSON.stringify(envObject)}`);
+    return envObject;
 }
 run();
 
