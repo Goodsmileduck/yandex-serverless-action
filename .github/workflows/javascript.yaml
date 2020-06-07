@@ -11,7 +11,7 @@ jobs:
     - uses: goodsmileduck/yandex-serverless-action@javascript
       with:
         source: 'example'
-        function_id: 'hello'
+        function_id: 'd4ecd1ho7t9ieugt9q58'
         runtime: 'python37'
         entrypoint: handler.hello
         environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true

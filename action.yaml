@@ -41,6 +41,18 @@ inputs:
     description: 'exclude pattern for source directory'
     default: ''
     required: false
+  bucket:
+    description: 'S3 bucket for code'
+    default: ''
+    required: false
+  access_key:
+    description: 'access key for bucket'
+    default: ''
+    required: false
+  secret_key:
+    description: 'secret key for bucket'
+    default: ''
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
