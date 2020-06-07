@@ -15,7 +15,7 @@ jobs:
         runtime: 'python37'
         entrypoint: handler.hello
         environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
-        iam_token: ${{ secrets.TOKEN }}
+        token: ${{ secrets.TOKEN }}
         execution_timeout: '600'
 
   deploy_from_bucket:
@@ -29,7 +29,7 @@ jobs:
         runtime: 'python37'
         entrypoint: handler.hello
         environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
-        iam_token: ${{ secrets.TOKEN }}
+        token: ${{ secrets.TOKEN }}
         execution_timeout: '600'
         bucket: 'yandex-functions'
         access_key: ${{ secrets.ACCESS_KEY }}
