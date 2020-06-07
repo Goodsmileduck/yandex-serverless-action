@@ -6,7 +6,7 @@ branding:
   icon: 'upload-cloud'
 inputs:
   function_id:
-    description: 'Function name in Yandex Cloud'
+    description: 'Function ID in Yandex Cloud'
     default: ''
     required: true
   runtime:
@@ -35,7 +35,7 @@ inputs:
     required: false
   execution_timeout:
     description: 'Execution timeout'
-    default: ''
+    default: '60'
     required: false
   exclude:
     description: 'exclude pattern for source directory'

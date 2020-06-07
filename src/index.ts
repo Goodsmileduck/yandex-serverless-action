@@ -6,6 +6,72 @@ import Long from "long";
 import { Session } from "yandex-cloud";
 import archiver from "archiver";
 
+async function run() {
+    try {
+        const inputFunctionId = core.getInput("function_id", { required: true });
+        const inputToken = core.getInput("token", { required: true });
+        const inputRuntime = core.getInput("runtime", { required: true });
+        const inputEntrypoint = core.getInput("entrypoint", { required: true });
+        const inputMemory = core.getInput("memory", { required: false });
+        const inputSource = core.getInput("source", { required: false });
+        const inputExecutionTimeout = core.getInput("execution_timeout", { required: false });
+        const inputEnvironment = core.getInput("environment", { required: false });
+
+        core.debug("Parsed inputs");
+
+        const fileContents = await zipDirectory(inputSource);
+
+        core.debug("Archive inmemory buffer created");
+
+        // IAM token
+        // Initialize SDK with your token
+        const session = new Session({ iamToken: inputToken });
+
+        core.debug("Session created with token");
+
+        // Create function
+        const functionService = new FunctionService(session);
+
+        core.debug("Function service created");
+
+        // Check if FunctionId exist
+        //let exist = functionService.get({ functionId: inputFunctionId });
+
+        //conver variables
+        let memory = Number.parseFloat(inputMemory);
+        core.debug(`Parsed memory ${memory}`);
+
+        let executionTimeout = Number.parseFloat(inputExecutionTimeout);
+        core.debug(`Parsed timeout ${executionTimeout}`);
+
+        // Create new version
+        let operation = await functionService.createVersion({
+            functionId: inputFunctionId,
+            runtime: inputRuntime,
+            entrypoint: inputEntrypoint,
+            resources: {
+                memory: memory ? Long.fromNumber(memory * 1024 * 1024) : undefined,
+            },
+            environment: parseEnvironmentVariables(inputEnvironment),
+            content: fileContents,
+            executionTimeout: { seconds: Long.fromNumber(executionTimeout) }
+        });
+
+        core.debug(`Operation complete ${inputFunctionId}, ${inputRuntime}, ${inputEntrypoint}`);
+
+        if (operation.error)
+            throw Error(`${operation.error.code}: ${operation.error.message}`);
+
+        core.debug(`Operation success ${operation.response.value}`);
+
+        core.setOutput("time", new Date().toTimeString());
+    }
+    catch (error) {
+        core.error(`Operation error ${error.message}`);
+        core.setFailed(error.message);
+    }
+}
+
 function zipDirectory(source: string) {
     let outputStreamBuffer = new streamBuffers.WritableStreamBuffer({
         initialSize: (1000 * 1024),   // start at 1000 kilobytes.
@@ -39,56 +105,6 @@ function parseEnvironmentVariables(env: string): { [s: string]: string } {
     core.debug(`Environment string: ${env}`);
 
     return {};
-}
-
-async function run() {
-    try {
-        const inputFunctionId = core.getInput("function_id", { required: true });
-        const inputToken = core.getInput("token", { required: true });
-        const inputRuntime = core.getInput("runtime", { required: true });
-        const inputEntrypoint = core.getInput("entrypoint", { required: true });
-        const inputMemory = core.getInput("memory", { required: false });
-        const inputSource = core.getInput("source", { required: false });
-        const inputExecutionTimeout = core.getInput("execution_timeout", { required: false });
-        const inputEnvironment = core.getInput("environment", { required: false });
-
-        const fileContents = await zipDirectory(inputSource);
-
-        // IAM token
-        // Initialize SDK with your token
-        const session = new Session({ iamToken: inputToken });
-
-        // Create function
-        const functionService = new FunctionService(session);
-
-        // Check if FunctionId exist
-        //let exist = functionService.get({ functionId: inputFunctionId });
-
-        //conver variables
-        let memory = inputMemory ? Number.parseFloat(inputMemory) : undefined;
-        let executionTimeout = inputExecutionTimeout ? Number.parseFloat(inputExecutionTimeout) : 60;
-
-        // Create new version
-        let operation = await functionService.createVersion({
-            functionId: inputFunctionId,
-            runtime: inputRuntime,
-            entrypoint: inputEntrypoint,
-            resources: {
-                memory: memory ? Long.fromNumber(memory * 1024 * 1024) : undefined,
-            },
-            environment: parseEnvironmentVariables(inputEnvironment),
-            content: fileContents,
-            executionTimeout: { seconds: Long.fromNumber(executionTimeout) }
-        });
-
-        if (operation.error)
-            throw Error(`${operation.error.code}: ${operation.error.message}`);
-
-        core.setOutput("time", new Date().toTimeString());
-    }
-    catch (error) {
-        core.setFailed(error.message);
-    }
 }
 
 run();
