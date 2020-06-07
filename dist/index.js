@@ -26960,23 +26960,23 @@ function run() {
             const inputSource = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("source", { required: false });
             const inputExecutionTimeout = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("execution_timeout", { required: false });
             const inputEnvironment = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("environment", { required: false });
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug("Parsed inputs");
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Parsed inputs");
             const fileContents = yield zipDirectory(inputSource);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug("Archive inmemory buffer created");
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Archive inmemory buffer created");
             // IAM token
             // Initialize SDK with your token
             const session = new yandex_cloud__WEBPACK_IMPORTED_MODULE_4__.Session({ iamToken: inputToken });
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug("Session created with token");
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Session created with token");
             // Create function
             const functionService = new yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_2__.FunctionService(session);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug("Function service created");
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Function service created");
             // Check if FunctionId exist
             //let exist = functionService.get({ functionId: inputFunctionId });
             //conver variables
             let memory = Number.parseFloat(inputMemory);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug(`Parsed memory ${memory}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Parsed memory ${memory}`);
             let executionTimeout = Number.parseFloat(inputExecutionTimeout);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug(`Parsed timeout ${executionTimeout}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Parsed timeout ${executionTimeout}`);
             // Create new version
             let operation = yield functionService.createVersion({
                 functionId: inputFunctionId,
@@ -26989,10 +26989,10 @@ function run() {
                 content: fileContents,
                 executionTimeout: { seconds: long__WEBPACK_IMPORTED_MODULE_3___default().fromNumber(executionTimeout) }
             });
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug(`Operation complete ${inputFunctionId}, ${inputRuntime}, ${inputEntrypoint}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Operation complete ${inputFunctionId}, ${inputRuntime}, ${inputEntrypoint}`);
             if (operation.error)
                 throw Error(`${operation.error.code}: ${operation.error.message}`);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug(`Operation success ${operation.response.value}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Operation success ${operation.response.value}`);
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput("time", new Date().toTimeString());
         }
         catch (error) {

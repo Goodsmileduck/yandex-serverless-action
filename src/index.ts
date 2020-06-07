@@ -17,32 +17,32 @@ async function run() {
         const inputExecutionTimeout = core.getInput("execution_timeout", { required: false });
         const inputEnvironment = core.getInput("environment", { required: false });
 
-        core.debug("Parsed inputs");
+        core.info("Parsed inputs");
 
         const fileContents = await zipDirectory(inputSource);
 
-        core.debug("Archive inmemory buffer created");
+        core.info("Archive inmemory buffer created");
 
         // IAM token
         // Initialize SDK with your token
         const session = new Session({ iamToken: inputToken });
 
-        core.debug("Session created with token");
+        core.info("Session created with token");
 
         // Create function
         const functionService = new FunctionService(session);
 
-        core.debug("Function service created");
+        core.info("Function service created");
 
         // Check if FunctionId exist
         //let exist = functionService.get({ functionId: inputFunctionId });
 
         //conver variables
         let memory = Number.parseFloat(inputMemory);
-        core.debug(`Parsed memory ${memory}`);
+        core.info(`Parsed memory ${memory}`);
 
         let executionTimeout = Number.parseFloat(inputExecutionTimeout);
-        core.debug(`Parsed timeout ${executionTimeout}`);
+        core.info(`Parsed timeout ${executionTimeout}`);
 
         // Create new version
         let operation = await functionService.createVersion({
@@ -57,12 +57,12 @@ async function run() {
             executionTimeout: { seconds: Long.fromNumber(executionTimeout) }
         });
 
-        core.debug(`Operation complete ${inputFunctionId}, ${inputRuntime}, ${inputEntrypoint}`);
+        core.info(`Operation complete ${inputFunctionId}, ${inputRuntime}, ${inputEntrypoint}`);
 
         if (operation.error)
             throw Error(`${operation.error.code}: ${operation.error.message}`);
 
-        core.debug(`Operation success ${operation.response.value}`);
+        core.info(`Operation success ${operation.response.value}`);
 
         core.setOutput("time", new Date().toTimeString());
     }
