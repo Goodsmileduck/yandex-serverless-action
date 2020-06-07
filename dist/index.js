@@ -26964,6 +26964,8 @@ function run() {
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Parsed inputs");
             const fileContents = yield zipDirectory(inputSource);
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Archive inmemory buffer created");
+            if (!fileContents)
+                throw Error("buffer error");
             // IAM token
             // Initialize SDK with your token
             const session = new yandex_cloud__WEBPACK_IMPORTED_MODULE_4__.Session({ iamToken: inputToken });
@@ -26997,37 +26999,32 @@ function run() {
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput("time", new Date().toTimeString());
         }
         catch (error) {
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.error(`Operation error ${error.message}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Operation error ${error.message}`);
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
         }
     });
 }
 function zipDirectory(source) {
-    let outputStreamBuffer = new stream_buffers__WEBPACK_IMPORTED_MODULE_1__.WritableStreamBuffer({
-        initialSize: (1000 * 1024),
-        incrementAmount: (1000 * 1024) // grow by 1000 kilobytes each time buffer overflows.
-    });
-    const archive = archiver__WEBPACK_IMPORTED_MODULE_5___default()("zip", { zlib: { level: 9 } });
-    archive.pipe(outputStreamBuffer);
-    return new Promise((resolve, reject) => {
-        archive
-            .directory(source, false)
-            .finalize()
-            .then(() => {
-            outputStreamBuffer.end(() => {
-                let buffer = outputStreamBuffer.getContents();
-                if (buffer == false)
-                    reject("buffer is false");
-                resolve(buffer);
-            });
-        })
-            .catch(err => {
-            reject(err);
+    return __awaiter(this, void 0, void 0, function* () {
+        let outputStreamBuffer = new stream_buffers__WEBPACK_IMPORTED_MODULE_1__.WritableStreamBuffer({
+            initialSize: (1000 * 1024),
+            incrementAmount: (1000 * 1024) // grow by 1000 kilobytes each time buffer overflows.
         });
+        const archive = archiver__WEBPACK_IMPORTED_MODULE_5___default()("zip", { zlib: { level: 9 } });
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Archive initialize");
+        archive.pipe(outputStreamBuffer);
+        yield archive
+            .directory(source, false)
+            .finalize();
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Archive finalized");
+        outputStreamBuffer.end();
+        let buffer = outputStreamBuffer.getContents();
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Buffer is set");
+        return buffer;
     });
 }
 function parseEnvironmentVariables(env) {
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug(`Environment string: ${env}`);
+    _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Environment string: ${env}`);
     return {};
 }
 run();

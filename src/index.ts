@@ -25,6 +25,9 @@ async function run() {
 
         core.info("Archive inmemory buffer created");
 
+        if (!fileContents)
+            throw Error("buffer error");
+
         // IAM token
         // Initialize SDK with your token
         const session = new Session({ iamToken: inputToken });
@@ -69,42 +72,36 @@ async function run() {
         core.setOutput("time", new Date().toTimeString());
     }
     catch (error) {
-        core.error(`Operation error ${error.message}`);
+        core.info(`Operation error ${error.message}`);
         core.setFailed(error.message);
     }
 }
 
-function zipDirectory(source: string) {
+async function zipDirectory(source: string) {
     let outputStreamBuffer = new streamBuffers.WritableStreamBuffer({
         initialSize: (1000 * 1024),   // start at 1000 kilobytes.
         incrementAmount: (1000 * 1024) // grow by 1000 kilobytes each time buffer overflows.
     });
 
     const archive = archiver("zip", { zlib: { level: 9 } });
+    core.info("Archive initialize");
 
     archive.pipe(outputStreamBuffer);
 
-    return new Promise<Buffer>((resolve, reject) => {
-        archive
-            .directory(source, false)
-            .finalize()
-            .then(() => {
-                outputStreamBuffer.end(() => {
-                    let buffer = outputStreamBuffer.getContents();
-                    if (buffer == false)
-                        reject("buffer is false");
+    await archive
+        .directory(source, false)
+        .finalize();
 
-                    resolve(buffer as Buffer);
-                });
-            })
-            .catch(err => {
-                reject(err);
-            });
-    });
+    core.info("Archive finalized");
+
+    outputStreamBuffer.end();
+    let buffer = outputStreamBuffer.getContents();
+    core.info("Buffer is set");
+    return buffer;
 }
 
 function parseEnvironmentVariables(env: string): { [s: string]: string } {
-    core.debug(`Environment string: ${env}`);
+    core.info(`Environment string: ${env}`);
 
     return {};
 }
