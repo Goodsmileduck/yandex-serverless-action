@@ -31,7 +31,7 @@ async function run() {
     try {
         let inputs: ActionInputs = {
             functionName: core.getInput("function_name", { required: true }),
-            functionId: core.getInput("function_id", { required: true }),
+            functionId: core.getInput("function_id", { required: false }),
             folderId: core.getInput("folder_id", { required: true }),
             token: core.getInput("token", { required: true }),
             runtime: core.getInput("runtime", { required: true }),

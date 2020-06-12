@@ -29350,7 +29350,7 @@ function run() {
         try {
             let inputs = {
                 functionName: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("function_name", { required: true }),
-                functionId: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("function_id", { required: true }),
+                functionId: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("function_id", { required: false }),
                 folderId: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("folder_id", { required: true }),
                 token: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("token", { required: true }),
                 runtime: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("runtime", { required: true }),
