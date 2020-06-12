@@ -5,6 +5,10 @@ branding:
   color: 'blue'
   icon: 'upload-cloud'
 inputs:
+  function_id:
+    description: 'Function Id in Yandex Cloud'
+    default: ''
+    required: true
   function_name:
     description: 'Function Name in Yandex Cloud'
     default: ''
@@ -25,6 +29,10 @@ inputs:
     description: 'Source directory for cloud function in git repo'
     default: '.'
     required: false
+  source_exclude:
+    description: 'Exclude patterns (comma separated) for source directory'
+    default: ''
+    required: false
   memory:
     description: 'Memory in Mb'
     default: '256'
@@ -41,12 +49,8 @@ inputs:
     description: 'Execution timeout'
     default: '60'
     required: false
-  exclude:
-    description: 'exclude pattern for source directory'
-    default: ''
-    required: false
   bucket:
-    description: 'S3 bucket for code'
+    description: 'S3 bucket name for code'
     default: ''
     required: false
   access_key:

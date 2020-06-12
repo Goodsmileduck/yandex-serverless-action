@@ -29322,10 +29322,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var stream_buffers__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(stream_buffers__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(936);
 /* harmony import */ var yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var long__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(900);
-/* harmony import */ var long__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(long__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var archiver__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(248);
-/* harmony import */ var archiver__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(archiver__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var yandex_cloud_lib_storage_v1beta__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(659);
+/* harmony import */ var yandex_cloud_lib_storage_v1beta__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(yandex_cloud_lib_storage_v1beta__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var long__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(900);
+/* harmony import */ var long__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(long__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var archiver__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(248);
+/* harmony import */ var archiver__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(archiver__WEBPACK_IMPORTED_MODULE_6__);
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -29341,28 +29343,38 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 
 
+
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         _actions_core__WEBPACK_IMPORTED_MODULE_1__.setCommandEcho(true);
         try {
             let inputs = {
                 functionName: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("function_name", { required: true }),
+                functionId: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("function_id", { required: true }),
                 folderId: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("folder_id", { required: true }),
                 token: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("token", { required: true }),
                 runtime: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("runtime", { required: true }),
                 entrypoint: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("entrypoint", { required: true }),
                 memory: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("memory", { required: false }),
                 source: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("source", { required: false }),
+                sourceIgnore: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("source_ignore", { required: false }),
                 executionTimeout: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("execution_timeout", { required: false }),
-                environment: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("environment", { required: false })
+                environment: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("environment", { required: false }),
+                bucket: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("bucket", { required: false }),
             };
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Parsed inputs");
-            const fileContents = yield zipDirectory(inputs.source);
+            const fileContents = yield zipDirectory(inputs);
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Buffer size: ${Buffer.byteLength(fileContents)}b`);
             // OAuth token
             // Initialize SDK with your token
             const session = new yandex_cloud__WEBPACK_IMPORTED_MODULE_0__.Session({ oauthToken: inputs.token });
             const functionService = new yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_3__.FunctionService(session);
+            if (inputs.bucket) {
+                _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Upload to bucket ${inputs.bucket}`);
+                const storageService = new yandex_cloud_lib_storage_v1beta__WEBPACK_IMPORTED_MODULE_4__.StorageService(session);
+                let storageObject = yandex_cloud_lib_storage_v1beta__WEBPACK_IMPORTED_MODULE_4__.StorageObject.fromBuffer(inputs.bucket, "serverless_object", fileContents);
+                yield storageService.putObject(storageObject);
+            }
             const functionObject = yield getOrCreateFunction(functionService, inputs);
             yield createFunctionVersion(functionService, functionObject, fileContents, inputs);
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.setOutput("time", new Date().toTimeString());
@@ -29374,7 +29386,7 @@ function run() {
 }
 function getFunctions(functionService, inputs) {
     return __awaiter(this, void 0, void 0, function* () {
-        _actions_core__WEBPACK_IMPORTED_MODULE_1__.startGroup("Get functions");
+        _actions_core__WEBPACK_IMPORTED_MODULE_1__.startGroup(`Get functions by filter: ${inputs.folderId}/${inputs.functionName}`);
         try {
             let functionListResponse = yield functionService.list({
                 folderId: inputs.folderId,
@@ -29404,16 +29416,16 @@ function handleOperationError(operation) {
 }
 function getOrCreateFunction(functionService, inputs) {
     return __awaiter(this, void 0, void 0, function* () {
-        // Check if Function exist
-        const functions = yield getFunctions(functionService, inputs);
-        if (functions.length == 1) {
-            let result = functions[0];
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function found: ${result.id}, ${result.name}`);
-            return result;
-        }
         _actions_core__WEBPACK_IMPORTED_MODULE_1__.startGroup("Get or Create function");
+        // Check if Function exist
+        const foundFunction = yield functionService.get({ functionId: inputs.functionId });
+        if (foundFunction) {
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function found: ${foundFunction.id}, ${foundFunction.name}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.endGroup();
+            return foundFunction;
+        }
         try {
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function ${inputs.folderId}/${inputs.functionName}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Create Function ${inputs.folderId}/${inputs.functionName}`);
             // Create new function
             let operation = yield functionService.create({
                 folderId: inputs.folderId,
@@ -29443,18 +29455,28 @@ function createFunctionVersion(functionService, targetFunction, fileContents, in
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Parsed memory ${memory}`);
             let executionTimeout = Number.parseFloat(inputs.executionTimeout);
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Parsed timeout ${executionTimeout}`);
-            // Create new version
-            let operation = yield functionService.createVersion({
+            let request = {
                 functionId: targetFunction.id,
                 runtime: inputs.runtime,
                 entrypoint: inputs.entrypoint,
                 resources: {
-                    memory: memory ? long__WEBPACK_IMPORTED_MODULE_4___default().fromNumber(memory * 1024 * 1024) : undefined,
+                    memory: memory ? long__WEBPACK_IMPORTED_MODULE_5___default().fromNumber(memory * 1024 * 1024) : undefined,
                 },
                 environment: parseEnvironmentVariables(inputs.environment),
-                content: fileContents,
-                executionTimeout: { seconds: long__WEBPACK_IMPORTED_MODULE_4___default().fromNumber(executionTimeout) }
-            });
+                executionTimeout: { seconds: long__WEBPACK_IMPORTED_MODULE_5___default().fromNumber(executionTimeout) }
+            };
+            //get from bucket if supplied
+            if (inputs.bucket) {
+                _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`From bucket ${inputs.bucket}`);
+                request.package = {
+                    bucketName: inputs.bucket,
+                    objectName: "serverless_object"
+                };
+            }
+            else
+                request.content = fileContents;
+            // Create new version
+            let operation = yield functionService.createVersion(request);
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Operation complete");
             handleOperationError(operation);
         }
@@ -29463,7 +29485,7 @@ function createFunctionVersion(functionService, targetFunction, fileContents, in
         }
     });
 }
-function zipDirectory(source) {
+function zipDirectory(inputs) {
     return __awaiter(this, void 0, void 0, function* () {
         _actions_core__WEBPACK_IMPORTED_MODULE_1__.startGroup("ZipDirectory");
         try {
@@ -29471,11 +29493,14 @@ function zipDirectory(source) {
                 initialSize: (1000 * 1024),
                 incrementAmount: (1000 * 1024) // grow by 1000 kilobytes each time buffer overflows.
             });
-            const archive = archiver__WEBPACK_IMPORTED_MODULE_5___default()("zip", { zlib: { level: 9 } });
+            const archive = archiver__WEBPACK_IMPORTED_MODULE_6___default()("zip", { zlib: { level: 9 } });
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Archive initialize");
             archive.pipe(outputStreamBuffer);
             yield archive
-                .directory(source, false)
+                .glob("**", {
+                cwd: inputs.source,
+                ignore: parseIgnoreGlobPatterns(inputs.sourceIgnore)
+            })
                 .finalize();
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Archive finalized");
             outputStreamBuffer.end();
@@ -29489,6 +29514,15 @@ function zipDirectory(source) {
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.endGroup();
         }
     });
+}
+function parseIgnoreGlobPatterns(ignoreString) {
+    var result = [];
+    var patterns = ignoreString.split(",");
+    patterns.forEach(pattern => {
+        result.push(pattern);
+    });
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`SourceIgnoreObject: ${JSON.stringify(result)}`);
+    return result;
 }
 function parseEnvironmentVariables(env) {
     _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Environment string: ${env}`);
@@ -48245,7 +48279,132 @@ module.exports = function (blocking) {
 
 
 /***/ }),
-/* 659 */,
+/* 659 */
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+const fetch = __webpack_require__(454);
+const fs = __webpack_require__(747);
+const yc = __webpack_require__(135);
+
+class StorageObject {
+    constructor(bucketName, objectName, bufferPromise) {
+        this.bucketName = bucketName;
+        this.objectName = objectName;
+        this.bufferPromise = bufferPromise;
+    }
+
+    static fromFile(bucketName, objectName, fileName) {
+        return new this(
+            bucketName,
+            objectName,
+            new Promise((resolve, reject) => {
+                fs.readFile(fileName, (err, data) => {
+                    if (err) {
+                        return reject(err);
+                    }
+
+                    return resolve(data);
+                });
+            })
+        );
+    }
+
+    static fromString(bucketName, objectName, content) {
+        return this.fromBuffer(
+            bucketName,
+            objectName,
+            Buffer.from(content, 'utf-8')
+        );
+    }
+
+    static fromBuffer(bucketName, objectName, buffer) {
+        return new this(
+            bucketName,
+            objectName,
+            new Promise((resolve) => {
+                resolve(buffer);
+            })
+        );
+    }
+
+    async getData(encoding) {
+        encoding = encoding || 'utf-8';
+        let buffer = await this.bufferPromise;
+        return buffer.toString(encoding);
+    }
+}
+
+class StorageServiceImpl {
+    constructor(address, credentials, options, tokenCreator) {
+        this._address = address;
+        this._tokenCreator = tokenCreator;
+
+        this.$method_definitions = {};
+    }
+
+    _url(bucketName, objectName) {
+        return `https://${this._address}/${bucketName}/${objectName}`;
+    }
+
+    async getObject(bucketName, objectName) {
+        const token = await this._tokenCreator();
+
+        const res = await fetch(this._url(bucketName, objectName), {
+            method: 'GET',
+            headers: {
+                'X-YaCloud-SubjectToken': token,
+            },
+        });
+
+        if (!res.ok) {
+            throw new Error(
+                `Storage replied with ${res.status}: ${res.statusText}`
+            );
+        }
+
+        return StorageObject.fromBuffer(bucketName, objectName, res.buffer());
+    }
+
+    async putObject(object) {
+        const token = await this._tokenCreator();
+        const buffer = await object.bufferPromise;
+
+        const res = await fetch(
+            this._url(object.bucketName, object.objectName),
+            {
+                method: 'PUT',
+                headers: {
+                    'X-YaCloud-SubjectToken': token,
+                },
+                body: buffer,
+            }
+        );
+
+        if (!res.ok) {
+            throw new Error(
+                `Storage replied with ${res.status}: ${res.statusText}`
+            );
+        }
+    }
+}
+
+StorageServiceImpl.__endpointId = 'storage';
+
+function StorageService(session) {
+    if (session === undefined) {
+        session = new yc.Session();
+    }
+
+    return session.client(StorageServiceImpl);
+}
+
+module.exports = {
+    StorageObject,
+    StorageService,
+};
+
+
+/***/ }),
 /* 660 */,
 /* 661 */,
 /* 662 */
