@@ -11,6 +11,7 @@ jobs:
     - uses: goodsmileduck/yandex-serverless-action@javascript
       with:
         source: 'example'
+        function_id: 'd4ecd1ho7t9ieugt9q58'
         function_name: 'hello'
         folder_id: ${{ secrets.FOLDER_ID }}
         runtime: 'python37'
