@@ -10,7 +10,6 @@ import { Operation } from "yandex-cloud/api/operation";
 import archiver from "archiver";
 
 type ActionInputs = {
-    functionName: string,
     functionId: string,
     folderId: string,
     token: string,
@@ -30,8 +29,7 @@ async function run() {
 
     try {
         let inputs: ActionInputs = {
-            functionName: core.getInput("function_name", { required: true }),
-            functionId: core.getInput("function_id", { required: false }),
+            functionId: core.getInput("function_id", { required: true }),
             folderId: core.getInput("folder_id", { required: true }),
             token: core.getInput("token", { required: true }),
             runtime: core.getInput("runtime", { required: true }),
@@ -65,7 +63,7 @@ async function run() {
             await storageService.putObject(storageObject);
         }
 
-        const functionObject = await getOrCreateFunction(functionService, inputs);
+        const functionObject = await getFunctionById(functionService, inputs);
 
         await createFunctionVersion(functionService, functionObject, fileContents, inputs);
 
@@ -73,30 +71,6 @@ async function run() {
     }
     catch (error) {
         core.setFailed(error.message);
-    }
-}
-
-async function getFunctions(functionService: FunctionService, inputs: ActionInputs) {
-    core.startGroup(`Get functions by filter: ${inputs.folderId}/${inputs.functionName}`);
-
-    try {
-        let functionListResponse = await functionService.list({
-            folderId: inputs.folderId,
-            //filter: inputs.functionName
-        });
-
-        if (!functionListResponse.functions)
-            throw Error(`Functions get error (undefined response)`);
-
-        const functions = functionListResponse.functions;
-
-        if (functions.length > 1)
-            throw Error(`Multiple functions found by name ${inputs.functionName}`);
-
-        return functions;
-    }
-    finally {
-        core.endGroup();
     }
 }
 
@@ -110,50 +84,20 @@ function handleOperationError(operation: Operation) {
     }
 }
 
-async function getOrCreateFunction(functionService: FunctionService, inputs: ActionInputs) {
-    core.startGroup("Get or Create function");
+async function getFunctionById(functionService: FunctionService, inputs: ActionInputs) {
+    core.startGroup("Get function by ID");
 
-    if (inputs.functionId) {
+    try {
         // Check if Function exist
         const foundFunction = await functionService.get({ functionId: inputs.functionId });
 
         if (foundFunction) {
             core.info(`Function found: ${foundFunction.id}, ${foundFunction.name}`);
-            core.endGroup();
 
             return foundFunction;
         }
-    } else {
-        const functionsResult = await getFunctions(functionService, inputs);
-        if (functionsResult.length == 1) {
-            let result = functionsResult[0];
-            core.info(`Function found: ${result.id}, ${result.name}`);
-            core.endGroup();
 
-            return result;
-        }
-    }
-
-    try {
-        core.info(`Create Function ${inputs.folderId}/${inputs.functionName}`);
-
-        // Create new function
-        let operation = await functionService.create({
-            folderId: inputs.folderId,
-            name: inputs.functionName
-        });
-
-        core.info("Operation complete");
-
-        handleOperationError(operation);
-
-        const functionsResult = await getFunctions(functionService, inputs);
-        if (functionsResult.length == 1) {
-            let result = functionsResult[0];
-            core.info(`Function found: ${result.id}, ${result.name}`);
-
-            return result;
-        }
+        throw Error("Function not found");
     }
     finally {
         core.endGroup();
@@ -163,7 +107,7 @@ async function getOrCreateFunction(functionService: FunctionService, inputs: Act
 async function createFunctionVersion(functionService: FunctionService, targetFunction: Function, fileContents: Buffer, inputs: ActionInputs) {
     core.startGroup("Create function version");
     try {
-        core.info(`Function ${inputs.folderId}/${inputs.functionName}`);
+        core.info(`Function ${inputs.folderId}/${inputs.functionId}`);
 
         //convert variables
         let memory = Number.parseFloat(inputs.memory);

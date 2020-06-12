@@ -13,7 +13,6 @@ jobs:
       with:
         source: 'example'
         function_id: 'd4ecd1ho7t9ieugt9q58'
-        function_name: 'hello'
         folder_id: ${{ secrets.FOLDER_ID }}
         runtime: 'python37'
         entrypoint: handler.hello
@@ -24,7 +23,7 @@ jobs:
       uses: goodsmileduck/yandex-serverless-action@javascript
       with:
         source: 'example'
-        function_name: 'hello-bucket'
+        function_id: 'd4ecd1ho7t9ieugt9q58'
         folder_id: ${{ secrets.FOLDER_ID }}
         runtime: 'python37'
         entrypoint: handler.hello
@@ -32,5 +31,3 @@ jobs:
         token: ${{ secrets.TOKEN }}
         execution_timeout: '600'
         bucket: 'yandex-functions'
-        access_key: ${{ secrets.ACCESS_KEY }}
-        secret_key: ${{ secrets.SECRET_KEY }}

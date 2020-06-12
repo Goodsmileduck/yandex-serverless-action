@@ -2,7 +2,7 @@ import json
 
 def hello(event, context):
     body = {
-        "message": "Hello World!!! 111",
+        "message": "Hello World!!!",
         "input": event
     }
     response = {

@@ -8,10 +8,6 @@ inputs:
   function_id:
     description: 'Function Id in Yandex Cloud'
     default: ''
-    required: false
-  function_name:
-    description: 'Function Name in Yandex Cloud'
-    default: ''
     required: true
   folder_id:
     description: 'Folder Id in Yandex Cloud'
@@ -51,14 +47,6 @@ inputs:
     required: false
   bucket:
     description: 'S3 bucket name for code'
-    default: ''
-    required: false
-  access_key:
-    description: 'access key for bucket'
-    default: ''
-    required: false
-  secret_key:
-    description: 'secret key for bucket'
     default: ''
     required: false
 runs:

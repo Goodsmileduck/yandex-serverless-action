@@ -29349,8 +29349,7 @@ function run() {
         _actions_core__WEBPACK_IMPORTED_MODULE_1__.setCommandEcho(true);
         try {
             let inputs = {
-                functionName: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("function_name", { required: true }),
-                functionId: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("function_id", { required: false }),
+                functionId: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("function_id", { required: true }),
                 folderId: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("folder_id", { required: true }),
                 token: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("token", { required: true }),
                 runtime: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("runtime", { required: true }),
@@ -29375,31 +29374,12 @@ function run() {
                 let storageObject = yandex_cloud_lib_storage_v1beta__WEBPACK_IMPORTED_MODULE_4__.StorageObject.fromBuffer(inputs.bucket, "serverless_object", fileContents);
                 yield storageService.putObject(storageObject);
             }
-            const functionObject = yield getOrCreateFunction(functionService, inputs);
+            const functionObject = yield getFunctionById(functionService, inputs);
             yield createFunctionVersion(functionService, functionObject, fileContents, inputs);
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.setOutput("time", new Date().toTimeString());
         }
         catch (error) {
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.setFailed(error.message);
-        }
-    });
-}
-function getFunctions(functionService, inputs) {
-    return __awaiter(this, void 0, void 0, function* () {
-        _actions_core__WEBPACK_IMPORTED_MODULE_1__.startGroup(`Get functions by filter: ${inputs.folderId}/${inputs.functionName}`);
-        try {
-            let functionListResponse = yield functionService.list({
-                folderId: inputs.folderId,
-            });
-            if (!functionListResponse.functions)
-                throw Error(`Functions get error (undefined response)`);
-            const functions = functionListResponse.functions;
-            if (functions.length > 1)
-                throw Error(`Multiple functions found by name ${inputs.functionName}`);
-            return functions;
-        }
-        finally {
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.endGroup();
         }
     });
 }
@@ -29412,42 +29392,17 @@ function handleOperationError(operation) {
         throw Error(`${operation.error.code}: ${operation.error.message}`);
     }
 }
-function getOrCreateFunction(functionService, inputs) {
+function getFunctionById(functionService, inputs) {
     return __awaiter(this, void 0, void 0, function* () {
-        _actions_core__WEBPACK_IMPORTED_MODULE_1__.startGroup("Get or Create function");
-        if (inputs.functionId) {
+        _actions_core__WEBPACK_IMPORTED_MODULE_1__.startGroup("Get function by ID");
+        try {
             // Check if Function exist
             const foundFunction = yield functionService.get({ functionId: inputs.functionId });
             if (foundFunction) {
                 _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function found: ${foundFunction.id}, ${foundFunction.name}`);
-                _actions_core__WEBPACK_IMPORTED_MODULE_1__.endGroup();
                 return foundFunction;
             }
-        }
-        else {
-            const functionsResult = yield getFunctions(functionService, inputs);
-            if (functionsResult.length == 1) {
-                let result = functionsResult[0];
-                _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function found: ${result.id}, ${result.name}`);
-                _actions_core__WEBPACK_IMPORTED_MODULE_1__.endGroup();
-                return result;
-            }
-        }
-        try {
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Create Function ${inputs.folderId}/${inputs.functionName}`);
-            // Create new function
-            let operation = yield functionService.create({
-                folderId: inputs.folderId,
-                name: inputs.functionName
-            });
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Operation complete");
-            handleOperationError(operation);
-            const functionsResult = yield getFunctions(functionService, inputs);
-            if (functionsResult.length == 1) {
-                let result = functionsResult[0];
-                _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function found: ${result.id}, ${result.name}`);
-                return result;
-            }
+            throw Error("Function not found");
         }
         finally {
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.endGroup();
@@ -29458,7 +29413,7 @@ function createFunctionVersion(functionService, targetFunction, fileContents, in
     return __awaiter(this, void 0, void 0, function* () {
         _actions_core__WEBPACK_IMPORTED_MODULE_1__.startGroup("Create function version");
         try {
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function ${inputs.folderId}/${inputs.functionName}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function ${inputs.folderId}/${inputs.functionId}`);
             //convert variables
             let memory = Number.parseFloat(inputs.memory);
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Parsed memory ${memory}`);
