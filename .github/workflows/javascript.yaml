@@ -4,7 +4,7 @@ name: Javascript action
 on: [push]
 
 jobs:
-  deploy_from_folder:
+  deploy_one_by_one:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -19,11 +19,6 @@ jobs:
         environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
         token: ${{ secrets.TOKEN }}
         execution_timeout: '600'
-
-  deploy_from_bucket:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
     - uses: goodsmileduck/yandex-serverless-action@javascript
       with:
         source: 'example'

@@ -114,14 +114,24 @@ function handleOperationError(operation: Operation) {
 async function getOrCreateFunction(functionService: FunctionService, inputs: ActionInputs) {
     core.startGroup("Get or Create function");
 
-    // Check if Function exist
-    const foundFunction = await functionService.get({ functionId: inputs.functionId });
+    if (inputs.functionId) {
+        // Check if Function exist
+        const foundFunction = await functionService.get({ functionId: inputs.functionId });
 
-    if (foundFunction) {
-        core.info(`Function found: ${foundFunction.id}, ${foundFunction.name}`);
-        core.endGroup();
+        if (foundFunction) {
+            core.info(`Function found: ${foundFunction.id}, ${foundFunction.name}`);
+            core.endGroup();
 
-        return foundFunction;
+            return foundFunction;
+        }
+    } else {
+        const functionsResult = await getFunctions(functionService, inputs);
+        if (functionsResult.length == 1) {
+            let result = functionsResult[0];
+            core.info(`Function found: ${result.id}, ${result.name}`);
+
+            return result;
+        }
     }
 
     try {

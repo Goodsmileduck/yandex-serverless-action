@@ -29417,12 +29417,22 @@ function handleOperationError(operation) {
 function getOrCreateFunction(functionService, inputs) {
     return __awaiter(this, void 0, void 0, function* () {
         _actions_core__WEBPACK_IMPORTED_MODULE_1__.startGroup("Get or Create function");
-        // Check if Function exist
-        const foundFunction = yield functionService.get({ functionId: inputs.functionId });
-        if (foundFunction) {
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function found: ${foundFunction.id}, ${foundFunction.name}`);
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.endGroup();
-            return foundFunction;
+        if (inputs.functionId) {
+            // Check if Function exist
+            const foundFunction = yield functionService.get({ functionId: inputs.functionId });
+            if (foundFunction) {
+                _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function found: ${foundFunction.id}, ${foundFunction.name}`);
+                _actions_core__WEBPACK_IMPORTED_MODULE_1__.endGroup();
+                return foundFunction;
+            }
+        }
+        else {
+            const functionsResult = yield getFunctions(functionService, inputs);
+            if (functionsResult.length == 1) {
+                let result = functionsResult[0];
+                _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function found: ${result.id}, ${result.name}`);
+                return result;
+            }
         }
         try {
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Create Function ${inputs.folderId}/${inputs.functionName}`);
