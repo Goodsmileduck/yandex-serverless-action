@@ -29361,7 +29361,7 @@ function run() {
                 environment: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("environment", { required: false }),
                 bucket: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("bucket", { required: false }),
             };
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Parsed inputs");
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Function inputs set");
             const fileContents = yield zipDirectory(inputs);
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Buffer size: ${Buffer.byteLength(fileContents)}b`);
             // OAuth token
@@ -29369,7 +29369,7 @@ function run() {
             const session = new yandex_cloud__WEBPACK_IMPORTED_MODULE_0__.Session({ oauthToken: inputs.token });
             const functionService = new yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_3__.FunctionService(session);
             if (inputs.bucket) {
-                _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Upload to bucket ${inputs.bucket}`);
+                _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Upload to bucket: "${inputs.bucket}"`);
                 const storageService = new yandex_cloud_lib_storage_v1beta__WEBPACK_IMPORTED_MODULE_4__.StorageService(session);
                 let storageObject = yandex_cloud_lib_storage_v1beta__WEBPACK_IMPORTED_MODULE_4__.StorageObject.fromBuffer(inputs.bucket, "serverless_object", fileContents);
                 yield storageService.putObject(storageObject);
@@ -29394,15 +29394,15 @@ function handleOperationError(operation) {
 }
 function getFunctionById(functionService, inputs) {
     return __awaiter(this, void 0, void 0, function* () {
-        _actions_core__WEBPACK_IMPORTED_MODULE_1__.startGroup("Get function by ID");
+        _actions_core__WEBPACK_IMPORTED_MODULE_1__.startGroup(`Get function by ID: "${inputs.functionId}"`);
         try {
             // Check if Function exist
             const foundFunction = yield functionService.get({ functionId: inputs.functionId });
             if (foundFunction) {
-                _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function found: ${foundFunction.id}, ${foundFunction.name}`);
+                _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function found: "${foundFunction.id} (${foundFunction.name})"`);
                 return foundFunction;
             }
-            throw Error("Function not found");
+            throw Error("Failed to find Function by id");
         }
         finally {
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.endGroup();
@@ -29416,9 +29416,9 @@ function createFunctionVersion(functionService, targetFunction, fileContents, in
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function ${inputs.folderId}/${inputs.functionId}`);
             //convert variables
             let memory = Number.parseFloat(inputs.memory);
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Parsed memory ${memory}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Parsed memory: "${memory}"`);
             let executionTimeout = Number.parseFloat(inputs.executionTimeout);
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Parsed timeout ${executionTimeout}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Parsed timeout: "${executionTimeout}"`);
             let request = {
                 functionId: targetFunction.id,
                 runtime: inputs.runtime,
@@ -29431,7 +29431,7 @@ function createFunctionVersion(functionService, targetFunction, fileContents, in
             };
             //get from bucket if supplied
             if (inputs.bucket) {
-                _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`From bucket ${inputs.bucket}`);
+                _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`From bucket: "${inputs.bucket}"`);
                 request.package = {
                     bucketName: inputs.bucket,
                     objectName: "serverless_object"
@@ -29471,7 +29471,7 @@ function zipDirectory(inputs) {
             let buffer = outputStreamBuffer.getContents();
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Buffer object created");
             if (!buffer)
-                throw Error("Buffer get error");
+                throw Error("Failed to initialize Buffer");
             return buffer;
         }
         finally {
@@ -29483,13 +29483,15 @@ function parseIgnoreGlobPatterns(ignoreString) {
     var result = [];
     var patterns = ignoreString.split(",");
     patterns.forEach(pattern => {
-        result.push(pattern);
+        //only not empty patterns
+        if ((pattern === null || pattern === void 0 ? void 0 : pattern.length) > 0)
+            result.push(pattern);
     });
-    _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`SourceIgnoreObject: ${JSON.stringify(result)}`);
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Source ignore pattern: "${JSON.stringify(result)}"`);
     return result;
 }
 function parseEnvironmentVariables(env) {
-    _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Environment string: ${env}`);
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Environment string: "${env}"`);
     let envObject = {};
     var kvs = env.split(",");
     kvs.forEach(kv => {
@@ -29498,7 +29500,7 @@ function parseEnvironmentVariables(env) {
         let value = res[1];
         envObject[key] = value;
     });
-    _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`EnvObject: ${JSON.stringify(envObject)}`);
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`EnvObject: "${JSON.stringify(envObject)}"`);
     return envObject;
 }
 run();

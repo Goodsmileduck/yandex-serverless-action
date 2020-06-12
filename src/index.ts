@@ -43,7 +43,7 @@ async function run() {
             bucket: core.getInput("bucket", { required: false }),
         };
 
-        core.info("Parsed inputs");
+        core.info("Function inputs set");
 
         const fileContents = await zipDirectory(inputs);
 
@@ -55,7 +55,7 @@ async function run() {
         const functionService = new FunctionService(session);
 
         if (inputs.bucket) {
-            core.info(`Upload to bucket ${inputs.bucket}`);
+            core.info(`Upload to bucket: "${inputs.bucket}"`);
 
             const storageService = new StorageService(session);
 
@@ -85,19 +85,19 @@ function handleOperationError(operation: Operation) {
 }
 
 async function getFunctionById(functionService: FunctionService, inputs: ActionInputs) {
-    core.startGroup("Get function by ID");
+    core.startGroup(`Get function by ID: "${inputs.functionId}"`);
 
     try {
         // Check if Function exist
         const foundFunction = await functionService.get({ functionId: inputs.functionId });
 
         if (foundFunction) {
-            core.info(`Function found: ${foundFunction.id}, ${foundFunction.name}`);
+            core.info(`Function found: "${foundFunction.id} (${foundFunction.name})"`);
 
             return foundFunction;
         }
 
-        throw Error("Function not found");
+        throw Error("Failed to find Function by id");
     }
     finally {
         core.endGroup();
@@ -111,10 +111,10 @@ async function createFunctionVersion(functionService: FunctionService, targetFun
 
         //convert variables
         let memory = Number.parseFloat(inputs.memory);
-        core.info(`Parsed memory ${memory}`);
+        core.info(`Parsed memory: "${memory}"`);
 
         let executionTimeout = Number.parseFloat(inputs.executionTimeout);
-        core.info(`Parsed timeout ${executionTimeout}`);
+        core.info(`Parsed timeout: "${executionTimeout}"`);
 
         let request: CreateFunctionVersionRequest = {
             functionId: targetFunction.id,
@@ -129,7 +129,7 @@ async function createFunctionVersion(functionService: FunctionService, targetFun
 
         //get from bucket if supplied
         if (inputs.bucket) {
-            core.info(`From bucket ${inputs.bucket}`);
+            core.info(`From bucket: "${inputs.bucket}"`);
 
             request.package = {
                 bucketName: inputs.bucket,
@@ -179,7 +179,7 @@ async function zipDirectory(inputs: ActionInputs) {
         core.info("Buffer object created");
 
         if (!buffer)
-            throw Error("Buffer get error");
+            throw Error("Failed to initialize Buffer");
 
         return buffer;
     }
@@ -193,15 +193,17 @@ function parseIgnoreGlobPatterns(ignoreString: string): string[] {
     var patterns = ignoreString.split(",");
 
     patterns.forEach(pattern => {
-        result.push(pattern);
+        //only not empty patterns
+        if (pattern?.length > 0)
+            result.push(pattern);
     });
 
-    core.info(`SourceIgnoreObject: ${JSON.stringify(result)}`)
+    core.info(`Source ignore pattern: "${JSON.stringify(result)}"`);
     return result;
 }
 
 function parseEnvironmentVariables(env: string): { [s: string]: string } {
-    core.info(`Environment string: ${env}`);
+    core.info(`Environment string: "${env}"`);
 
     let envObject = {};
     var kvs = env.split(",");
@@ -212,7 +214,7 @@ function parseEnvironmentVariables(env: string): { [s: string]: string } {
         envObject[key] = value;
     });
 
-    core.info(`EnvObject: ${JSON.stringify(envObject)}`)
+    core.info(`EnvObject: "${JSON.stringify(envObject)}"`);
     return envObject;
 }
 
