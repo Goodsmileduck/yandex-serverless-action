@@ -8,7 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - uses: goodsmileduck/yandex-serverless-action@javascript
+    - name: Deploy from Folder
+      uses: goodsmileduck/yandex-serverless-action@javascript
       with:
         source: 'example'
         function_id: 'd4ecd1ho7t9ieugt9q58'
@@ -19,7 +20,8 @@ jobs:
         environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
         token: ${{ secrets.TOKEN }}
         execution_timeout: '600'
-    - uses: goodsmileduck/yandex-serverless-action@javascript
+    - name: Deploy from Bucket
+      uses: goodsmileduck/yandex-serverless-action@javascript
       with:
         source: 'example'
         function_name: 'hello-bucket'

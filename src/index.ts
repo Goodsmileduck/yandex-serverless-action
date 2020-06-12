@@ -82,8 +82,7 @@ async function getFunctions(functionService: FunctionService, inputs: ActionInpu
     try {
         let functionListResponse = await functionService.list({
             folderId: inputs.folderId,
-            pageSize: undefined,
-            filter: inputs.functionName
+            //filter: inputs.functionName
         });
 
         if (!functionListResponse.functions)
@@ -129,6 +128,7 @@ async function getOrCreateFunction(functionService: FunctionService, inputs: Act
         if (functionsResult.length == 1) {
             let result = functionsResult[0];
             core.info(`Function found: ${result.id}, ${result.name}`);
+            core.endGroup();
 
             return result;
         }

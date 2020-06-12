@@ -29390,8 +29390,6 @@ function getFunctions(functionService, inputs) {
         try {
             let functionListResponse = yield functionService.list({
                 folderId: inputs.folderId,
-                pageSize: undefined,
-                filter: inputs.functionName
             });
             if (!functionListResponse.functions)
                 throw Error(`Functions get error (undefined response)`);
@@ -29431,6 +29429,7 @@ function getOrCreateFunction(functionService, inputs) {
             if (functionsResult.length == 1) {
                 let result = functionsResult[0];
                 _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function found: ${result.id}, ${result.name}`);
+                _actions_core__WEBPACK_IMPORTED_MODULE_1__.endGroup();
                 return result;
             }
         }
