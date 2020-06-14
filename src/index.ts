@@ -11,7 +11,6 @@ import archiver from "archiver";
 
 type ActionInputs = {
     functionId: string,
-    folderId: string,
     token: string,
     runtime: string,
     entrypoint: string,
@@ -35,7 +34,6 @@ async function run() {
     try {
         let inputs: ActionInputs = {
             functionId: core.getInput("function_id", { required: true }),
-            folderId: core.getInput("folder_id", { required: true }),
             token: core.getInput("token", { required: true }),
             runtime: core.getInput("runtime", { required: true }),
             entrypoint: core.getInput("entrypoint", { required: true }),
@@ -121,7 +119,7 @@ async function getFunctionById(functionService: FunctionService, inputs: ActionI
 async function createFunctionVersion(functionService: FunctionService, targetFunction: Function, fileContents: Buffer, inputs: ActionInputs) {
     core.startGroup("Create function version");
     try {
-        core.info(`Function ${inputs.folderId}/${inputs.functionId}`);
+        core.info(`Function ${inputs.functionId}`);
 
         //convert variables
         let memory = Number.parseFloat(inputs.memory);

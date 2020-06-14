@@ -9,10 +9,6 @@ inputs:
     description: 'Function Id in Yandex Cloud'
     default: ''
     required: true
-  folder_id:
-    description: 'Folder Id in Yandex Cloud'
-    default: ''
-    required: true
   runtime:
     description: 'Runtime for function'
     default: ''

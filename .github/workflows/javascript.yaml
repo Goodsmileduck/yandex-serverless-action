@@ -14,7 +14,6 @@ jobs:
         source: 'example'
         exclude: 'exclude.txt'
         function_id: 'd4ecd1ho7t9ieugt9q58'
-        folder_id: ${{ secrets.FOLDER_ID }}
         runtime: 'python37'
         entrypoint: handler.hello
         environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
@@ -25,7 +24,6 @@ jobs:
       with:
         source: 'example'
         function_id: 'd4e9st6hefepjghdv67s'
-        folder_id: ${{ secrets.FOLDER_ID }}
         runtime: 'python37'
         entrypoint: handler.hello
         environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true

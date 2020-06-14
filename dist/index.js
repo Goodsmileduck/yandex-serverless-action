@@ -29354,7 +29354,6 @@ function run() {
         try {
             let inputs = {
                 functionId: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("function_id", { required: true }),
-                folderId: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("folder_id", { required: true }),
                 token: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("token", { required: true }),
                 runtime: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("runtime", { required: true }),
                 entrypoint: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("entrypoint", { required: true }),
@@ -29424,7 +29423,7 @@ function createFunctionVersion(functionService, targetFunction, fileContents, in
     return __awaiter(this, void 0, void 0, function* () {
         _actions_core__WEBPACK_IMPORTED_MODULE_1__.startGroup("Create function version");
         try {
-            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function ${inputs.folderId}/${inputs.functionId}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Function ${inputs.functionId}`);
             //convert variables
             let memory = Number.parseFloat(inputs.memory);
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Parsed memory: "${memory}"`);
