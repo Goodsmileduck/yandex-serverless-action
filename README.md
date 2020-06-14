@@ -2,6 +2,8 @@
 
 This action uploads code to object storage and update Serverless funstion in Yandex cloud.
 
+![yandex-serverless-action](https://github.com/Goodsmileduck/yandex-serverless-action/workflows/yandex-serverless-action/badge.svg)
+
 ## Usage
 
 1. Create serverless function in Yandex Cloud and copy function id
