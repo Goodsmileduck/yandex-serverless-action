@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - uses: goodsmileduck/yandex-serverless-action@v0.1.0
+    - uses: goodsmileduck/yandex-serverless-action@v1
       with:
         token: ${{ secrets.TOKEN }}
         bucket: ${{ secrets.BUCKET }}
@@ -60,7 +60,7 @@ The following settings must be passed as variables as shown in the example. Sens
 ## Zip and and deploy folder
 
 ```yaml
-- uses: goodsmileduck/yandex-serverless-action@master
+- uses: goodsmileduck/yandex-serverless-action@v1
   with:
     token: ${{ secrets.TOKEN }}
     function_id: 'my_function_id'
@@ -74,7 +74,7 @@ The following settings must be passed as variables as shown in the example. Sens
 ## Zip and upload to bucket and deploy
 
 ```yaml
-- uses: goodsmileduck/yandex-serverless-action@master
+- uses: goodsmileduck/yandex-serverless-action@v1
   with:
     token: ${{ secrets.TOKEN }}
     bucket: ${{ secrets.BUCKET }}
@@ -89,7 +89,7 @@ The following settings must be passed as variables as shown in the example. Sens
 ## Exclude pattern from archive
 
 ```yaml
-- uses: goodsmileduck/yandex-serverless-action@master
+- uses: goodsmileduck/yandex-serverless-action@v1
   with:
     token: ${{ secrets.TOKEN }}
     function_id: 'my_function_id'
