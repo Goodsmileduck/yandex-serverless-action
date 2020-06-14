@@ -1,8 +1,11 @@
+<p align="center">
+![yandex-serverless-action](https://github.com/Goodsmileduck/yandex-serverless-action/workflows/yandex-serverless-action/badge.svg)
+</p>
 # Yandex serverless action
 
 This action uploads code to object storage and update Serverless funstion in Yandex cloud.
 
-![yandex-serverless-action](https://github.com/Goodsmileduck/yandex-serverless-action/workflows/yandex-serverless-action/badge.svg)
+
 
 ## Usage
 
