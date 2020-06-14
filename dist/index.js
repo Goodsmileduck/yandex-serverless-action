@@ -29344,6 +29344,10 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 
 
+/**
+ * Generated Object name
+ */
+var bucketObjectName;
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         _actions_core__WEBPACK_IMPORTED_MODULE_1__.setCommandEcho(true);
@@ -29369,9 +29373,16 @@ function run() {
             const session = new yandex_cloud__WEBPACK_IMPORTED_MODULE_0__.Session({ oauthToken: inputs.token });
             const functionService = new yandex_cloud_api_serverless_functions_v1__WEBPACK_IMPORTED_MODULE_3__.FunctionService(session);
             if (inputs.bucket) {
-                _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Upload to bucket: "${inputs.bucket}"`);
+                const { GITHUB_SHA } = process.env;
+                if (!GITHUB_SHA) {
+                    _actions_core__WEBPACK_IMPORTED_MODULE_1__.setFailed("Missing GITHUB_SHA");
+                    return;
+                }
+                //setting object name
+                bucketObjectName = `${inputs.functionId}/${GITHUB_SHA}.zip`;
+                _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Upload to bucket: "${inputs.bucket}/${bucketObjectName}"`);
                 const storageService = new yandex_cloud_lib_storage_v1beta__WEBPACK_IMPORTED_MODULE_4__.StorageService(session);
-                let storageObject = yandex_cloud_lib_storage_v1beta__WEBPACK_IMPORTED_MODULE_4__.StorageObject.fromBuffer(inputs.bucket, "serverless_object", fileContents);
+                let storageObject = yandex_cloud_lib_storage_v1beta__WEBPACK_IMPORTED_MODULE_4__.StorageObject.fromBuffer(inputs.bucket, bucketObjectName, fileContents);
                 yield storageService.putObject(storageObject);
             }
             const functionObject = yield getFunctionById(functionService, inputs);
@@ -29434,7 +29445,7 @@ function createFunctionVersion(functionService, targetFunction, fileContents, in
                 _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`From bucket: "${inputs.bucket}"`);
                 request.package = {
                     bucketName: inputs.bucket,
-                    objectName: "serverless_object"
+                    objectName: bucketObjectName
                 };
             }
             else

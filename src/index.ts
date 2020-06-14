@@ -24,6 +24,11 @@ type ActionInputs = {
     bucket: string
 };
 
+/**
+ * Generated Object name
+ */
+var bucketObjectName: string;
+
 async function run() {
     core.setCommandEcho(true);
 
@@ -55,11 +60,20 @@ async function run() {
         const functionService = new FunctionService(session);
 
         if (inputs.bucket) {
-            core.info(`Upload to bucket: "${inputs.bucket}"`);
+            const { GITHUB_SHA } = process.env;
+
+            if (!GITHUB_SHA) {
+                core.setFailed("Missing GITHUB_SHA");
+                return;
+            }
+
+            //setting object name
+            bucketObjectName = `${inputs.functionId}/${GITHUB_SHA}.zip`;
+            core.info(`Upload to bucket: "${inputs.bucket}/${bucketObjectName}"`);
 
             const storageService = new StorageService(session);
 
-            let storageObject = StorageObject.fromBuffer(inputs.bucket, "serverless_object", fileContents);
+            let storageObject = StorageObject.fromBuffer(inputs.bucket, bucketObjectName, fileContents);
             await storageService.putObject(storageObject);
         }
 
@@ -133,7 +147,7 @@ async function createFunctionVersion(functionService: FunctionService, targetFun
 
             request.package = {
                 bucketName: inputs.bucket,
-                objectName: "serverless_object"
+                objectName: bucketObjectName
             };
         }
         else
