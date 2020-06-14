@@ -29356,7 +29356,7 @@ function run() {
                 entrypoint: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("entrypoint", { required: true }),
                 memory: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("memory", { required: false }),
                 source: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("source", { required: false }),
-                sourceIgnore: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("source_ignore", { required: false }),
+                sourceIgnore: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("exclude", { required: false }),
                 executionTimeout: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("execution_timeout", { required: false }),
                 environment: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("environment", { required: false }),
                 bucket: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("bucket", { required: false }),

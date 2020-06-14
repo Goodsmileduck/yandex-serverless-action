@@ -36,7 +36,7 @@ async function run() {
             entrypoint: core.getInput("entrypoint", { required: true }),
             memory: core.getInput("memory", { required: false }),
             source: core.getInput("source", { required: false }),
-            sourceIgnore: core.getInput("source_ignore", { required: false }),
+            sourceIgnore: core.getInput("exclude", { required: false }),
             executionTimeout: core.getInput("execution_timeout", { required: false }),
             environment: core.getInput("environment", { required: false }),
 

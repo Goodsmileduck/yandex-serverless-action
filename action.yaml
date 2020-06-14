@@ -25,7 +25,7 @@ inputs:
     description: 'Source directory for cloud function in git repo'
     default: '.'
     required: false
-  source_exclude:
+  exclude:
     description: 'Exclude patterns (comma separated) for source directory'
     default: ''
     required: false
