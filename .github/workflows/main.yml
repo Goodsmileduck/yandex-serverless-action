@@ -30,6 +30,7 @@ jobs:
         exclude: 'exclude.txt'
         function_id: 'd4e9st6hefepjghdv67s'
         runtime: 'python37'
+        memory: 256
         entrypoint: handler.hello
         environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
-        execution_timeout: '600'
+        execution_timeout: '5'
