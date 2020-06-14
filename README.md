@@ -1,7 +1,5 @@
-<p align="center">
-![yandex-serverless-action](https://github.com/Goodsmileduck/yandex-serverless-action/workflows/yandex-serverless-action/badge.svg)
-</p>
 # Yandex serverless action
+
 <p align="left">
   <a href="https://github.com/Goodsmileduck/yandex-serverless-action/actions?query=workflow%3Ayandex-serverless-action"><img alt="yandex-serverless-action" src="https://github.com/Goodsmileduck/yandex-serverless-action/workflows/yandex-serverless-action/badge.svgg"></a> 
 </p>
