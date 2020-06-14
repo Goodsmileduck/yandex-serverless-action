@@ -4,7 +4,7 @@ This action uploads code to object storage and update Serverless funstion in Yan
 
 ## Usage
 
-1. Create serverless function in Yandex Cloud
+1. Create serverless function in Yandex Cloud and copy function id
 2. Create s3 bucket and static api keys for access (if you want to upload code to bucket or if it's bigger than 5Mb)
 3. Add workflow to your repo
 
@@ -21,36 +21,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - uses: goodsmileduck/yandex-serverless-action@master
+    - uses: goodsmileduck/yandex-serverless-action@v0.1.0
       with:
-        function_id: 'handler'
+        token: ${{ secrets.TOKEN }}
+        bucket: ${{ secrets.BUCKET }}
+        function_id: '234awefq12345g24f'
         runtime: 'python37'
         memory: '256'
         entrypoint: 'main.handler'
         environment: DEBUG=True,COUNT=1
-        token: ${{ secrets.TOKEN }}
         source: '.'
-        bucket: ${{ secrets.BUCKET }}
-        access_key: ${{ secrets.ACCESS_KEY }}
-        secret_key: ${{ secrets.SECRET_KEY }}
         exclude: 'src/'
 ```
 
 ## Configuration
 
-The following settings must be passed as variables as shown in the example. Sensitive information, especially `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, should be [set as encrypted secrets](https://help.github.com/en/articles/virtual-environments-for-github-actions#creating-and-using-secrets-encrypted-variables) — otherwise, they'll be public to anyone browsing your repository.
+The following settings must be passed as variables as shown in the example. Sensitive information, especially `token`  should be [set as encrypted secrets](https://help.github.com/en/articles/virtual-environments-for-github-actions#creating-and-using-secrets-encrypted-variables) — otherwise, they'll be public to anyone browsing your repository.
 
 | Key | Value | Suggested Type | Required |
 | ------------- | ------------- | ------------- | ------------- |
 | `token` | Token for access to yc cli. To get token visit [link](https://oauth.yandex.ru/authorize?response_type=token&client_id=1a6990aa636648e9b2ef855fa7bec2fb) | `secret` | **Yes** |
-| `function_id` | The name of function in Yandex Cloud | `env` | **Yes** |
+| `function_id` | The ID of function in Yandex Cloud | `env` | **Yes** |
 | `runtime` | Runtime for function in Yandex Cloud | `env` | **Yes** |
 | `entrypoint` | Entry point of function | `env` | **Yes** |
 | `environment` | Comma-separated list with env variables | `env` | No |
-| `memory` | Memory limit in megabytes for function in Yandex Cloud Default value is `128m`| `env` | No |
-| `execution_timeout` | Execution timeout in seconds for function in Yandex Cloud. Default value is `5s` | `env` | No |
-| `access_key` | Your Access Key. Required if code bigger than 5Mb | `secret` | No |
-| `secret_key` | Your Secret Access Key. Required if code bigger than 5Mb | `secret` | No |
+| `memory` | Memory limit in `megabytes` for function in Yandex Cloud Default value is `128`| `env` | No |
+| `execution_timeout` | Execution timeout in seconds for function in Yandex Cloud. Default value is `5` | `env` | No |
 | `bucket` | The name of the bucket you're syncing to. For example, `bucket`. If wasn't set action will try to upload code directly. Required if code bigger than 5Mb| `secret` | No |
 | `source` | The local directory you wish to upload. For example, `./public`. Defaults to the root of your repository (`.`) if not provided. | `env` | No |
 | `exclude` | Explicitly exclude the specified files. Defaults empty if not provided. | `env` | No |
@@ -66,12 +62,12 @@ The following settings must be passed as variables as shown in the example. Sens
 ```yaml
 - uses: goodsmileduck/yandex-serverless-action@master
   with:
-    function_id: 'my_function'
+    token: ${{ secrets.TOKEN }}
+    function_id: 'my_function_id'
     runtime: 'python37'
     memory: '256'
     entrypoint: 'main.handler'
     environment: DEBUG=True,COUNT=1
-    token: ${{ secrets.TOKEN }}
     source: '.'
 ```
 
@@ -80,16 +76,14 @@ The following settings must be passed as variables as shown in the example. Sens
 ```yaml
 - uses: goodsmileduck/yandex-serverless-action@master
   with:
-    function_id: 'my_function'
+    token: ${{ secrets.TOKEN }}
+    bucket: ${{ secrets.BUCKET }}
+    function_id: 'my_function_id'
     runtime: 'python37'
     memory: '256'
     entrypoint: 'main.handler'
     environment: DEBUG=True,COUNT=1
-    token: ${{ secrets.TOKEN }}
     source: './src'
-    bucket: ${{ secrets.BUCKET }}
-    access_key: ${{ secrets.ACCESS_KEY }}
-    secret_key: ${{ secrets.SECRET_KEY }}
 ```
 
 ## Exclude pattern from archive
@@ -97,12 +91,12 @@ The following settings must be passed as variables as shown in the example. Sens
 ```yaml
 - uses: goodsmileduck/yandex-serverless-action@master
   with:
-    function_id: 'my_function'
+    token: ${{ secrets.TOKEN }}
+    function_id: 'my_function_id'
     runtime: 'python37'
     memory: '256'
     entrypoint: 'main.handler'
-    environment: DEBUG=True,COUNT=1
-    token: ${{ secrets.TOKEN }}
+    environment: DEBUG=True,COUNT=2
     source: './public'
     exclude: '*.txt'
 ```

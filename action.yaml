@@ -5,10 +5,18 @@ branding:
   color: 'blue'
   icon: 'upload-cloud'
 inputs:
+  token:
+    description: 'OAuth token'
+    default: ''
+    required: false
   function_id:
     description: 'Function Id in Yandex Cloud'
     default: ''
     required: true
+  bucket:
+    description: 'S3 bucket name for code'
+    default: ''
+    required: false
   runtime:
     description: 'Runtime for function'
     default: ''
@@ -27,24 +35,17 @@ inputs:
     required: false
   memory:
     description: 'Memory in Mb'
-    default: '256'
+    default: '128'
     required: false
   environment:
     description: 'Env variables for function'
     default: ''
     required: false
-  token:
-    description: 'OAuth token'
-    default: ''
-    required: false
   execution_timeout:
     description: 'Execution timeout'
-    default: '60'
+    default: '5'
     required: false
-  bucket:
-    description: 'S3 bucket name for code'
-    default: ''
-    required: false
+
 runs:
   using: 'node12'
   main: 'dist/index.js'

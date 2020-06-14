@@ -1,4 +1,4 @@
-name: CI
+name: yandex-serverless-action
 
 on:
   push:
@@ -6,22 +6,30 @@ on:
       - master
 
 jobs:
-  deploy:
+  deploy_one_by_one:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - uses: goodsmileduck/yandex-serverless-action@dev
-      env:
-        SOURCE_DIR: 'example'
-        ZONE: 'ru-central1-a'
-        FUNCTION_NAME: 'hello'
-        RUNTIME: 'python37'
-        ENTRYPOINT: handler.hello
-        ENVIRONMENT: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
-        CLOUD_ID: ${{ secrets.CLOUD_ID }}
-        FOLDER_ID: ${{ secrets.FOLDER_ID }}
-        TOKEN: ${{ secrets.TOKEN }}
-#        BUCKET: ${{ secrets.BUCKET }}
-        ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
-        SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        EXCLUDE: '*.txt'
+    - name: Deploy from Folder
+      uses: goodsmileduck/yandex-serverless-action@javascript
+      with:
+        token: ${{ secrets.TOKEN }}
+        source: 'example'
+        exclude: 'exclude.txt'
+        function_id: 'd4ecd1ho7t9ieugt9q58'
+        runtime: 'python37'
+        entrypoint: handler.hello
+        environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
+        execution_timeout: '600'
+    - name: Deploy from Bucket
+      uses: goodsmileduck/yandex-serverless-action@javascript
+      with:
+        token: ${{ secrets.TOKEN }}
+        bucket: 'yandex-functions'
+        source: 'example'
+        exclude: 'exclude.txt'
+        function_id: 'd4e9st6hefepjghdv67s'
+        runtime: 'python37'
+        entrypoint: handler.hello
+        environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
+        execution_timeout: '600'
