@@ -1,4 +1,4 @@
-name: 'Yandex Serverless Action deploy'
+name: 'Yandex Serverless function deploy'
 description: 'Deploy new version of Serverless function to Yandex Cloud'
 author: 'Goodsmileduck'
 branding:
