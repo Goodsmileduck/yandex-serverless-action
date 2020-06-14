@@ -1,0 +1,36 @@
+{
+  "name": "yandex-serverless-action",
+  "version": "0.0.1",
+  "description": "This action deploys new version of serverless function to Yandex Cloud.",
+  "main": "dist/index.js",
+  "scripts": {
+    "lint": "eslint src/index.ts",
+    "package": "ncc build src/index.ts -o dist",
+    "test": "eslint src/index.ts && jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Goodsmileduck/yandex-serverless-action.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Goodsmileduck/yandex-serverless-action/issues"
+  },
+  "homepage": "https://github.com/Goodsmileduck/yandex-serverless-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.4",
+    "archiver": "^4.0.1",
+    "grpc": "^1.24.3",
+    "yandex-cloud": "vermilion/nodejs-sdk#master",
+    "stream-buffers": "^3.0.2"
+  },
+  "devDependencies": {
+    "@types/stream-buffers": "^3.0.3",
+    "@types/archiver": "^3.1.0",
+    "@zeit/ncc": "^0.22.3",
+    "jest": "^26.0.1",
+    "typescript": "^3.9.5"
+  }
+}
