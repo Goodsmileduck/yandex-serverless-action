@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Deploy from Folder
-      uses: goodsmileduck/yandex-serverless-action@javascript
+      uses: goodsmileduck/yandex-serverless-action@master
       with:
         token: ${{ secrets.TOKEN }}
         source: 'example'
@@ -22,7 +22,7 @@ jobs:
         environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
         execution_timeout: '600'
     - name: Deploy from Bucket
-      uses: goodsmileduck/yandex-serverless-action@javascript
+      uses: goodsmileduck/yandex-serverless-action@master
       with:
         token: ${{ secrets.TOKEN }}
         bucket: 'yandex-functions'
