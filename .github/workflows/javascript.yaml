@@ -32,5 +32,3 @@ jobs:
         token: ${{ secrets.TOKEN }}
         execution_timeout: '600'
         bucket: 'yandex-functions'
-        access_key: ${{ secrets.ACCESS_KEY }}
-        secret_key: ${{ secrets.SECRET_KEY }}
