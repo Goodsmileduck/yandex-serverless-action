@@ -180,6 +180,7 @@ async function zipDirectory(inputs: ActionInputs) {
         await archive
             .glob("**", {
                 cwd: inputs.source,
+                dot: true,
                 ignore: parseIgnoreGlobPatterns(inputs.sourceIgnore)
             })
             .finalize();
