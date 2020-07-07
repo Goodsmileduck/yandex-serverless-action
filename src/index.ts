@@ -19,7 +19,7 @@ type ActionInputs = {
     sourceIgnore: string,
     executionTimeout: string,
     environment: string,
-
+    serviceAccount: string,
     bucket: string
 };
 
@@ -42,7 +42,7 @@ async function run() {
             sourceIgnore: core.getInput("exclude", { required: false }),
             executionTimeout: core.getInput("execution_timeout", { required: false }),
             environment: core.getInput("environment", { required: false }),
-
+            serviceAccount: core.getInput("service_account", { required: false }),
             bucket: core.getInput("bucket", { required: false }),
         };
 
@@ -135,6 +135,7 @@ async function createFunctionVersion(functionService: FunctionService, targetFun
             resources: {
                 memory: memory ? Long.fromNumber(memory * 1024 * 1024) : undefined,
             },
+            serviceAccountId: inputs.serviceAccount,
             environment: parseEnvironmentVariables(inputs.environment),
             executionTimeout: { seconds: Long.fromNumber(executionTimeout) }
         };

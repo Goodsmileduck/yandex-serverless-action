@@ -45,6 +45,11 @@ inputs:
     description: 'Execution timeout'
     default: '5'
     required: false
+  service_account:
+    description: 'Service account for function'
+    default: ''
+    required: false
+
 
 runs:
   using: 'node12'

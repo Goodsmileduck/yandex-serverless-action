@@ -1,4 +1,4 @@
-name: yandex-serverless-action
+name: test-master
 
 on:
   push:
