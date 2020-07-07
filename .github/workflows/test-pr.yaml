@@ -1,0 +1,36 @@
+name: test-pr
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  deploy_one_by_one:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Deploy from Folder
+      uses: goodsmileduck/yandex-serverless-action@master
+      with:
+        token: ${{ secrets.TOKEN }}
+        source: 'example'
+        exclude: 'exclude.txt'
+        function_id: 'd4ecd1ho7t9ieugt9q58'
+        runtime: 'python37'
+        entrypoint: handler.hello
+        environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
+        execution_timeout: '600'
+    - name: Deploy from Bucket
+      uses: goodsmileduck/yandex-serverless-action@master
+      with:
+        token: ${{ secrets.TOKEN }}
+        bucket: 'yandex-functions'
+        source: 'example'
+        exclude: 'exclude.txt'
+        function_id: 'd4e9st6hefepjghdv67s'
+        runtime: 'python37'
+        memory: 256
+        entrypoint: handler.hello
+        environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
+        execution_timeout: '5'
