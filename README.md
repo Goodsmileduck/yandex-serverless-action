@@ -4,14 +4,14 @@
   <a href="https://github.com/Goodsmileduck/yandex-serverless-action/actions?query=workflow%3Ayandex-serverless-action"><img alt="yandex-serverless-action" src="https://github.com/Goodsmileduck/yandex-serverless-action/workflows/yandex-serverless-action/badge.svg"></a> 
 </p>
 
-This action uploads code to object storage and update Serverless funstion in Yandex cloud.
+This action uploads code to object storage and update Serverless function in Yandex cloud.
 
 
 
 ## Usage
 
 1. Create serverless function in Yandex Cloud and copy function id
-2. Create s3 bucket and static api keys for access (if you want to upload code to bucket or if it's bigger than 5Mb)
+2. Create s3 bucket (optional, if you want to upload code to bucket or if it's bigger than 5Mb)
 3. Add workflow to your repo
 
 ## `workflow.yml` Example
