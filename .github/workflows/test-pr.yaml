@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Deploy from Folder
-      uses: .
+      uses: goodsmileduck/yandex-serverless-action@${{ github.sha }}
       with:
         token: ${{ secrets.TOKEN }}
         source: 'example'
@@ -22,7 +22,7 @@ jobs:
         environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
         execution_timeout: '600'
     - name: Deploy from Bucket
-      uses: .
+      uses: goodsmileduck/yandex-serverless-action@${{ github.sha }}
       with:
         token: ${{ secrets.TOKEN }}
         bucket: 'yandex-functions'
@@ -35,7 +35,7 @@ jobs:
         environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
         execution_timeout: '5'
     - name: Deploy with SA
-      uses: .
+      uses: goodsmileduck/yandex-serverless-action@${{ github.sha }}
       with:
         token: ${{ secrets.TOKEN }}
         bucket: 'yandex-functions'
