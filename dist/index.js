@@ -4136,7 +4136,7 @@ exports.default = crc32;
 
 module.exports = Service;
 
-var util = __webpack_require__(729);
+var util = __webpack_require__(941);
 
 // Extends EventEmitter
 (Service.prototype = Object.create(util.EventEmitter.prototype)).constructor = Service;
@@ -20140,10 +20140,10 @@ function patch (fs) {
 var binary = __webpack_require__(707);
 var path = __webpack_require__(622);
 var binding_path =
-    __webpack_require__.ab + "/src/node/extension_binary/node-v72-darwin-x64-unknown/grpc_node.node";
+    __webpack_require__.ab + "/src/node/extension_binary/node-v72-linux-x64-glibc/grpc_node.node";
 var binding;
 try {
-  binding = __webpack_require__(591);
+  binding = __webpack_require__(729);
 } catch (e) {
   let fs = __webpack_require__(747);
   let searchPath = __webpack_require__.ab + "extension_binary";
@@ -30465,7 +30465,7 @@ protobuf.Reader       = __webpack_require__(468);
 protobuf.BufferReader = __webpack_require__(585);
 
 // Utility
-protobuf.util         = __webpack_require__(729);
+protobuf.util         = __webpack_require__(941);
 protobuf.rpc          = __webpack_require__(693);
 protobuf.roots        = __webpack_require__(162);
 protobuf.configure    = configure;
@@ -34615,7 +34615,7 @@ function indexOf(xs, x) {
 
 module.exports = Reader;
 
-var util      = __webpack_require__(729);
+var util      = __webpack_require__(941);
 
 var BufferReader; // cyclic
 
@@ -36656,7 +36656,7 @@ module.exports = BufferWriter;
 var Writer = __webpack_require__(613);
 (BufferWriter.prototype = Object.create(Writer.prototype)).constructor = BufferWriter;
 
-var util = __webpack_require__(729);
+var util = __webpack_require__(941);
 
 /**
  * Constructs a new buffer writer instance.
@@ -37456,7 +37456,7 @@ module.exports = __webpack_require__(271).default;
 
 module.exports = LongBits;
 
-var util = __webpack_require__(729);
+var util = __webpack_require__(941);
 
 /**
  * Constructs new long bits.
@@ -42091,7 +42091,7 @@ module.exports = BufferReader;
 var Reader = __webpack_require__(468);
 (BufferReader.prototype = Object.create(Reader.prototype)).constructor = BufferReader;
 
-var util = __webpack_require__(729);
+var util = __webpack_require__(941);
 
 /**
  * Constructs a new buffer reader instance.
@@ -42143,12 +42143,7 @@ BufferReader._configure();
 /* 588 */,
 /* 589 */,
 /* 590 */,
-/* 591 */
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-module.exports = require(__webpack_require__.ab + "src/node/extension_binary/node-v72-darwin-x64-unknown/grpc_node.node")
-
-/***/ }),
+/* 591 */,
 /* 592 */,
 /* 593 */,
 /* 594 */
@@ -46034,7 +46029,7 @@ protobuf.Root._configure(protobuf.Type, protobuf.parse, protobuf.common);
 
 module.exports = Writer;
 
-var util      = __webpack_require__(729);
+var util      = __webpack_require__(941);
 
 var BufferWriter; // cyclic
 
@@ -47538,7 +47533,7 @@ module.exports = Extract
  * Various utility functions.
  * @namespace
  */
-var util = module.exports = __webpack_require__(729);
+var util = module.exports = __webpack_require__(941);
 
 var roots = __webpack_require__(162);
 
@@ -49257,7 +49252,7 @@ try {
 
 module.exports = Message;
 
-var util = __webpack_require__(729);
+var util = __webpack_require__(941);
 
 /**
  * Constructs a new message instance.
@@ -52129,424 +52124,9 @@ exports.getLastListener = getLastListener;
 /* 727 */,
 /* 728 */,
 /* 729 */
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
+/***/ (function(module, __unusedexports, __webpack_require__) {
 
-"use strict";
-
-var util = exports;
-
-// used to return a Promise where callback is omitted
-util.asPromise = __webpack_require__(189);
-
-// converts to / from base64 encoded strings
-util.base64 = __webpack_require__(492);
-
-// base class of rpc.Service
-util.EventEmitter = __webpack_require__(45);
-
-// float handling accross browsers
-util.float = __webpack_require__(111);
-
-// requires modules optionally and hides the call from bundlers
-util.inquire = __webpack_require__(358);
-
-// converts to / from utf8 encoded strings
-util.utf8 = __webpack_require__(120);
-
-// provides a node-like buffer pool in the browser
-util.pool = __webpack_require__(391);
-
-// utility to work with the low and high bits of a 64 bit value
-util.LongBits = __webpack_require__(540);
-
-// global object reference
-util.global = typeof window !== "undefined" && window
-           || typeof global !== "undefined" && global
-           || typeof self   !== "undefined" && self
-           || this; // eslint-disable-line no-invalid-this
-
-/**
- * An immuable empty array.
- * @memberof util
- * @type {Array.<*>}
- * @const
- */
-util.emptyArray = Object.freeze ? Object.freeze([]) : /* istanbul ignore next */ []; // used on prototypes
-
-/**
- * An immutable empty object.
- * @type {Object}
- * @const
- */
-util.emptyObject = Object.freeze ? Object.freeze({}) : /* istanbul ignore next */ {}; // used on prototypes
-
-/**
- * Whether running within node or not.
- * @memberof util
- * @type {boolean}
- * @const
- */
-util.isNode = Boolean(util.global.process && util.global.process.versions && util.global.process.versions.node);
-
-/**
- * Tests if the specified value is an integer.
- * @function
- * @param {*} value Value to test
- * @returns {boolean} `true` if the value is an integer
- */
-util.isInteger = Number.isInteger || /* istanbul ignore next */ function isInteger(value) {
-    return typeof value === "number" && isFinite(value) && Math.floor(value) === value;
-};
-
-/**
- * Tests if the specified value is a string.
- * @param {*} value Value to test
- * @returns {boolean} `true` if the value is a string
- */
-util.isString = function isString(value) {
-    return typeof value === "string" || value instanceof String;
-};
-
-/**
- * Tests if the specified value is a non-null object.
- * @param {*} value Value to test
- * @returns {boolean} `true` if the value is a non-null object
- */
-util.isObject = function isObject(value) {
-    return value && typeof value === "object";
-};
-
-/**
- * Checks if a property on a message is considered to be present.
- * This is an alias of {@link util.isSet}.
- * @function
- * @param {Object} obj Plain object or message instance
- * @param {string} prop Property name
- * @returns {boolean} `true` if considered to be present, otherwise `false`
- */
-util.isset =
-
-/**
- * Checks if a property on a message is considered to be present.
- * @param {Object} obj Plain object or message instance
- * @param {string} prop Property name
- * @returns {boolean} `true` if considered to be present, otherwise `false`
- */
-util.isSet = function isSet(obj, prop) {
-    var value = obj[prop];
-    if (value != null && obj.hasOwnProperty(prop)) // eslint-disable-line eqeqeq, no-prototype-builtins
-        return typeof value !== "object" || (Array.isArray(value) ? value.length : Object.keys(value).length) > 0;
-    return false;
-};
-
-/**
- * Any compatible Buffer instance.
- * This is a minimal stand-alone definition of a Buffer instance. The actual type is that exported by node's typings.
- * @interface Buffer
- * @extends Uint8Array
- */
-
-/**
- * Node's Buffer class if available.
- * @type {Constructor<Buffer>}
- */
-util.Buffer = (function() {
-    try {
-        var Buffer = util.inquire("buffer").Buffer;
-        // refuse to use non-node buffers if not explicitly assigned (perf reasons):
-        return Buffer.prototype.utf8Write ? Buffer : /* istanbul ignore next */ null;
-    } catch (e) {
-        /* istanbul ignore next */
-        return null;
-    }
-})();
-
-// Internal alias of or polyfull for Buffer.from.
-util._Buffer_from = null;
-
-// Internal alias of or polyfill for Buffer.allocUnsafe.
-util._Buffer_allocUnsafe = null;
-
-/**
- * Creates a new buffer of whatever type supported by the environment.
- * @param {number|number[]} [sizeOrArray=0] Buffer size or number array
- * @returns {Uint8Array|Buffer} Buffer
- */
-util.newBuffer = function newBuffer(sizeOrArray) {
-    /* istanbul ignore next */
-    return typeof sizeOrArray === "number"
-        ? util.Buffer
-            ? util._Buffer_allocUnsafe(sizeOrArray)
-            : new util.Array(sizeOrArray)
-        : util.Buffer
-            ? util._Buffer_from(sizeOrArray)
-            : typeof Uint8Array === "undefined"
-                ? sizeOrArray
-                : new Uint8Array(sizeOrArray);
-};
-
-/**
- * Array implementation used in the browser. `Uint8Array` if supported, otherwise `Array`.
- * @type {Constructor<Uint8Array>}
- */
-util.Array = typeof Uint8Array !== "undefined" ? Uint8Array /* istanbul ignore next */ : Array;
-
-/**
- * Any compatible Long instance.
- * This is a minimal stand-alone definition of a Long instance. The actual type is that exported by long.js.
- * @interface Long
- * @property {number} low Low bits
- * @property {number} high High bits
- * @property {boolean} unsigned Whether unsigned or not
- */
-
-/**
- * Long.js's Long class if available.
- * @type {Constructor<Long>}
- */
-util.Long = /* istanbul ignore next */ util.global.dcodeIO && /* istanbul ignore next */ util.global.dcodeIO.Long
-         || /* istanbul ignore next */ util.global.Long
-         || util.inquire("long");
-
-/**
- * Regular expression used to verify 2 bit (`bool`) map keys.
- * @type {RegExp}
- * @const
- */
-util.key2Re = /^true|false|0|1$/;
-
-/**
- * Regular expression used to verify 32 bit (`int32` etc.) map keys.
- * @type {RegExp}
- * @const
- */
-util.key32Re = /^-?(?:0|[1-9][0-9]*)$/;
-
-/**
- * Regular expression used to verify 64 bit (`int64` etc.) map keys.
- * @type {RegExp}
- * @const
- */
-util.key64Re = /^(?:[\\x00-\\xff]{8}|-?(?:0|[1-9][0-9]*))$/;
-
-/**
- * Converts a number or long to an 8 characters long hash string.
- * @param {Long|number} value Value to convert
- * @returns {string} Hash
- */
-util.longToHash = function longToHash(value) {
-    return value
-        ? util.LongBits.from(value).toHash()
-        : util.LongBits.zeroHash;
-};
-
-/**
- * Converts an 8 characters long hash string to a long or number.
- * @param {string} hash Hash
- * @param {boolean} [unsigned=false] Whether unsigned or not
- * @returns {Long|number} Original value
- */
-util.longFromHash = function longFromHash(hash, unsigned) {
-    var bits = util.LongBits.fromHash(hash);
-    if (util.Long)
-        return util.Long.fromBits(bits.lo, bits.hi, unsigned);
-    return bits.toNumber(Boolean(unsigned));
-};
-
-/**
- * Merges the properties of the source object into the destination object.
- * @memberof util
- * @param {Object.<string,*>} dst Destination object
- * @param {Object.<string,*>} src Source object
- * @param {boolean} [ifNotSet=false] Merges only if the key is not already set
- * @returns {Object.<string,*>} Destination object
- */
-function merge(dst, src, ifNotSet) { // used by converters
-    for (var keys = Object.keys(src), i = 0; i < keys.length; ++i)
-        if (dst[keys[i]] === undefined || !ifNotSet)
-            dst[keys[i]] = src[keys[i]];
-    return dst;
-}
-
-util.merge = merge;
-
-/**
- * Converts the first character of a string to lower case.
- * @param {string} str String to convert
- * @returns {string} Converted string
- */
-util.lcFirst = function lcFirst(str) {
-    return str.charAt(0).toLowerCase() + str.substring(1);
-};
-
-/**
- * Creates a custom error constructor.
- * @memberof util
- * @param {string} name Error name
- * @returns {Constructor<Error>} Custom error constructor
- */
-function newError(name) {
-
-    function CustomError(message, properties) {
-
-        if (!(this instanceof CustomError))
-            return new CustomError(message, properties);
-
-        // Error.call(this, message);
-        // ^ just returns a new error instance because the ctor can be called as a function
-
-        Object.defineProperty(this, "message", { get: function() { return message; } });
-
-        /* istanbul ignore next */
-        if (Error.captureStackTrace) // node
-            Error.captureStackTrace(this, CustomError);
-        else
-            Object.defineProperty(this, "stack", { value: new Error().stack || "" });
-
-        if (properties)
-            merge(this, properties);
-    }
-
-    (CustomError.prototype = Object.create(Error.prototype)).constructor = CustomError;
-
-    Object.defineProperty(CustomError.prototype, "name", { get: function() { return name; } });
-
-    CustomError.prototype.toString = function toString() {
-        return this.name + ": " + this.message;
-    };
-
-    return CustomError;
-}
-
-util.newError = newError;
-
-/**
- * Constructs a new protocol error.
- * @classdesc Error subclass indicating a protocol specifc error.
- * @memberof util
- * @extends Error
- * @template T extends Message<T>
- * @constructor
- * @param {string} message Error message
- * @param {Object.<string,*>} [properties] Additional properties
- * @example
- * try {
- *     MyMessage.decode(someBuffer); // throws if required fields are missing
- * } catch (e) {
- *     if (e instanceof ProtocolError && e.instance)
- *         console.log("decoded so far: " + JSON.stringify(e.instance));
- * }
- */
-util.ProtocolError = newError("ProtocolError");
-
-/**
- * So far decoded message instance.
- * @name util.ProtocolError#instance
- * @type {Message<T>}
- */
-
-/**
- * A OneOf getter as returned by {@link util.oneOfGetter}.
- * @typedef OneOfGetter
- * @type {function}
- * @returns {string|undefined} Set field name, if any
- */
-
-/**
- * Builds a getter for a oneof's present field name.
- * @param {string[]} fieldNames Field names
- * @returns {OneOfGetter} Unbound getter
- */
-util.oneOfGetter = function getOneOf(fieldNames) {
-    var fieldMap = {};
-    for (var i = 0; i < fieldNames.length; ++i)
-        fieldMap[fieldNames[i]] = 1;
-
-    /**
-     * @returns {string|undefined} Set field name, if any
-     * @this Object
-     * @ignore
-     */
-    return function() { // eslint-disable-line consistent-return
-        for (var keys = Object.keys(this), i = keys.length - 1; i > -1; --i)
-            if (fieldMap[keys[i]] === 1 && this[keys[i]] !== undefined && this[keys[i]] !== null)
-                return keys[i];
-    };
-};
-
-/**
- * A OneOf setter as returned by {@link util.oneOfSetter}.
- * @typedef OneOfSetter
- * @type {function}
- * @param {string|undefined} value Field name
- * @returns {undefined}
- */
-
-/**
- * Builds a setter for a oneof's present field name.
- * @param {string[]} fieldNames Field names
- * @returns {OneOfSetter} Unbound setter
- */
-util.oneOfSetter = function setOneOf(fieldNames) {
-
-    /**
-     * @param {string} name Field name
-     * @returns {undefined}
-     * @this Object
-     * @ignore
-     */
-    return function(name) {
-        for (var i = 0; i < fieldNames.length; ++i)
-            if (fieldNames[i] !== name)
-                delete this[fieldNames[i]];
-    };
-};
-
-/**
- * Default conversion options used for {@link Message#toJSON} implementations.
- *
- * These options are close to proto3's JSON mapping with the exception that internal types like Any are handled just like messages. More precisely:
- *
- * - Longs become strings
- * - Enums become string keys
- * - Bytes become base64 encoded strings
- * - (Sub-)Messages become plain objects
- * - Maps become plain objects with all string keys
- * - Repeated fields become arrays
- * - NaN and Infinity for float and double fields become strings
- *
- * @type {IConversionOptions}
- * @see https://developers.google.com/protocol-buffers/docs/proto3?hl=en#json
- */
-util.toJSONOptions = {
-    longs: String,
-    enums: String,
-    bytes: String,
-    json: true
-};
-
-// Sets up buffer utility according to the environment (called in index-minimal)
-util._configure = function() {
-    var Buffer = util.Buffer;
-    /* istanbul ignore if */
-    if (!Buffer) {
-        util._Buffer_from = util._Buffer_allocUnsafe = null;
-        return;
-    }
-    // because node 4.x buffers are incompatible & immutable
-    // see: https://github.com/dcodeIO/protobuf.js/pull/665
-    util._Buffer_from = Buffer.from !== Uint8Array.from && Buffer.from ||
-        /* istanbul ignore next */
-        function Buffer_from(value, encoding) {
-            return new Buffer(value, encoding);
-        };
-    util._Buffer_allocUnsafe = Buffer.allocUnsafe ||
-        /* istanbul ignore next */
-        function Buffer_allocUnsafe(size) {
-            return new Buffer(size);
-        };
-};
-
+module.exports = require(__webpack_require__.ab + "src/node/extension_binary/node-v72-linux-x64-glibc/grpc_node.node")
 
 /***/ }),
 /* 730 */,
@@ -52706,7 +52286,7 @@ module.exports = require("fs");
 /* 750 */
 /***/ (function(module) {
 
-module.exports = {"_from":"grpc@^1.24.3","_id":"grpc@1.24.3","_inBundle":false,"_integrity":"sha512-EDemzuZTfhM0hgrXqC4PtR76O3t+hTIYJYR5vgiW0yt2WJqo4mhxUqZUirzUQz34Psz7dbLp38C6Cl7Ij2vXRQ==","_location":"/grpc","_phantomChildren":{},"_requested":{"type":"range","registry":true,"raw":"grpc@^1.24.3","name":"grpc","escapedName":"grpc","rawSpec":"^1.24.3","saveSpec":null,"fetchSpec":"^1.24.3"},"_requiredBy":["/","/yandex-cloud"],"_resolved":"https://registry.npmjs.org/grpc/-/grpc-1.24.3.tgz","_shasum":"92efe28dfc1250dca179b8133e40b4f2341473d9","_spec":"grpc@^1.24.3","_where":"/Users/sergey/Sources/OpenSource/yandex-serverless-action","author":{"name":"Google Inc."},"binary":{"module_name":"grpc_node","module_path":"src/node/extension_binary/{node_abi}-{platform}-{arch}-{libc}","host":"https://node-precompiled-binaries.grpc.io/","remote_path":"{name}/v{version}","package_name":"{node_abi}-{platform}-{arch}-{libc}.tar.gz"},"bugs":{"url":"https://github.com/grpc/grpc-node/issues"},"bundleDependencies":false,"contributors":[{"name":"Michael Lumish","email":"mlumish@google.com"}],"dependencies":{"@types/bytebuffer":"^5.0.40","lodash.camelcase":"^4.3.0","lodash.clone":"^4.5.0","nan":"^2.13.2","node-pre-gyp":"^0.15.0","protobufjs":"^5.0.3"},"deprecated":false,"description":"gRPC Library for Node","devDependencies":{"body-parser":"^1.15.2","electron-mocha":"^3.1.1","express":"^4.14.0","google-protobuf":"^3.0.0","istanbul":"^0.4.4","lodash":"^4.17.4","minimist":"^1.1.0","node-forge":"^0.7.5","poisson-process":"^0.2.1"},"directories":{"lib":"src"},"engines":{"node":">=4"},"files":["LICENSE","README.md","deps/grpc/etc/","index.js","index.d.ts","src/*.js","ext/*.{cc,h}","deps/grpc/include/grpc/**/*.h","deps/grpc/src/core/**/*.{c,cc,h}","deps/grpc/src/boringssl/err_data.c","deps/grpc/third_party/abseil-cpp/absl/**/*.{h,hh,inc}","deps/grpc/third_party/boringssl/crypto/**/*.{c,cc,h}","deps/grpc/third_party/boringssl/include/**/*.{c,cc,h}","deps/grpc/third_party/boringssl/ssl/**/*.{c,cc,h}","deps/grpc/third_party/boringssl/third_party/**/*.{c,h}","deps/grpc/third_party/nanopb/*.{c,cc,h}","deps/grpc/third_party/upb/**/*.{c,h,inc}","deps/grpc/third_party/zlib/**/*.{c,cc,h}","deps/grpc/third_party/address_sorting/**/*.{c,h}","deps/grpc/third_party/cares/**/*.{c,h}","binding.gyp"],"homepage":"https://grpc.io/","jshintConfig":{"bitwise":true,"curly":true,"eqeqeq":true,"esnext":true,"freeze":true,"immed":true,"indent":2,"latedef":"nofunc","maxlen":80,"mocha":true,"newcap":true,"node":true,"noarg":true,"quotmark":"single","strict":true,"trailing":true,"undef":true,"unused":"vars"},"license":"Apache-2.0","main":"index.js","name":"grpc","repository":{"type":"git","url":"git+https://github.com/grpc/grpc-node.git"},"scripts":{"build":"node-pre-gyp build","coverage":"istanbul cover ./node_modules/.bin/_mocha test","electron-build":"node-pre-gyp configure build --runtime=electron --disturl=https://atom.io/download/atom-shell","install":"node-pre-gyp install --fallback-to-build --library=static_library","prepack":"git submodule update --init --recursive && npm install"},"typings":"index.d.ts","version":"1.24.3"};
+module.exports = {"_from":"grpc@^1.24.3","_id":"grpc@1.24.3","_inBundle":false,"_integrity":"sha512-EDemzuZTfhM0hgrXqC4PtR76O3t+hTIYJYR5vgiW0yt2WJqo4mhxUqZUirzUQz34Psz7dbLp38C6Cl7Ij2vXRQ==","_location":"/grpc","_phantomChildren":{},"_requested":{"type":"range","registry":true,"raw":"grpc@^1.24.3","name":"grpc","escapedName":"grpc","rawSpec":"^1.24.3","saveSpec":null,"fetchSpec":"^1.24.3"},"_requiredBy":["/","/yandex-cloud"],"_resolved":"https://registry.npmjs.org/grpc/-/grpc-1.24.3.tgz","_shasum":"92efe28dfc1250dca179b8133e40b4f2341473d9","_spec":"grpc@^1.24.3","_where":"/home/parallels/Sources/yandex-serverless-action","author":{"name":"Google Inc."},"binary":{"module_name":"grpc_node","module_path":"src/node/extension_binary/{node_abi}-{platform}-{arch}-{libc}","host":"https://node-precompiled-binaries.grpc.io/","remote_path":"{name}/v{version}","package_name":"{node_abi}-{platform}-{arch}-{libc}.tar.gz"},"bugs":{"url":"https://github.com/grpc/grpc-node/issues"},"bundleDependencies":false,"contributors":[{"name":"Michael Lumish","email":"mlumish@google.com"}],"dependencies":{"@types/bytebuffer":"^5.0.40","lodash.camelcase":"^4.3.0","lodash.clone":"^4.5.0","nan":"^2.13.2","node-pre-gyp":"^0.15.0","protobufjs":"^5.0.3"},"deprecated":false,"description":"gRPC Library for Node","devDependencies":{"body-parser":"^1.15.2","electron-mocha":"^3.1.1","express":"^4.14.0","google-protobuf":"^3.0.0","istanbul":"^0.4.4","lodash":"^4.17.4","minimist":"^1.1.0","node-forge":"^0.7.5","poisson-process":"^0.2.1"},"directories":{"lib":"src"},"engines":{"node":">=4"},"files":["LICENSE","README.md","deps/grpc/etc/","index.js","index.d.ts","src/*.js","ext/*.{cc,h}","deps/grpc/include/grpc/**/*.h","deps/grpc/src/core/**/*.{c,cc,h}","deps/grpc/src/boringssl/err_data.c","deps/grpc/third_party/abseil-cpp/absl/**/*.{h,hh,inc}","deps/grpc/third_party/boringssl/crypto/**/*.{c,cc,h}","deps/grpc/third_party/boringssl/include/**/*.{c,cc,h}","deps/grpc/third_party/boringssl/ssl/**/*.{c,cc,h}","deps/grpc/third_party/boringssl/third_party/**/*.{c,h}","deps/grpc/third_party/nanopb/*.{c,cc,h}","deps/grpc/third_party/upb/**/*.{c,h,inc}","deps/grpc/third_party/zlib/**/*.{c,cc,h}","deps/grpc/third_party/address_sorting/**/*.{c,h}","deps/grpc/third_party/cares/**/*.{c,h}","binding.gyp"],"homepage":"https://grpc.io/","jshintConfig":{"bitwise":true,"curly":true,"eqeqeq":true,"esnext":true,"freeze":true,"immed":true,"indent":2,"latedef":"nofunc","maxlen":80,"mocha":true,"newcap":true,"node":true,"noarg":true,"quotmark":"single","strict":true,"trailing":true,"undef":true,"unused":"vars"},"license":"Apache-2.0","main":"index.js","name":"grpc","repository":{"type":"git","url":"git+https://github.com/grpc/grpc-node.git"},"scripts":{"build":"node-pre-gyp build","coverage":"istanbul cover ./node_modules/.bin/_mocha test","electron-build":"node-pre-gyp configure build --runtime=electron --disturl=https://atom.io/download/atom-shell","install":"node-pre-gyp install --fallback-to-build --library=static_library","prepack":"git submodule update --init --recursive && npm install"},"typings":"index.d.ts","version":"1.24.3"};
 
 /***/ }),
 /* 751 */,
@@ -72917,7 +72497,427 @@ module.exports = (function() {
 /***/ }),
 /* 939 */,
 /* 940 */,
-/* 941 */,
+/* 941 */
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var util = exports;
+
+// used to return a Promise where callback is omitted
+util.asPromise = __webpack_require__(189);
+
+// converts to / from base64 encoded strings
+util.base64 = __webpack_require__(492);
+
+// base class of rpc.Service
+util.EventEmitter = __webpack_require__(45);
+
+// float handling accross browsers
+util.float = __webpack_require__(111);
+
+// requires modules optionally and hides the call from bundlers
+util.inquire = __webpack_require__(358);
+
+// converts to / from utf8 encoded strings
+util.utf8 = __webpack_require__(120);
+
+// provides a node-like buffer pool in the browser
+util.pool = __webpack_require__(391);
+
+// utility to work with the low and high bits of a 64 bit value
+util.LongBits = __webpack_require__(540);
+
+// global object reference
+util.global = typeof window !== "undefined" && window
+           || typeof global !== "undefined" && global
+           || typeof self   !== "undefined" && self
+           || this; // eslint-disable-line no-invalid-this
+
+/**
+ * An immuable empty array.
+ * @memberof util
+ * @type {Array.<*>}
+ * @const
+ */
+util.emptyArray = Object.freeze ? Object.freeze([]) : /* istanbul ignore next */ []; // used on prototypes
+
+/**
+ * An immutable empty object.
+ * @type {Object}
+ * @const
+ */
+util.emptyObject = Object.freeze ? Object.freeze({}) : /* istanbul ignore next */ {}; // used on prototypes
+
+/**
+ * Whether running within node or not.
+ * @memberof util
+ * @type {boolean}
+ * @const
+ */
+util.isNode = Boolean(util.global.process && util.global.process.versions && util.global.process.versions.node);
+
+/**
+ * Tests if the specified value is an integer.
+ * @function
+ * @param {*} value Value to test
+ * @returns {boolean} `true` if the value is an integer
+ */
+util.isInteger = Number.isInteger || /* istanbul ignore next */ function isInteger(value) {
+    return typeof value === "number" && isFinite(value) && Math.floor(value) === value;
+};
+
+/**
+ * Tests if the specified value is a string.
+ * @param {*} value Value to test
+ * @returns {boolean} `true` if the value is a string
+ */
+util.isString = function isString(value) {
+    return typeof value === "string" || value instanceof String;
+};
+
+/**
+ * Tests if the specified value is a non-null object.
+ * @param {*} value Value to test
+ * @returns {boolean} `true` if the value is a non-null object
+ */
+util.isObject = function isObject(value) {
+    return value && typeof value === "object";
+};
+
+/**
+ * Checks if a property on a message is considered to be present.
+ * This is an alias of {@link util.isSet}.
+ * @function
+ * @param {Object} obj Plain object or message instance
+ * @param {string} prop Property name
+ * @returns {boolean} `true` if considered to be present, otherwise `false`
+ */
+util.isset =
+
+/**
+ * Checks if a property on a message is considered to be present.
+ * @param {Object} obj Plain object or message instance
+ * @param {string} prop Property name
+ * @returns {boolean} `true` if considered to be present, otherwise `false`
+ */
+util.isSet = function isSet(obj, prop) {
+    var value = obj[prop];
+    if (value != null && obj.hasOwnProperty(prop)) // eslint-disable-line eqeqeq, no-prototype-builtins
+        return typeof value !== "object" || (Array.isArray(value) ? value.length : Object.keys(value).length) > 0;
+    return false;
+};
+
+/**
+ * Any compatible Buffer instance.
+ * This is a minimal stand-alone definition of a Buffer instance. The actual type is that exported by node's typings.
+ * @interface Buffer
+ * @extends Uint8Array
+ */
+
+/**
+ * Node's Buffer class if available.
+ * @type {Constructor<Buffer>}
+ */
+util.Buffer = (function() {
+    try {
+        var Buffer = util.inquire("buffer").Buffer;
+        // refuse to use non-node buffers if not explicitly assigned (perf reasons):
+        return Buffer.prototype.utf8Write ? Buffer : /* istanbul ignore next */ null;
+    } catch (e) {
+        /* istanbul ignore next */
+        return null;
+    }
+})();
+
+// Internal alias of or polyfull for Buffer.from.
+util._Buffer_from = null;
+
+// Internal alias of or polyfill for Buffer.allocUnsafe.
+util._Buffer_allocUnsafe = null;
+
+/**
+ * Creates a new buffer of whatever type supported by the environment.
+ * @param {number|number[]} [sizeOrArray=0] Buffer size or number array
+ * @returns {Uint8Array|Buffer} Buffer
+ */
+util.newBuffer = function newBuffer(sizeOrArray) {
+    /* istanbul ignore next */
+    return typeof sizeOrArray === "number"
+        ? util.Buffer
+            ? util._Buffer_allocUnsafe(sizeOrArray)
+            : new util.Array(sizeOrArray)
+        : util.Buffer
+            ? util._Buffer_from(sizeOrArray)
+            : typeof Uint8Array === "undefined"
+                ? sizeOrArray
+                : new Uint8Array(sizeOrArray);
+};
+
+/**
+ * Array implementation used in the browser. `Uint8Array` if supported, otherwise `Array`.
+ * @type {Constructor<Uint8Array>}
+ */
+util.Array = typeof Uint8Array !== "undefined" ? Uint8Array /* istanbul ignore next */ : Array;
+
+/**
+ * Any compatible Long instance.
+ * This is a minimal stand-alone definition of a Long instance. The actual type is that exported by long.js.
+ * @interface Long
+ * @property {number} low Low bits
+ * @property {number} high High bits
+ * @property {boolean} unsigned Whether unsigned or not
+ */
+
+/**
+ * Long.js's Long class if available.
+ * @type {Constructor<Long>}
+ */
+util.Long = /* istanbul ignore next */ util.global.dcodeIO && /* istanbul ignore next */ util.global.dcodeIO.Long
+         || /* istanbul ignore next */ util.global.Long
+         || util.inquire("long");
+
+/**
+ * Regular expression used to verify 2 bit (`bool`) map keys.
+ * @type {RegExp}
+ * @const
+ */
+util.key2Re = /^true|false|0|1$/;
+
+/**
+ * Regular expression used to verify 32 bit (`int32` etc.) map keys.
+ * @type {RegExp}
+ * @const
+ */
+util.key32Re = /^-?(?:0|[1-9][0-9]*)$/;
+
+/**
+ * Regular expression used to verify 64 bit (`int64` etc.) map keys.
+ * @type {RegExp}
+ * @const
+ */
+util.key64Re = /^(?:[\\x00-\\xff]{8}|-?(?:0|[1-9][0-9]*))$/;
+
+/**
+ * Converts a number or long to an 8 characters long hash string.
+ * @param {Long|number} value Value to convert
+ * @returns {string} Hash
+ */
+util.longToHash = function longToHash(value) {
+    return value
+        ? util.LongBits.from(value).toHash()
+        : util.LongBits.zeroHash;
+};
+
+/**
+ * Converts an 8 characters long hash string to a long or number.
+ * @param {string} hash Hash
+ * @param {boolean} [unsigned=false] Whether unsigned or not
+ * @returns {Long|number} Original value
+ */
+util.longFromHash = function longFromHash(hash, unsigned) {
+    var bits = util.LongBits.fromHash(hash);
+    if (util.Long)
+        return util.Long.fromBits(bits.lo, bits.hi, unsigned);
+    return bits.toNumber(Boolean(unsigned));
+};
+
+/**
+ * Merges the properties of the source object into the destination object.
+ * @memberof util
+ * @param {Object.<string,*>} dst Destination object
+ * @param {Object.<string,*>} src Source object
+ * @param {boolean} [ifNotSet=false] Merges only if the key is not already set
+ * @returns {Object.<string,*>} Destination object
+ */
+function merge(dst, src, ifNotSet) { // used by converters
+    for (var keys = Object.keys(src), i = 0; i < keys.length; ++i)
+        if (dst[keys[i]] === undefined || !ifNotSet)
+            dst[keys[i]] = src[keys[i]];
+    return dst;
+}
+
+util.merge = merge;
+
+/**
+ * Converts the first character of a string to lower case.
+ * @param {string} str String to convert
+ * @returns {string} Converted string
+ */
+util.lcFirst = function lcFirst(str) {
+    return str.charAt(0).toLowerCase() + str.substring(1);
+};
+
+/**
+ * Creates a custom error constructor.
+ * @memberof util
+ * @param {string} name Error name
+ * @returns {Constructor<Error>} Custom error constructor
+ */
+function newError(name) {
+
+    function CustomError(message, properties) {
+
+        if (!(this instanceof CustomError))
+            return new CustomError(message, properties);
+
+        // Error.call(this, message);
+        // ^ just returns a new error instance because the ctor can be called as a function
+
+        Object.defineProperty(this, "message", { get: function() { return message; } });
+
+        /* istanbul ignore next */
+        if (Error.captureStackTrace) // node
+            Error.captureStackTrace(this, CustomError);
+        else
+            Object.defineProperty(this, "stack", { value: new Error().stack || "" });
+
+        if (properties)
+            merge(this, properties);
+    }
+
+    (CustomError.prototype = Object.create(Error.prototype)).constructor = CustomError;
+
+    Object.defineProperty(CustomError.prototype, "name", { get: function() { return name; } });
+
+    CustomError.prototype.toString = function toString() {
+        return this.name + ": " + this.message;
+    };
+
+    return CustomError;
+}
+
+util.newError = newError;
+
+/**
+ * Constructs a new protocol error.
+ * @classdesc Error subclass indicating a protocol specifc error.
+ * @memberof util
+ * @extends Error
+ * @template T extends Message<T>
+ * @constructor
+ * @param {string} message Error message
+ * @param {Object.<string,*>} [properties] Additional properties
+ * @example
+ * try {
+ *     MyMessage.decode(someBuffer); // throws if required fields are missing
+ * } catch (e) {
+ *     if (e instanceof ProtocolError && e.instance)
+ *         console.log("decoded so far: " + JSON.stringify(e.instance));
+ * }
+ */
+util.ProtocolError = newError("ProtocolError");
+
+/**
+ * So far decoded message instance.
+ * @name util.ProtocolError#instance
+ * @type {Message<T>}
+ */
+
+/**
+ * A OneOf getter as returned by {@link util.oneOfGetter}.
+ * @typedef OneOfGetter
+ * @type {function}
+ * @returns {string|undefined} Set field name, if any
+ */
+
+/**
+ * Builds a getter for a oneof's present field name.
+ * @param {string[]} fieldNames Field names
+ * @returns {OneOfGetter} Unbound getter
+ */
+util.oneOfGetter = function getOneOf(fieldNames) {
+    var fieldMap = {};
+    for (var i = 0; i < fieldNames.length; ++i)
+        fieldMap[fieldNames[i]] = 1;
+
+    /**
+     * @returns {string|undefined} Set field name, if any
+     * @this Object
+     * @ignore
+     */
+    return function() { // eslint-disable-line consistent-return
+        for (var keys = Object.keys(this), i = keys.length - 1; i > -1; --i)
+            if (fieldMap[keys[i]] === 1 && this[keys[i]] !== undefined && this[keys[i]] !== null)
+                return keys[i];
+    };
+};
+
+/**
+ * A OneOf setter as returned by {@link util.oneOfSetter}.
+ * @typedef OneOfSetter
+ * @type {function}
+ * @param {string|undefined} value Field name
+ * @returns {undefined}
+ */
+
+/**
+ * Builds a setter for a oneof's present field name.
+ * @param {string[]} fieldNames Field names
+ * @returns {OneOfSetter} Unbound setter
+ */
+util.oneOfSetter = function setOneOf(fieldNames) {
+
+    /**
+     * @param {string} name Field name
+     * @returns {undefined}
+     * @this Object
+     * @ignore
+     */
+    return function(name) {
+        for (var i = 0; i < fieldNames.length; ++i)
+            if (fieldNames[i] !== name)
+                delete this[fieldNames[i]];
+    };
+};
+
+/**
+ * Default conversion options used for {@link Message#toJSON} implementations.
+ *
+ * These options are close to proto3's JSON mapping with the exception that internal types like Any are handled just like messages. More precisely:
+ *
+ * - Longs become strings
+ * - Enums become string keys
+ * - Bytes become base64 encoded strings
+ * - (Sub-)Messages become plain objects
+ * - Maps become plain objects with all string keys
+ * - Repeated fields become arrays
+ * - NaN and Infinity for float and double fields become strings
+ *
+ * @type {IConversionOptions}
+ * @see https://developers.google.com/protocol-buffers/docs/proto3?hl=en#json
+ */
+util.toJSONOptions = {
+    longs: String,
+    enums: String,
+    bytes: String,
+    json: true
+};
+
+// Sets up buffer utility according to the environment (called in index-minimal)
+util._configure = function() {
+    var Buffer = util.Buffer;
+    /* istanbul ignore if */
+    if (!Buffer) {
+        util._Buffer_from = util._Buffer_allocUnsafe = null;
+        return;
+    }
+    // because node 4.x buffers are incompatible & immutable
+    // see: https://github.com/dcodeIO/protobuf.js/pull/665
+    util._Buffer_from = Buffer.from !== Uint8Array.from && Buffer.from ||
+        /* istanbul ignore next */
+        function Buffer_from(value, encoding) {
+            return new Buffer(value, encoding);
+        };
+    util._Buffer_allocUnsafe = Buffer.allocUnsafe ||
+        /* istanbul ignore next */
+        function Buffer_allocUnsafe(size) {
+            return new Buffer(size);
+        };
+};
+
+
+/***/ }),
 /* 942 */,
 /* 943 */
 /***/ (function(module) {
