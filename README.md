@@ -50,9 +50,11 @@ The following settings must be passed as variables as shown in the example. Sens
 | `function_id` | The ID of function in Yandex Cloud | `env` | **Yes** |
 | `runtime` | Runtime for function in Yandex Cloud | `env` | **Yes** |
 | `entrypoint` | Entry point of function | `env` | **Yes** |
+| `description` | Description for function | `env` | No |
 | `environment` | Comma-separated list with env variables | `env` | No |
 | `memory` | Memory limit in `megabytes` for function in Yandex Cloud Default value is `128`| `env` | No |
 | `execution_timeout` | Execution timeout in seconds for function in Yandex Cloud. Default value is `5` | `env` | No |
+| `service_account` | Service account id. | `secret` | No |
 | `bucket` | The name of the bucket you're syncing to. For example, `bucket`. If wasn't set action will try to upload code directly. Required if code bigger than 5Mb| `secret` | No |
 | `source` | The local directory you wish to upload. For example, `./public`. Defaults to the root of your repository (`.`) if not provided. | `env` | No |
 | `exclude` | Explicitly exclude the specified files. Defaults empty if not provided. | `env` | No |
@@ -62,6 +64,7 @@ The following settings must be passed as variables as shown in the example. Sens
   - [Zip and and deploy folder](#zip-and-and-deploy-folder)
   - [Zip and upload to bucket and deploy](#zip-and-upload-to-bucket-and-deploy)
   - [Exclude pattern from archive](#Exclude-pattern-from-archive)
+  - [Set service account id](#Set-service-account-id)
 
 ## Zip and and deploy folder
 
@@ -82,6 +85,7 @@ The following settings must be passed as variables as shown in the example. Sens
 ```yaml
 - uses: goodsmileduck/yandex-serverless-action@v1
   with:
+    description: "Function without bucket"
     token: ${{ secrets.TOKEN }}
     bucket: ${{ secrets.BUCKET }}
     function_id: 'my_function_id'
@@ -107,6 +111,20 @@ The following settings must be passed as variables as shown in the example. Sens
     exclude: '*.txt'
 ```
 
+## Set service account id
+
+```yaml
+- uses: goodsmileduck/yandex-serverless-action@v1
+  with:
+    token: ${{ secrets.TOKEN }}
+    function_id: 'my_function_id'
+    runtime: 'python37'
+    memory: '256'
+    entrypoint: 'main.handler'
+    environment: DEBUG=True,COUNT=2
+    source: './public'
+    service_account: ${{ secret.SERVICE_ACCOUNT }}
+```
 ## License
 
 This project is distributed under the [MIT license](LICENSE.md).
