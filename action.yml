@@ -5,10 +5,14 @@ branding:
   color: 'blue'
   icon: 'upload-cloud'
 inputs:
+  description:
+    description: 'Function description'
+    default: ''
+    required: false
   token:
     description: 'OAuth token'
     default: ''
-    required: false
+    required: true
   function_id:
     description: 'Function Id in Yandex Cloud'
     default: ''
@@ -49,7 +53,6 @@ inputs:
     description: 'Service account for function'
     default: ''
     required: false
-
 
 runs:
   using: 'node12'

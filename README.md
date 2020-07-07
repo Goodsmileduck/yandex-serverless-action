@@ -50,6 +50,7 @@ The following settings must be passed as variables as shown in the example. Sens
 | `function_id` | The ID of function in Yandex Cloud | `env` | **Yes** |
 | `runtime` | Runtime for function in Yandex Cloud | `env` | **Yes** |
 | `entrypoint` | Entry point of function | `env` | **Yes** |
+| `description` | Description for function | `env` | No |
 | `environment` | Comma-separated list with env variables | `env` | No |
 | `memory` | Memory limit in `megabytes` for function in Yandex Cloud Default value is `128`| `env` | No |
 | `execution_timeout` | Execution timeout in seconds for function in Yandex Cloud. Default value is `5` | `env` | No |
@@ -84,6 +85,7 @@ The following settings must be passed as variables as shown in the example. Sens
 ```yaml
 - uses: goodsmileduck/yandex-serverless-action@v1
   with:
+    description: "Function without bucket"
     token: ${{ secrets.TOKEN }}
     bucket: ${{ secrets.BUCKET }}
     function_id: 'my_function_id'

@@ -27449,6 +27449,7 @@ function run() {
                 environment: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("environment", { required: false }),
                 serviceAccount: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("service_account", { required: false }),
                 bucket: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("bucket", { required: false }),
+                description: _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("description", { required: false }),
             };
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.info("Function inputs set");
             const fileContents = yield zipDirectory(inputs);
@@ -27523,6 +27524,7 @@ function createFunctionVersion(functionService, targetFunction, fileContents, in
                     memory: memory ? long__WEBPACK_IMPORTED_MODULE_5___default().fromNumber(memory * 1024 * 1024) : undefined,
                 },
                 serviceAccountId: inputs.serviceAccount,
+                description: inputs.description,
                 environment: parseEnvironmentVariables(inputs.environment),
                 executionTimeout: { seconds: long__WEBPACK_IMPORTED_MODULE_5___default().fromNumber(executionTimeout) }
             };
