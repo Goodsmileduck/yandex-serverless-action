@@ -50,7 +50,7 @@ The following settings must be passed as variables as shown in the example. Sens
 | `function_id` | The ID of function in Yandex Cloud | `env` | **Yes** |
 | `runtime` | Runtime for function in Yandex Cloud | `env` | **Yes** |
 | `entrypoint` | Entry point of function | `env` | **Yes** |
-| `description` | Description for function | `env` | No |
+| `description` | Description for version of function | `env` | No |
 | `environment` | Comma-separated list with env variables | `env` | No |
 | `memory` | Memory limit in `megabytes` for function in Yandex Cloud Default value is `128`| `env` | No |
 | `execution_timeout` | Execution timeout in seconds for function in Yandex Cloud. Default value is `5` | `env` | No |
@@ -94,6 +94,7 @@ The following settings must be passed as variables as shown in the example. Sens
     entrypoint: 'main.handler'
     environment: DEBUG=True,COUNT=1
     source: './src'
+    description: "Version: v0.1.1"
 ```
 
 ## Exclude pattern from archive
