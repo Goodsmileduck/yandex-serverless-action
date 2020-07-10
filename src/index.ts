@@ -27,13 +27,13 @@ type ActionInputs = {
 /**
  * Generated Object name
  */
-var bucketObjectName: string;
+let bucketObjectName: string;
 
 async function run() {
     core.setCommandEcho(true);
 
     try {
-        let inputs: ActionInputs = {
+        const inputs: ActionInputs = {
             functionId: core.getInput("function_id", { required: true }),
             token: core.getInput("token", { required: true }),
             runtime: core.getInput("runtime", { required: true }),
@@ -73,7 +73,7 @@ async function run() {
 
             const storageService = new StorageService(session);
 
-            let storageObject = StorageObject.fromBuffer(inputs.bucket, bucketObjectName, fileContents);
+            const storageObject = StorageObject.fromBuffer(inputs.bucket, bucketObjectName, fileContents);
             await storageService.putObject(storageObject);
         }
 
@@ -90,7 +90,7 @@ async function run() {
 
 function handleOperationError(operation: Operation) {
     if (operation.error) {
-        let details = operation.error?.details;
+        const details = operation.error?.details;
         if (details)
             throw Error(`${operation.error.code}: ${operation.error.message} (${details.join(", ")})`);
 
@@ -124,13 +124,13 @@ async function createFunctionVersion(functionService: FunctionService, targetFun
         core.info(`Function ${inputs.functionId}`);
 
         //convert variables
-        let memory = Number.parseFloat(inputs.memory);
+        const memory = Number.parseFloat(inputs.memory);
         core.info(`Parsed memory: "${memory}"`);
 
-        let executionTimeout = Number.parseFloat(inputs.executionTimeout);
+        const executionTimeout = Number.parseFloat(inputs.executionTimeout);
         core.info(`Parsed timeout: "${executionTimeout}"`);
 
-        let request: CreateFunctionVersionRequest = {
+        const request: CreateFunctionVersionRequest = {
             functionId: targetFunction.id,
             runtime: inputs.runtime,
             entrypoint: inputs.entrypoint,
@@ -156,7 +156,7 @@ async function createFunctionVersion(functionService: FunctionService, targetFun
             request.content = fileContents;
 
         // Create new version
-        let operation = await functionService.createVersion(request);
+        const operation = await functionService.createVersion(request);
 
         core.info("Operation complete");
 
@@ -171,7 +171,7 @@ async function zipDirectory(inputs: ActionInputs) {
     core.startGroup("ZipDirectory");
 
     try {
-        let outputStreamBuffer = new streamBuffers.WritableStreamBuffer({
+        const outputStreamBuffer = new streamBuffers.WritableStreamBuffer({
             initialSize: (1000 * 1024),   // start at 1000 kilobytes.
             incrementAmount: (1000 * 1024) // grow by 1000 kilobytes each time buffer overflows.
         });
@@ -192,7 +192,7 @@ async function zipDirectory(inputs: ActionInputs) {
         core.info("Archive finalized");
 
         outputStreamBuffer.end();
-        let buffer = outputStreamBuffer.getContents();
+        const buffer = outputStreamBuffer.getContents();
         core.info("Buffer object created");
 
         if (!buffer)
@@ -206,8 +206,8 @@ async function zipDirectory(inputs: ActionInputs) {
 }
 
 function parseIgnoreGlobPatterns(ignoreString: string): string[] {
-    var result: string[] = [];
-    var patterns = ignoreString.split(",");
+    const result: string[] = [];
+    const patterns = ignoreString.split(",");
 
     patterns.forEach(pattern => {
         //only not empty patterns
@@ -222,12 +222,12 @@ function parseIgnoreGlobPatterns(ignoreString: string): string[] {
 function parseEnvironmentVariables(env: string): { [s: string]: string } {
     core.info(`Environment string: "${env}"`);
 
-    let envObject = {};
-    var kvs = env.split(",");
+    const envObject = {};
+    const kvs = env.split(",");
     kvs.forEach(kv => {
-        let res = kv.split("=");
-        let key = res[0];
-        let value = res[1];
+        const eqIndex = kv.indexOf('=')
+        const key = kv.substr(0, eqIndex);
+        const value = kv.substr(eqIndex + 1);
         envObject[key] = value;
     });
 
