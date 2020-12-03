@@ -124,7 +124,7 @@ The following settings must be passed as variables as shown in the example. Sens
     entrypoint: 'main.handler'
     environment: DEBUG=True,COUNT=2
     source: './public'
-    service_account: ${{ secret.SERVICE_ACCOUNT }}
+    service_account: ${{ secrets.SERVICE_ACCOUNT }}
 ```
 ## License
 
