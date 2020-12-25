@@ -49,17 +49,3 @@ jobs:
         execution_timeout: '5'
         service_account: ${{ secrets.SERVICE_ACCOUNT }}
         description: "Yandex function with bucket"
-        
-    - name: Deploy without env
-      uses: ./
-      with: 
-        token: ${{ secrets.TOKEN }}
-        bucket: 'yandex-functions'
-        source: 'example'
-        exclude: 'exclude.txt'
-        function_id: 'd4e9st6hefepjghdv67s'
-        runtime: 'python37'
-        memory: 256
-        entrypoint: handler.hello
-        execution_timeout: '5'
-        description: "Yandex function with bucket"
