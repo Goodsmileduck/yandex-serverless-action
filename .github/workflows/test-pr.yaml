@@ -20,9 +20,7 @@ jobs:
       run: yarn
 
     - name: Rebuild the dist/ directory
-      run: |
-        yarn run lint
-        yarn run package
+      run: yarn run package
 
     - name: Compare the expected and actual dist/ directories
       run: |
