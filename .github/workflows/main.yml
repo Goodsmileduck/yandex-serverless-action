@@ -16,7 +16,7 @@ jobs:
         token: ${{ secrets.TOKEN }}
         source: 'example'
         exclude: 'exclude.txt'
-        function_id: 'd4ecd1ho7t9ieugt9q58'
+        function_id: 'd4epc2gvqbaj72q6o2ug'
         runtime: 'python37'
         entrypoint: handler.hello
         environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
