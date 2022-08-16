@@ -1,4 +1,4 @@
-import * as cloud from "yandex-cloud";
+import * as cloud from "@yandex-cloud/nodejs-sdk";
 import * as core from "@actions/core";
 import * as streamBuffers from "stream-buffers";
 
