@@ -6,24 +6,20 @@ import { Session, cloudApi, serviceClients } from "@yandex-cloud/nodejs-sdk";
 
 import archiver from "archiver";
 
-//import { CreateFunctionVersionRequest, Function, FunctionService } from "yandex-cloud/api/serverless/functions/v1";
-//import { StorageObject, StorageService } from "yandex-cloud/lib/storage/v1beta";
-
-
-//import { Operation } from "yandex-cloud/api/operation";
-
-type ActionInputs = {
-    functionId: string,
-    token: string,
-    runtime: string,
-    entrypoint: string,
-    memory: string,
-    source: string,
-    sourceIgnore: string,
-    executionTimeout: string,
-    environment: string,
-    serviceAccount: string,
-    bucket: string,
+interface IActionInputs {
+    functionId: string;
+    token: string;
+    accessKeyId: string;
+    secretAccessKey: string;
+    runtime: string;
+    entrypoint: string;
+    memory: string;
+    source: string;
+    sourceIgnore: string;
+    executionTimeout: string;
+    environment: string;
+    serviceAccount: string;
+    bucket: string;
     description: string;
 };
 
@@ -36,9 +32,11 @@ async function run() {
     core.setCommandEcho(true);
 
     try {
-        const inputs: ActionInputs = {
+        const inputs: IActionInputs = {
             functionId: core.getInput("function_id", { required: true }),
             token: core.getInput("token", { required: true }),
+            accessKeyId: core.getInput("ACCESS_KEY_ID", { required: false }),
+            secretAccessKey: core.getInput("SECRET_ACCESS_KEY", { required: false }),
             runtime: core.getInput("runtime", { required: true }),
             entrypoint: core.getInput("entrypoint", { required: true }),
             memory: core.getInput("memory", { required: false }),
@@ -61,50 +59,7 @@ async function run() {
         // Initialize SDK with your token
         const session = new Session({ oauthToken: inputs.token });
 
-        if (inputs.bucket) {
-            const { GITHUB_SHA } = process.env;
-
-            if (!GITHUB_SHA) {
-                core.setFailed("Missing GITHUB_SHA");
-                return;
-            }
-
-            //setting object name
-            bucketObjectName = `${inputs.functionId}/${GITHUB_SHA}.zip`;
-            core.info(`Upload to bucket: "${inputs.bucket}/${bucketObjectName}"`);
-
-            // create client
-            const client = new S3Client({
-                region: "ru-central1",
-                signingRegion: "ru-central1",
-                endpoint: "https://storage.yandexcloud.net",
-                forcePathStyle: true,
-                credentials: {
-                    accessKeyId: "",
-                    secretAccessKey: "",
-                    sessionToken: inputs.token
-                },
-            });
-
-            const cmd = new PutObjectCommand({
-                Key: bucketObjectName,
-                Bucket: inputs.bucket,
-                Body: fileContents
-            });
-
-            await client.send(cmd);
-
-
-            /*const bucketService = session.client(serviceClients.BucketServiceClient);;
-
-            const storageService = new StorageService(session);
-            const storageObject = StorageObject.fromBuffer(inputs.bucket, bucketObjectName, fileContents);
-            await storageService.putObject(storageObject);
-
-            const { storage: {  bucket_service: { } } } = cloudApi;
-            const storageObject = UpdateBucketRequest.fromBuffer(inputs.bucket, bucketObjectName, fileContents);
-            await bucketService.update(storageObject);*/
-        }
+        await tryStoreObjectInBucket(inputs, fileContents);
 
         const functionObject = await getFunctionById(session, inputs);
 
@@ -117,6 +72,48 @@ async function run() {
     }
 }
 
+async function tryStoreObjectInBucket(inputs: IActionInputs, fileContents: Buffer) {
+    if (!inputs.bucket)
+        return;
+
+    const { GITHUB_SHA } = process.env;
+
+    if (!GITHUB_SHA) {
+        core.setFailed("Missing GITHUB_SHA");
+        return;
+    }
+
+    if (!inputs.accessKeyId || !inputs.secretAccessKey) {
+        core.setFailed("Missing ACCESS_KEY_ID or SECRET_ACCESS_KEY");
+        return;
+    }
+
+    // setting object name
+    const bucketObjectName = `${inputs.functionId}/${GITHUB_SHA}.zip`;
+    core.info(`Upload to bucket: "${inputs.bucket}/${bucketObjectName}"`);
+
+    // create AWS client
+    const client = new S3Client({
+        region: "ru-central1",
+        signingRegion: "ru-central1",
+        endpoint: "https://storage.yandexcloud.net",
+        forcePathStyle: true,
+        credentials: {
+            accessKeyId: inputs.accessKeyId,
+            secretAccessKey: inputs.secretAccessKey
+        },
+    });
+
+    // create PUT Object command
+    const cmd = new PutObjectCommand({
+        Key: bucketObjectName,
+        Bucket: inputs.bucket,
+        Body: fileContents
+    });
+
+    await client.send(cmd);
+}
+
 function handleOperationError(operation: cloudApi.operation.operation.Operation) {
     if (operation.error) {
         const details = operation.error?.details;
@@ -127,7 +124,7 @@ function handleOperationError(operation: cloudApi.operation.operation.Operation)
     }
 }
 
-async function getFunctionById(session: Session, inputs: ActionInputs): Promise<cloudApi.serverless.functions_function.Function> {
+async function getFunctionById(session: Session, inputs: IActionInputs): Promise<cloudApi.serverless.functions_function.Function> {
     const functionService = session.client(serviceClients.FunctionServiceClient);
     const { serverless: { functions_function_service: { GetFunctionRequest } } } = cloudApi;
 
@@ -150,7 +147,7 @@ async function getFunctionById(session: Session, inputs: ActionInputs): Promise<
     }
 }
 
-async function createFunctionVersion(session: Session, targetFunction: cloudApi.serverless.functions_function.Function, fileContents: Buffer, inputs: ActionInputs) {
+async function createFunctionVersion(session: Session, targetFunction: cloudApi.serverless.functions_function.Function, fileContents: Buffer, inputs: IActionInputs) {
     const functionService = session.client(serviceClients.FunctionServiceClient);
     const { serverless: { functions_function: { Package }, functions_function_service: { CreateFunctionVersionRequest } } } = cloudApi;
 
@@ -179,7 +176,7 @@ async function createFunctionVersion(session: Session, targetFunction: cloudApi.
             executionTimeout: { seconds: executionTimeout }
         });
 
-        //get from bucket if supplied
+        // get from bucket if supplied
         if (inputs.bucket) {
             core.info(`From bucket: "${inputs.bucket}"`);
 
@@ -203,7 +200,7 @@ async function createFunctionVersion(session: Session, targetFunction: cloudApi.
     }
 }
 
-async function zipDirectory(inputs: ActionInputs) {
+async function zipDirectory(inputs: IActionInputs) {
     core.startGroup("ZipDirectory");
 
     try {

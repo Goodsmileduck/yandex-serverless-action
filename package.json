@@ -23,12 +23,12 @@
     "@actions/core": "^1.9.1",
     "archiver": "^5.3.1",
     "@yandex-cloud/nodejs-sdk": "^2.1.1",
-    "@aws-sdk/client-s3": "^3.150.0",
+    "@aws-sdk/client-s3": "^3.154.0",
     "stream-buffers": "^3.0.2"
   },
   "devDependencies": {
     "@types/archiver": "^5.3.1",
-    "@types/node": "^16.11.49",
+    "@types/node": "^16.11.52",
     "@types/stream-buffers": "^3.0.4",
     "@vercel/ncc": "^0.34.0",
     "jest": "^28.1.3",
