@@ -9,6 +9,7 @@ import archiver from "archiver";
 interface IActionInputs {
     functionId: string;
     token: string;
+    serviceAccountId: string;
     accessKeyId: string;
     secretAccessKey: string;
     runtime: string;
@@ -35,6 +36,7 @@ async function run() {
         const inputs: IActionInputs = {
             functionId: core.getInput("function_id", { required: true }),
             token: core.getInput("token", { required: true }),
+            serviceAccountId: core.getInput("serviceAccountId", { required: false }),
             accessKeyId: core.getInput("accessKeyId", { required: false }),
             secretAccessKey: core.getInput("secretAccessKey", { required: false }),
             runtime: core.getInput("runtime", { required: true }),
@@ -57,9 +59,16 @@ async function run() {
 
         // OAuth token
         // Initialize SDK with your token
-        const session = new Session({ oauthToken: inputs.token });
+        const session = new Session({
+            /*serviceAccountJson: {
+                serviceAccountId: inputs.serviceAccountId,
+                accessKeyId: inputs.accessKeyId,
+                privateKey: inputs.secretAccessKey,
+            },*/
+            oauthToken: inputs.token
+        });
 
-        await tryStoreObjectInBucket(inputs, fileContents);
+        await tryStoreObjectInBucket(session, inputs, fileContents);
 
         const functionObject = await getFunctionById(session, inputs);
 
@@ -72,7 +81,7 @@ async function run() {
     }
 }
 
-async function tryStoreObjectInBucket(inputs: IActionInputs, fileContents: Buffer) {
+async function tryStoreObjectInBucket(session: Session, inputs: IActionInputs, fileContents: Buffer) {
     if (!inputs.bucket)
         return;
 
@@ -83,10 +92,6 @@ async function tryStoreObjectInBucket(inputs: IActionInputs, fileContents: Buffe
         return;
     }
 
-    core.info(`inputs.accessKeyId == null, ${inputs.accessKeyId == "" || inputs.accessKeyId == null}`);
-    core.info(`inputs.secretAccessKey == null, ${inputs.secretAccessKey == "" || inputs.secretAccessKey == null}`);
-
-
     if (!inputs.accessKeyId || !inputs.secretAccessKey) {
         core.setFailed("Missing ACCESS_KEY_ID or SECRET_ACCESS_KEY");
         return;
@@ -96,6 +101,13 @@ async function tryStoreObjectInBucket(inputs: IActionInputs, fileContents: Buffe
     const bucketObjectName = `${inputs.functionId}/${GITHUB_SHA}.zip`;
     core.info(`Upload to bucket: "${inputs.bucket}/${bucketObjectName}"`);
 
+    const accessService = session.client(serviceClients.AccessKeyServiceClient);
+    const { iam: { access_key_service: { GetAccessKeyRequest } } } = cloudApi;
+
+    const res = await accessService.get(GetAccessKeyRequest.fromPartial({
+        accessKeyId: inputs.accessKeyId
+    }));
+
     // create AWS client
     const client = new S3Client({
         region: "ru-central1",
@@ -103,9 +115,9 @@ async function tryStoreObjectInBucket(inputs: IActionInputs, fileContents: Buffe
         endpoint: "https://storage.yandexcloud.net",
         forcePathStyle: true,
         credentials: {
-            accessKeyId: inputs.accessKeyId,
+            accessKeyId: res.keyId,
             secretAccessKey: inputs.secretAccessKey
-        },
+        }
     });
 
     // create PUT Object command
