@@ -83,6 +83,10 @@ async function tryStoreObjectInBucket(inputs: IActionInputs, fileContents: Buffe
         return;
     }
 
+    core.info(`inputs.accessKeyId == null, ${inputs.accessKeyId == null}`);
+    core.info(`inputs.secretAccessKey == null, ${inputs.secretAccessKey == null}`);
+
+
     if (!inputs.accessKeyId || !inputs.secretAccessKey) {
         core.setFailed("Missing ACCESS_KEY_ID or SECRET_ACCESS_KEY");
         return;
@@ -243,7 +247,7 @@ function parseIgnoreGlobPatterns(ignoreString: string): string[] {
     const patterns = ignoreString.split(",");
 
     patterns.forEach(pattern => {
-        //only not empty patterns
+        // only not empty patterns
         if (pattern?.length > 0)
             result.push(pattern);
     });
