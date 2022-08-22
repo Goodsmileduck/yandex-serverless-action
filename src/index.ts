@@ -6,6 +6,9 @@ import { Session, cloudApi, serviceClients } from "@yandex-cloud/nodejs-sdk";
 
 import archiver from "archiver";
 
+/**
+ * Typed input parameters
+ */
 interface IActionInputs {
     functionId: string;
     token: string;
@@ -22,11 +25,6 @@ interface IActionInputs {
     bucket: string;
     description: string;
 };
-
-/**
- * Generated Object name
- */
-let bucketObjectName: string;
 
 async function run() {
     core.setCommandEcho(true);
@@ -76,24 +74,13 @@ async function tryStoreObjectInBucket(inputs: IActionInputs, fileContents: Buffe
     if (!inputs.bucket)
         return;
 
-    const { GITHUB_SHA } = process.env;
-
-    if (!GITHUB_SHA) {
-        core.setFailed("Missing GITHUB_SHA");
-        return;
-    }
-
-    core.info(`inputs.accessKeyId == null, ${inputs.accessKeyId == "" || inputs.accessKeyId == null}`);
-    core.info(`inputs.secretAccessKey == null, ${inputs.secretAccessKey == "" || inputs.secretAccessKey == null}`);
-
-
     if (!inputs.accessKeyId || !inputs.secretAccessKey) {
         core.setFailed("Missing ACCESS_KEY_ID or SECRET_ACCESS_KEY");
         return;
     }
 
     // setting object name
-    const bucketObjectName = `${inputs.functionId}/${GITHUB_SHA}.zip`;
+    const bucketObjectName = getBucketObjectName(inputs);
     core.info(`Upload to bucket: "${inputs.bucket}/${bucketObjectName}"`);
 
     // create AWS client
@@ -186,7 +173,7 @@ async function createFunctionVersion(session: Session, targetFunction: cloudApi.
 
             request.package = Package.fromPartial({
                 bucketName: inputs.bucket,
-                objectName: bucketObjectName
+                objectName: getBucketObjectName(inputs)
             });
         }
         else
@@ -204,7 +191,28 @@ async function createFunctionVersion(session: Session, targetFunction: cloudApi.
     }
 }
 
-async function zipDirectory(inputs: IActionInputs) {
+/**
+ * Generates object name
+ * @param inputs parameters
+ * @returns object name
+ */
+function getBucketObjectName(inputs: IActionInputs): string {
+    const { GITHUB_SHA } = process.env;
+
+    // check SHA present
+    if (!GITHUB_SHA) {
+        core.setFailed("Missing GITHUB_SHA");
+        return;
+    }
+
+    return `${inputs.functionId}/${GITHUB_SHA}.zip`;
+}
+
+/**
+ * Allows to zip input contents
+ * @param inputs parameters
+ */
+async function zipDirectory(inputs: IActionInputs): Promise<Buffer> {
     core.startGroup("ZipDirectory");
 
     try {
@@ -263,8 +271,8 @@ function parseEnvironmentVariables(env: string): { [s: string]: string; } {
     const kvs = env.split(",");
     kvs.forEach(kv => {
         const eqIndex = kv.indexOf('=');
-        const key = kv.substr(0, eqIndex);
-        const value = kv.substr(eqIndex + 1);
+        const key = kv.substring(0, eqIndex);
+        const value = kv.substring(eqIndex + 1);
         envObject[key] = value;
     });
 
