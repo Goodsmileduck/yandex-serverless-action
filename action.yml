@@ -13,6 +13,14 @@ inputs:
     description: 'OAuth token'
     default: ''
     required: true
+  accessKeyId:
+    description: 'Yandex AWS Access Key Id'
+    default: ''
+    required: false
+  secretAccessKey:
+    description: 'Yandex AWS Secret Access Key'
+    default: ''
+    required: false
   function_id:
     description: 'Function Id in Yandex Cloud'
     default: ''
@@ -55,5 +63,5 @@ inputs:
     required: false
 
 runs:
-  using: 'node12'
+  using: 'node14'
   main: 'dist/index.js'

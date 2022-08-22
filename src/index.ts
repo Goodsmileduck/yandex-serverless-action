@@ -35,8 +35,8 @@ async function run() {
         const inputs: IActionInputs = {
             functionId: core.getInput("function_id", { required: true }),
             token: core.getInput("token", { required: true }),
-            accessKeyId: core.getInput("ACCESS_KEY_ID", { required: false }),
-            secretAccessKey: core.getInput("SECRET_ACCESS_KEY", { required: false }),
+            accessKeyId: core.getInput("accessKeyId", { required: false }),
+            secretAccessKey: core.getInput("secretAccessKey", { required: false }),
             runtime: core.getInput("runtime", { required: true }),
             entrypoint: core.getInput("entrypoint", { required: true }),
             memory: core.getInput("memory", { required: false }),
@@ -83,8 +83,8 @@ async function tryStoreObjectInBucket(inputs: IActionInputs, fileContents: Buffe
         return;
     }
 
-    core.info(`inputs.accessKeyId == null, ${inputs.accessKeyId == null}`);
-    core.info(`inputs.secretAccessKey == null, ${inputs.secretAccessKey == null}`);
+    core.info(`inputs.accessKeyId == null, ${inputs.accessKeyId == "" || inputs.accessKeyId == null}`);
+    core.info(`inputs.secretAccessKey == null, ${inputs.secretAccessKey == "" || inputs.secretAccessKey == null}`);
 
 
     if (!inputs.accessKeyId || !inputs.secretAccessKey) {

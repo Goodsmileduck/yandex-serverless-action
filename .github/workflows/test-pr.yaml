@@ -30,7 +30,7 @@ jobs:
           exit 1
         fi
       id: diff
-  
+
   deploy_one_by_one:
     runs-on: ubuntu-latest
     steps:
@@ -50,8 +50,8 @@ jobs:
       uses: ./
       with:
         token: ${{ secrets.TOKEN }}
-        ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}
-        SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
+        accessKeyId: ${{ secrets.ACCESS_KEY_ID }}
+        secretAccessKey: ${{ secrets.SECRET_ACCESS_KEY }}
         bucket: 'yandex-functions'
         source: 'example'
         exclude: 'exclude.txt'
@@ -63,7 +63,7 @@ jobs:
         execution_timeout: '5'
     - name: Deploy with SA
       uses: ./
-      with: 
+      with:
         token: ${{ secrets.TOKEN }}
         bucket: 'yandex-functions'
         source: 'example'
