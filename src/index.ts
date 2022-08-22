@@ -1,6 +1,6 @@
 import * as core from "@actions/core";
-import * as streamBuffers from "stream-buffers";
 
+import { PassThrough, Stream } from "stream";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { Session, cloudApi, serviceClients } from "@yandex-cloud/nodejs-sdk";
 
@@ -80,7 +80,7 @@ async function tryStoreObjectInBucket(inputs: IActionInputs, fileContents: Buffe
     }
 
     // setting object name
-    const bucketObjectName = getBucketObjectName(inputs);
+    const bucketObjectName = constructBucketObjectName(inputs);
     core.info(`Upload to bucket: "${inputs.bucket}/${bucketObjectName}"`);
 
     // create AWS client
@@ -173,7 +173,7 @@ async function createFunctionVersion(session: Session, targetFunction: cloudApi.
 
             request.package = Package.fromPartial({
                 bucketName: inputs.bucket,
-                objectName: getBucketObjectName(inputs)
+                objectName: constructBucketObjectName(inputs)
             });
         }
         else
@@ -196,7 +196,7 @@ async function createFunctionVersion(session: Session, targetFunction: cloudApi.
  * @param inputs parameters
  * @returns object name
  */
-function getBucketObjectName(inputs: IActionInputs): string {
+function constructBucketObjectName(inputs: IActionInputs): string {
     const { GITHUB_SHA } = process.env;
 
     // check SHA present
@@ -216,15 +216,12 @@ async function zipDirectory(inputs: IActionInputs): Promise<Buffer> {
     core.startGroup("ZipDirectory");
 
     try {
-        const outputStreamBuffer = new streamBuffers.WritableStreamBuffer({
-            initialSize: (1000 * 1024),   // start at 1000 kilobytes.
-            incrementAmount: (1000 * 1024) // grow by 1000 kilobytes each time buffer overflows.
-        });
+        const bufferStream = new PassThrough();
 
         const archive = archiver("zip", { zlib: { level: 9 } });
         core.info("Archive initialize");
 
-        archive.pipe(outputStreamBuffer);
+        archive.pipe(bufferStream);
 
         await archive
             .glob("**", {
@@ -236,12 +233,13 @@ async function zipDirectory(inputs: IActionInputs): Promise<Buffer> {
 
         core.info("Archive finalized");
 
-        outputStreamBuffer.end();
-        const buffer = outputStreamBuffer.getContents();
-        core.info("Buffer object created");
+        bufferStream.end();
+        const buffer = await streamToBuffer(bufferStream);
 
         if (!buffer)
             throw Error("Failed to initialize Buffer");
+
+        core.info("Buffer object created");
 
         return buffer;
     }
@@ -264,13 +262,23 @@ function parseIgnoreGlobPatterns(ignoreString: string): string[] {
     return result;
 }
 
+function streamToBuffer(stream: Stream): Promise<Buffer> {
+    const chunks: Uint8Array[] = [];
+
+    return new Promise((resolve, reject) => {
+        stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
+        stream.on("error", (err) => reject(err));
+        stream.on("end", () => resolve(Buffer.concat(chunks)));
+    });
+}
+
 function parseEnvironmentVariables(env: string): { [s: string]: string; } {
     core.info(`Environment string: "${env}"`);
 
     const envObject = {};
     const kvs = env.split(",");
     kvs.forEach(kv => {
-        const eqIndex = kv.indexOf('=');
+        const eqIndex = kv.indexOf("=");
         const key = kv.substring(0, eqIndex);
         const value = kv.substring(eqIndex + 1);
         envObject[key] = value;
