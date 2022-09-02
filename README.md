@@ -27,10 +27,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - uses: goodsmileduck/yandex-serverless-action@v1
+    - uses: goodsmileduck/yandex-serverless-action@v2
       with:
         token: ${{ secrets.TOKEN }}
         bucket: ${{ secrets.BUCKET }}
+        accessKeyId: ${{ secrets.ACCESS_KEY_ID }}
+        secretAccessKey: ${{ secrets.SECRET_ACCESS_KEY }}
         function_id: '234awefq12345g24f'
         runtime: 'python37'
         memory: '256'
@@ -56,6 +58,8 @@ The following settings must be passed as variables as shown in the example. Sens
 | `execution_timeout` | Execution timeout in seconds for function in Yandex Cloud. Default value is `5` | `env` | No |
 | `service_account` | Service account id. | `secret` | No |
 | `bucket` | The name of the bucket you're syncing to. For example, `bucket`. If wasn't set action will try to upload code directly. Required if code bigger than 5Mb| `secret` | No |
+| `accessKeyId` | Yandex AWS Access Key Id when s3 bucket used. Required if code bigger than 5Mb| `secret` | No |
+| `secretAccessKey` | Yandex AWS Access Key Id when s3 bucket used. Required if code bigger than 5Mb| `secret` | No |
 | `source` | The local directory you wish to upload. For example, `./public`. Defaults to the root of your repository (`.`) if not provided. | `env` | No |
 | `exclude` | Explicitly exclude the specified files. Defaults empty if not provided. | `env` | No |
 
@@ -88,6 +92,8 @@ The following settings must be passed as variables as shown in the example. Sens
     description: "Function without bucket"
     token: ${{ secrets.TOKEN }}
     bucket: ${{ secrets.BUCKET }}
+    accessKeyId: ${{ secrets.ACCESS_KEY_ID }}
+    secretAccessKey: ${{ secrets.SECRET_ACCESS_KEY }}
     function_id: 'my_function_id'
     runtime: 'python37'
     memory: '256'
