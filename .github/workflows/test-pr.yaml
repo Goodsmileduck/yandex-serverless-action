@@ -6,6 +6,31 @@ on:
       - master
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2.1.4
+      with:
+        node-version: 12
+
+    - name: Install dependencies
+      run: yarn
+
+    - name: Rebuild the dist/ directory
+      run: yarn run package
+
+    - name: Compare the expected and actual dist/ directories
+      run: |
+        if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
+          echo "Detected uncommitted changes after build.  See status below:"
+          git diff
+          exit 1
+        fi
+      id: diff
+
   deploy_one_by_one:
     runs-on: ubuntu-latest
     steps:
@@ -25,6 +50,8 @@ jobs:
       uses: ./
       with:
         token: ${{ secrets.TOKEN }}
+        accessKeyId: ${{ secrets.ACCESS_KEY_ID }}
+        secretAccessKey: ${{ secrets.SECRET_ACCESS_KEY }}
         bucket: 'yandex-functions'
         source: 'example'
         exclude: 'exclude.txt'
@@ -36,8 +63,10 @@ jobs:
         execution_timeout: '5'
     - name: Deploy with SA
       uses: ./
-      with: 
+      with:
         token: ${{ secrets.TOKEN }}
+        accessKeyId: ${{ secrets.ACCESS_KEY_ID }}
+        secretAccessKey: ${{ secrets.SECRET_ACCESS_KEY }}
         bucket: 'yandex-functions'
         source: 'example'
         exclude: 'exclude.txt'

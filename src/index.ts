@@ -1,41 +1,40 @@
-import * as cloud from "yandex-cloud";
 import * as core from "@actions/core";
-import * as streamBuffers from "stream-buffers";
 
-import { CreateFunctionVersionRequest, Function, FunctionService } from "yandex-cloud/api/serverless/functions/v1";
-import { StorageObject, StorageService } from "yandex-cloud/lib/storage/v1beta";
+import { PassThrough, Stream } from "stream";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { Session, cloudApi, serviceClients } from "@yandex-cloud/nodejs-sdk";
 
-import Long from "long";
-import { Operation } from "yandex-cloud/api/operation";
 import archiver from "archiver";
 
-type ActionInputs = {
-    functionId: string,
-    token: string,
-    runtime: string,
-    entrypoint: string,
-    memory: string,
-    source: string,
-    sourceIgnore: string,
-    executionTimeout: string,
-    environment: string,
-    serviceAccount: string,
-    bucket: string,
-    description: string
-};
-
 /**
- * Generated Object name
+ * Typed input parameters
  */
-let bucketObjectName: string;
+interface IActionInputs {
+    functionId: string;
+    token: string;
+    accessKeyId: string;
+    secretAccessKey: string;
+    runtime: string;
+    entrypoint: string;
+    memory: string;
+    source: string;
+    sourceIgnore: string;
+    executionTimeout: string;
+    environment: string;
+    serviceAccount: string;
+    bucket: string;
+    description: string;
+};
 
 async function run() {
     core.setCommandEcho(true);
 
     try {
-        const inputs: ActionInputs = {
+        const inputs: IActionInputs = {
             functionId: core.getInput("function_id", { required: true }),
             token: core.getInput("token", { required: true }),
+            accessKeyId: core.getInput("accessKeyId", { required: false }),
+            secretAccessKey: core.getInput("secretAccessKey", { required: false }),
             runtime: core.getInput("runtime", { required: true }),
             entrypoint: core.getInput("entrypoint", { required: true }),
             memory: core.getInput("memory", { required: false }),
@@ -56,30 +55,13 @@ async function run() {
 
         // OAuth token
         // Initialize SDK with your token
-        const session = new cloud.Session({ oauthToken: inputs.token });
-        const functionService = new FunctionService(session);
+        const session = new Session({ oauthToken: inputs.token });
 
-        if (inputs.bucket) {
-            const { GITHUB_SHA } = process.env;
+        await tryStoreObjectInBucket(inputs, fileContents);
 
-            if (!GITHUB_SHA) {
-                core.setFailed("Missing GITHUB_SHA");
-                return;
-            }
+        const functionObject = await getFunctionById(session, inputs);
 
-            //setting object name
-            bucketObjectName = `${inputs.functionId}/${GITHUB_SHA}.zip`;
-            core.info(`Upload to bucket: "${inputs.bucket}/${bucketObjectName}"`);
-
-            const storageService = new StorageService(session);
-
-            const storageObject = StorageObject.fromBuffer(inputs.bucket, bucketObjectName, fileContents);
-            await storageService.putObject(storageObject);
-        }
-
-        const functionObject = await getFunctionById(functionService, inputs);
-
-        await createFunctionVersion(functionService, functionObject, fileContents, inputs);
+        await createFunctionVersion(session, functionObject, fileContents, inputs);
 
         core.setOutput("time", new Date().toTimeString());
     }
@@ -88,7 +70,42 @@ async function run() {
     }
 }
 
-function handleOperationError(operation: Operation) {
+async function tryStoreObjectInBucket(inputs: IActionInputs, fileContents: Buffer) {
+    if (!inputs.bucket)
+        return;
+
+    if (!inputs.accessKeyId || !inputs.secretAccessKey) {
+        core.setFailed("Missing ACCESS_KEY_ID or SECRET_ACCESS_KEY");
+        return;
+    }
+
+    // setting object name
+    const bucketObjectName = constructBucketObjectName(inputs);
+    core.info(`Upload to bucket: "${inputs.bucket}/${bucketObjectName}"`);
+
+    // create AWS client
+    const client = new S3Client({
+        region: "ru-central1",
+        signingRegion: "ru-central1",
+        endpoint: "https://storage.yandexcloud.net",
+        forcePathStyle: true,
+        credentials: {
+            accessKeyId: inputs.accessKeyId,
+            secretAccessKey: inputs.secretAccessKey
+        },
+    });
+
+    // create PUT Object command
+    const cmd = new PutObjectCommand({
+        Key: bucketObjectName,
+        Bucket: inputs.bucket,
+        Body: fileContents
+    });
+
+    await client.send(cmd);
+}
+
+function handleOperationError(operation: cloudApi.operation.operation.Operation) {
     if (operation.error) {
         const details = operation.error?.details;
         if (details)
@@ -98,12 +115,15 @@ function handleOperationError(operation: Operation) {
     }
 }
 
-async function getFunctionById(functionService: FunctionService, inputs: ActionInputs) {
+async function getFunctionById(session: Session, inputs: IActionInputs): Promise<cloudApi.serverless.functions_function.Function> {
+    const functionService = session.client(serviceClients.FunctionServiceClient);
+    const { serverless: { functions_function_service: { GetFunctionRequest } } } = cloudApi;
+
     core.startGroup(`Get function by ID: "${inputs.functionId}"`);
 
     try {
         // Check if Function exist
-        const foundFunction = await functionService.get({ functionId: inputs.functionId });
+        const foundFunction = await functionService.get(GetFunctionRequest.fromPartial({ functionId: inputs.functionId }));
 
         if (foundFunction) {
             core.info(`Function found: "${foundFunction.id} (${foundFunction.name})"`);
@@ -118,8 +138,12 @@ async function getFunctionById(functionService: FunctionService, inputs: ActionI
     }
 }
 
-async function createFunctionVersion(functionService: FunctionService, targetFunction: Function, fileContents: Buffer, inputs: ActionInputs) {
+async function createFunctionVersion(session: Session, targetFunction: cloudApi.serverless.functions_function.Function, fileContents: Buffer, inputs: IActionInputs) {
+    const functionService = session.client(serviceClients.FunctionServiceClient);
+    const { serverless: { functions_function: { Package }, functions_function_service: { CreateFunctionVersionRequest } } } = cloudApi;
+
     core.startGroup("Create function version");
+
     try {
         core.info(`Function ${inputs.functionId}`);
 
@@ -130,27 +154,27 @@ async function createFunctionVersion(functionService: FunctionService, targetFun
         const executionTimeout = Number.parseFloat(inputs.executionTimeout);
         core.info(`Parsed timeout: "${executionTimeout}"`);
 
-        const request: CreateFunctionVersionRequest = {
+        const request = CreateFunctionVersionRequest.fromPartial({
             functionId: targetFunction.id,
             runtime: inputs.runtime,
             entrypoint: inputs.entrypoint,
             resources: {
-                memory: memory ? Long.fromNumber(memory * 1024 * 1024) : undefined,
+                memory: memory ? memory * 1024 * 1024 : undefined,
             },
             serviceAccountId: inputs.serviceAccount,
             description: inputs.description,
             environment: parseEnvironmentVariables(inputs.environment),
-            executionTimeout: { seconds: Long.fromNumber(executionTimeout) }
-        };
+            executionTimeout: { seconds: executionTimeout }
+        });
 
-        //get from bucket if supplied
+        // get from bucket if supplied
         if (inputs.bucket) {
             core.info(`From bucket: "${inputs.bucket}"`);
 
-            request.package = {
+            request.package = Package.fromPartial({
                 bucketName: inputs.bucket,
-                objectName: bucketObjectName
-            };
+                objectName: constructBucketObjectName(inputs)
+            });
         }
         else
             request.content = fileContents;
@@ -167,19 +191,37 @@ async function createFunctionVersion(functionService: FunctionService, targetFun
     }
 }
 
-async function zipDirectory(inputs: ActionInputs) {
+/**
+ * Generates object name
+ * @param inputs parameters
+ * @returns object name
+ */
+function constructBucketObjectName(inputs: IActionInputs): string {
+    const { GITHUB_SHA } = process.env;
+
+    // check SHA present
+    if (!GITHUB_SHA) {
+        core.setFailed("Missing GITHUB_SHA");
+        return;
+    }
+
+    return `${inputs.functionId}/${GITHUB_SHA}.zip`;
+}
+
+/**
+ * Allows to zip input contents
+ * @param inputs parameters
+ */
+async function zipDirectory(inputs: IActionInputs): Promise<Buffer> {
     core.startGroup("ZipDirectory");
 
     try {
-        const outputStreamBuffer = new streamBuffers.WritableStreamBuffer({
-            initialSize: (1000 * 1024),   // start at 1000 kilobytes.
-            incrementAmount: (1000 * 1024) // grow by 1000 kilobytes each time buffer overflows.
-        });
+        const bufferStream = new PassThrough();
 
         const archive = archiver("zip", { zlib: { level: 9 } });
         core.info("Archive initialize");
 
-        archive.pipe(outputStreamBuffer);
+        archive.pipe(bufferStream);
 
         await archive
             .glob("**", {
@@ -191,12 +233,13 @@ async function zipDirectory(inputs: ActionInputs) {
 
         core.info("Archive finalized");
 
-        outputStreamBuffer.end();
-        const buffer = outputStreamBuffer.getContents();
-        core.info("Buffer object created");
+        bufferStream.end();
+        const buffer = await streamToBuffer(bufferStream);
 
         if (!buffer)
             throw Error("Failed to initialize Buffer");
+
+        core.info("Buffer object created");
 
         return buffer;
     }
@@ -210,7 +253,7 @@ function parseIgnoreGlobPatterns(ignoreString: string): string[] {
     const patterns = ignoreString.split(",");
 
     patterns.forEach(pattern => {
-        //only not empty patterns
+        // only not empty patterns
         if (pattern?.length > 0)
             result.push(pattern);
     });
@@ -219,15 +262,25 @@ function parseIgnoreGlobPatterns(ignoreString: string): string[] {
     return result;
 }
 
-function parseEnvironmentVariables(env: string): { [s: string]: string } {
+function streamToBuffer(stream: Stream): Promise<Buffer> {
+    const chunks: Uint8Array[] = [];
+
+    return new Promise((resolve, reject) => {
+        stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
+        stream.on("error", (err) => reject(err));
+        stream.on("end", () => resolve(Buffer.concat(chunks)));
+    });
+}
+
+function parseEnvironmentVariables(env: string): { [s: string]: string; } {
     core.info(`Environment string: "${env}"`);
 
     const envObject = {};
     const kvs = env.split(",");
     kvs.forEach(kv => {
-        const eqIndex = kv.indexOf('=')
-        const key = kv.substr(0, eqIndex);
-        const value = kv.substr(eqIndex + 1);
+        const eqIndex = kv.indexOf("=");
+        const key = kv.substring(0, eqIndex);
+        const value = kv.substring(eqIndex + 1);
         envObject[key] = value;
     });
 
