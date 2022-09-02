@@ -14,11 +14,11 @@ inputs:
     default: ''
     required: true
   accessKeyId:
-    description: 'Yandex AWS Access Key Id'
+    description: 'Yandex AWS Access Key Id when s3 bucket used'
     default: ''
     required: false
   secretAccessKey:
-    description: 'Yandex AWS Secret Access Key'
+    description: 'Yandex AWS Secret Access Key when s3 bucket used'
     default: ''
     required: false
   function_id:
