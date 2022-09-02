@@ -25,6 +25,8 @@ jobs:
       uses: goodsmileduck/yandex-serverless-action@master
       with:
         token: ${{ secrets.TOKEN }}
+        accessKeyId: ${{ secrets.ACCESS_KEY_ID }}
+        secretAccessKey: ${{ secrets.SECRET_ACCESS_KEY }}
         bucket: 'yandex-functions'
         source: 'example'
         exclude: 'exclude.txt'
