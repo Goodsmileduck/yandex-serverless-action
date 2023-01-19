@@ -2,7 +2,7 @@ import * as core from "@actions/core";
 
 import { PassThrough, Stream } from "stream";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { Session, cloudApi, serviceClients } from "@yandex-cloud/nodejs-sdk";
+import { Session, cloudApi, serviceClients, waitForOperation } from "@yandex-cloud/nodejs-sdk";
 
 import archiver from "archiver";
 
@@ -181,10 +181,10 @@ async function createFunctionVersion(session: Session, targetFunction: cloudApi.
 
         // Create new version
         const operation = await functionService.createVersion(request);
-
+        const result = await waitForOperation(operation, session);
         core.info("Operation complete");
 
-        handleOperationError(operation);
+        handleOperationError(result);
     }
     finally {
         core.endGroup();
