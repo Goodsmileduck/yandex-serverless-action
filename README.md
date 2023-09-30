@@ -50,7 +50,7 @@ The following settings must be passed as variables as shown in the example. Sens
 | ------------- | ------------- | ------------- | ------------- |
 | `token` | Token for access to yc cli. To get token visit [link](https://oauth.yandex.ru/authorize?response_type=token&client_id=1a6990aa636648e9b2ef855fa7bec2fb) | `secret` | **Yes** |
 | `function_id` | The ID of function in Yandex Cloud | `env` | **Yes** |
-| `runtime` | Runtime for function in Yandex Cloud | `env` | **Yes** |
+| `runtime` | Runtime for function in Yandex Cloud. To get the list of allowed args visit [link](https://cloud.yandex.com/en-ru/docs/functions/concepts/runtime/#runtimes) | `env` | **Yes** |
 | `entrypoint` | Entry point of function | `env` | **Yes** |
 | `description` | Description for version of function | `env` | No |
 | `environment` | Comma-separated list with env variables | `env` | No |
