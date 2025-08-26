@@ -9,7 +9,7 @@ jobs:
   deploy_one_by_one:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v4
     - name: Deploy from Folder
       uses: goodsmileduck/yandex-serverless-action@master
       with:

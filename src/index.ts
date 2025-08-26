@@ -66,7 +66,7 @@ async function run() {
         core.setOutput("time", new Date().toTimeString());
     }
     catch (error) {
-        core.setFailed(error.message);
+        core.setFailed(error instanceof Error ? error.message : String(error));
     }
 }
 
@@ -202,7 +202,7 @@ function constructBucketObjectName(inputs: IActionInputs): string {
     // check SHA present
     if (!GITHUB_SHA) {
         core.setFailed("Missing GITHUB_SHA");
-        return;
+        return "";
     }
 
     return `${inputs.functionId}/${GITHUB_SHA}.zip`;
@@ -275,7 +275,7 @@ function streamToBuffer(stream: Stream): Promise<Buffer> {
 function parseEnvironmentVariables(env: string): { [s: string]: string; } {
     core.info(`Environment string: "${env}"`);
 
-    const envObject = {};
+    const envObject: { [s: string]: string; } = {};
     const kvs = env.split(",");
     kvs.forEach(kv => {
         const eqIndex = kv.indexOf("=");
