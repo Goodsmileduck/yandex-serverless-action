@@ -12,8 +12,8 @@
     "type": "git",
     "url": "git+https://github.com/Goodsmileduck/yandex-serverless-action.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["github-actions", "yandex-cloud", "serverless", "deployment", "functions"],
+  "author": "Goodsmileduck",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Goodsmileduck/yandex-serverless-action/issues"

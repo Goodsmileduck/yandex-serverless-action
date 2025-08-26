@@ -17,10 +17,10 @@ jobs:
         node-version: 20
 
     - name: Install dependencies
-      run: yarn
+      run: npm ci
 
     - name: Rebuild the dist/ directory
-      run: yarn run package
+      run: npm run package
 
     - name: Compare the expected and actual dist/ directories
       run: |

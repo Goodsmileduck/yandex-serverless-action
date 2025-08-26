@@ -7,6 +7,42 @@ import { Session, cloudApi, serviceClients, waitForOperation } from "@yandex-clo
 import archiver from "archiver";
 
 /**
+ * Input validation utilities
+ */
+function validateNumericInput(value: string, name: string, min?: number, max?: number): number {
+    if (!value || value.trim() === '') {
+        return 0; // Return default for empty values
+    }
+    
+    const parsed = Number.parseFloat(value.trim());
+    if (Number.isNaN(parsed)) {
+        throw new Error(`Invalid ${name}: "${value}" is not a valid number`);
+    }
+    
+    if (min !== undefined && parsed < min) {
+        throw new Error(`Invalid ${name}: ${parsed} is below minimum value of ${min}`);
+    }
+    
+    if (max !== undefined && parsed > max) {
+        throw new Error(`Invalid ${name}: ${parsed} exceeds maximum value of ${max}`);
+    }
+    
+    return parsed;
+}
+
+function sanitizeInput(value: string): string {
+    return value?.trim() || '';
+}
+
+function validateRequiredInput(value: string, name: string): string {
+    const sanitized = sanitizeInput(value);
+    if (!sanitized) {
+        throw new Error(`Required input "${name}" is missing or empty`);
+    }
+    return sanitized;
+}
+
+/**
  * Typed input parameters
  */
 interface IActionInputs {
@@ -31,20 +67,20 @@ async function run() {
 
     try {
         const inputs: IActionInputs = {
-            functionId: core.getInput("function_id", { required: true }),
-            token: core.getInput("token", { required: true }),
-            accessKeyId: core.getInput("accessKeyId", { required: false }),
-            secretAccessKey: core.getInput("secretAccessKey", { required: false }),
-            runtime: core.getInput("runtime", { required: true }),
-            entrypoint: core.getInput("entrypoint", { required: true }),
-            memory: core.getInput("memory", { required: false }),
-            source: core.getInput("source", { required: false }),
-            sourceIgnore: core.getInput("exclude", { required: false }),
-            executionTimeout: core.getInput("execution_timeout", { required: false }),
-            environment: core.getInput("environment", { required: false }),
-            serviceAccount: core.getInput("service_account", { required: false }),
-            bucket: core.getInput("bucket", { required: false }),
-            description: core.getInput("description", { required: false }),
+            functionId: validateRequiredInput(core.getInput("function_id", { required: true }), "function_id"),
+            token: validateRequiredInput(core.getInput("token", { required: true }), "token"),
+            accessKeyId: sanitizeInput(core.getInput("accessKeyId", { required: false })),
+            secretAccessKey: sanitizeInput(core.getInput("secretAccessKey", { required: false })),
+            runtime: validateRequiredInput(core.getInput("runtime", { required: true }), "runtime"),
+            entrypoint: validateRequiredInput(core.getInput("entrypoint", { required: true }), "entrypoint"),
+            memory: sanitizeInput(core.getInput("memory", { required: false })) || "128",
+            source: sanitizeInput(core.getInput("source", { required: false })) || ".",
+            sourceIgnore: sanitizeInput(core.getInput("exclude", { required: false })),
+            executionTimeout: sanitizeInput(core.getInput("execution_timeout", { required: false })) || "5",
+            environment: sanitizeInput(core.getInput("environment", { required: false })),
+            serviceAccount: sanitizeInput(core.getInput("service_account", { required: false })),
+            bucket: sanitizeInput(core.getInput("bucket", { required: false })),
+            description: sanitizeInput(core.getInput("description", { required: false })),
         };
 
         core.info("Function inputs set");
@@ -75,8 +111,7 @@ async function tryStoreObjectInBucket(inputs: IActionInputs, fileContents: Buffe
         return;
 
     if (!inputs.accessKeyId || !inputs.secretAccessKey) {
-        core.setFailed("Missing ACCESS_KEY_ID or SECRET_ACCESS_KEY");
-        return;
+        throw new Error("Missing ACCESS_KEY_ID or SECRET_ACCESS_KEY when bucket is specified");
     }
 
     // setting object name
@@ -109,9 +144,9 @@ function handleOperationError(operation: cloudApi.operation.operation.Operation)
     if (operation.error) {
         const details = operation.error?.details;
         if (details)
-            throw Error(`${operation.error.code}: ${operation.error.message} (${details.join(", ")})`);
+            throw new Error(`${operation.error.code}: ${operation.error.message} (${details.join(", ")})`);
 
-        throw Error(`${operation.error.code}: ${operation.error.message}`);
+        throw new Error(`${operation.error.code}: ${operation.error.message}`);
     }
 }
 
@@ -131,7 +166,7 @@ async function getFunctionById(session: Session, inputs: IActionInputs): Promise
             return foundFunction;
         }
 
-        throw Error("Failed to find Function by id");
+        throw new Error(`Failed to find function with ID: ${inputs.functionId}`);
     }
     finally {
         core.endGroup();
@@ -147,19 +182,19 @@ async function createFunctionVersion(session: Session, targetFunction: cloudApi.
     try {
         core.info(`Function ${inputs.functionId}`);
 
-        //convert variables
-        const memory = Number.parseFloat(inputs.memory);
-        core.info(`Parsed memory: "${memory}"`);
+        // Convert and validate variables
+        const memory = validateNumericInput(inputs.memory, "memory", 128, 4096); // 128MB to 4GB
+        core.info(`Parsed memory: "${memory}MB"`);
 
-        const executionTimeout = Number.parseFloat(inputs.executionTimeout);
-        core.info(`Parsed timeout: "${executionTimeout}"`);
+        const executionTimeout = validateNumericInput(inputs.executionTimeout, "execution_timeout", 1, 900); // 1s to 15min
+        core.info(`Parsed timeout: "${executionTimeout}s"`);
 
         const request = CreateFunctionVersionRequest.fromPartial({
             functionId: targetFunction.id,
             runtime: inputs.runtime,
             entrypoint: inputs.entrypoint,
             resources: {
-                memory: memory ? memory * 1024 * 1024 : undefined,
+                memory: memory > 0 ? memory * 1024 * 1024 : 128 * 1024 * 1024, // Default to 128MB
             },
             serviceAccountId: inputs.serviceAccount,
             description: inputs.description,
@@ -201,8 +236,7 @@ function constructBucketObjectName(inputs: IActionInputs): string {
 
     // check SHA present
     if (!GITHUB_SHA) {
-        core.setFailed("Missing GITHUB_SHA");
-        return "";
+        throw new Error("Missing GITHUB_SHA environment variable");
     }
 
     return `${inputs.functionId}/${GITHUB_SHA}.zip`;
@@ -237,7 +271,7 @@ async function zipDirectory(inputs: IActionInputs): Promise<Buffer> {
         const buffer = await streamToBuffer(bufferStream);
 
         if (!buffer)
-            throw Error("Failed to initialize Buffer");
+            throw new Error("Failed to initialize buffer from stream");
 
         core.info("Buffer object created");
 
@@ -249,16 +283,22 @@ async function zipDirectory(inputs: IActionInputs): Promise<Buffer> {
 }
 
 function parseIgnoreGlobPatterns(ignoreString: string): string[] {
+    if (!ignoreString || ignoreString.trim() === '') {
+        return [];
+    }
+    
     const result: string[] = [];
     const patterns = ignoreString.split(",");
 
     patterns.forEach(pattern => {
-        // only not empty patterns
-        if (pattern?.length > 0)
-            result.push(pattern);
+        const trimmed = pattern.trim();
+        // only non-empty patterns after trimming
+        if (trimmed.length > 0) {
+            result.push(trimmed);
+        }
     });
 
-    core.info(`Source ignore pattern: "${JSON.stringify(result)}"`);
+    core.info(`Source ignore patterns: "${JSON.stringify(result)}"`);
     return result;
 }
 
@@ -273,18 +313,37 @@ function streamToBuffer(stream: Stream): Promise<Buffer> {
 }
 
 function parseEnvironmentVariables(env: string): { [s: string]: string; } {
-    core.info(`Environment string: "${env}"`);
+    if (!env || env.trim() === '') {
+        return {};
+    }
+    
+    core.info(`Environment string provided: ${env.length} characters`);
 
     const envObject: { [s: string]: string; } = {};
     const kvs = env.split(",");
-    kvs.forEach(kv => {
-        const eqIndex = kv.indexOf("=");
-        const key = kv.substring(0, eqIndex);
-        const value = kv.substring(eqIndex + 1);
+    
+    kvs.forEach((kv, index) => {
+        const trimmed = kv.trim();
+        if (!trimmed) return; // Skip empty entries
+        
+        const eqIndex = trimmed.indexOf("=");
+        if (eqIndex === -1) {
+            core.warning(`Skipping invalid environment variable at index ${index}: "${trimmed}" (missing =)`);
+            return;
+        }
+        
+        const key = trimmed.substring(0, eqIndex).trim();
+        const value = trimmed.substring(eqIndex + 1).trim();
+        
+        if (!key) {
+            core.warning(`Skipping environment variable with empty key at index ${index}`);
+            return;
+        }
+        
         envObject[key] = value;
     });
 
-    core.info(`EnvObject: "${JSON.stringify(envObject)}"`);
+    core.info(`Parsed ${Object.keys(envObject).length} environment variables`);
     return envObject;
 }
 
