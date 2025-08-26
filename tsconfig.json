@@ -1,9 +1,9 @@
 {
     "compilerOptions": {
-        "target": "ES2020",
+        "target": "ES2017",
         "module": "CommonJS",
         "moduleResolution": "node",
-        "lib": ["ES2020"],
+        "lib": ["ES2017"],
         "outDir": "dist",
         "strict": true,
         "noImplicitAny": true,
