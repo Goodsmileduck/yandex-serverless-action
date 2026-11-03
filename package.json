@@ -23,7 +23,7 @@
     "@actions/core": "^1.11.1",
     "archiver": "^7.0.1",
     "@yandex-cloud/nodejs-sdk": "^2.9.0",
-    "@aws-sdk/client-s3": "^3.873.0"
+    "@aws-sdk/client-s3": "^3.987.0"
   },
   "devDependencies": {
     "@types/archiver": "^6.0.3",
