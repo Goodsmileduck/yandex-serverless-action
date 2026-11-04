@@ -39,7 +39,7 @@ jobs:
       contents: read
       id-token: write   # required for OIDC authentication
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - uses: goodsmileduck/yandex-serverless-action@v3
       with:
         oidc_service_account_id: ${{ vars.YC_SA_ID }}
@@ -177,7 +177,7 @@ jobs:
       contents: read
       id-token: write          # lets the job request a GitHub OIDC token
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - uses: goodsmileduck/yandex-serverless-action@v3
       with:
         oidc_service_account_id: ${{ vars.YC_SA_ID }}
