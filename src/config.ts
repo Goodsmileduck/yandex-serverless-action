@@ -33,6 +33,12 @@ export interface IActionInputs extends IAuthInputs {
 }
 
 export function readInputs(): IActionInputs {
+    const accessKeyId = input("accessKeyId");
+    const secretAccessKey = input("secretAccessKey");
+    if (Boolean(accessKeyId) !== Boolean(secretAccessKey)) {
+        throw new Error("Set both accessKeyId and secretAccessKey, or neither to upload with the IAM token");
+    }
+
     return {
         functionId: required("function_id"),
         runtime: required("runtime"),
@@ -49,8 +55,8 @@ export function readInputs(): IActionInputs {
         include: splitList(input("include")),
         exclude: splitList(input("exclude")),
         bucket: input("bucket"),
-        accessKeyId: input("accessKeyId"),
-        secretAccessKey: input("secretAccessKey"),
+        accessKeyId,
+        secretAccessKey,
 
         memoryBytes: number("memory", 128, 8192, 128) * MB,
         executionTimeoutSeconds: number("execution_timeout", 1, 3600, 5),
@@ -58,18 +64,17 @@ export function readInputs(): IActionInputs {
         serviceAccount: input("service_account"),
         tags: splitList(input("tags")),
         secrets: splitList(input("secrets"), /[\n;]/).map(parseSecret),
-        logOptions: parseLogOptions(input("log_group_id"), input("log_min_level"), input("log_disabled")),
+        logOptions: parseLogOptions(input("log_group_id"), input("log_min_level"), input("log_disabled") ? core.getBooleanInput("log_disabled") : false),
         networkId: input("network_id"),
         concurrency: number("concurrency", 1, 16, 0),
-        tmpfsSizeBytes: number("tmpfs_size", 0, 8192, 0) * MB,
+        tmpfsSizeBytes: number("tmpfs_size", 0, Infinity, 0) * MB,
         mounts: splitList(input("mounts"), /[\n;]/).map(parseMount),
         metadataOptions: parseMetadataOptions(input("metadata_options")),
     };
 }
 
-function input(name: string): string {
-    return core.getInput(name).trim();
-}
+// core.getInput trims by default.
+const input = (name: string): string => core.getInput(name);
 
 function required(name: string): string {
     const value = input(name);
@@ -93,27 +98,26 @@ function number(name: string, min: number, max: number, fallback: number): numbe
 }
 
 /** Splits a list input on `separator` (comma by default), trimming and dropping empty entries. */
-export function splitList(value: string, separator: string | RegExp = ","): string[] {
+function splitList(value: string, separator: string | RegExp = ","): string[] {
     return value.split(separator).map(s => s.trim()).filter(Boolean);
 }
 
 /** `KEY=value,KEY2=value2`. Entries without `=` or with an empty key are skipped with a warning. */
-export function parseEnvironment(value: string): Record<string, string> {
+function parseEnvironment(value: string): Record<string, string> {
     const env: Record<string, string> = {};
     for (const entry of splitList(value)) {
-        const eq = entry.indexOf("=");
-        const key = eq > 0 ? entry.slice(0, eq).trim() : "";
-        if (!key) {
+        const [key, val] = splitPair(entry);
+        if (!key || val === undefined) {
             core.warning(`Skipping invalid environment entry "${entry}" (expected KEY=value)`);
             continue;
         }
-        env[key] = entry.slice(eq + 1).trim();
+        env[key] = val;
     }
     return env;
 }
 
 /** `ENV_VAR=<secret_id>/<version_id>/<key>` */
-export function parseSecret(entry: string): fn.Secret {
+function parseSecret(entry: string): fn.Secret {
     const match = /^([^=\s]+)\s*=\s*([^/\s]+)\/([^/\s]+)\/(\S+)$/.exec(entry);
     if (!match) {
         throw new Error(`Invalid secrets entry "${entry}" (expected ENV_VAR=<secret_id>/<version_id>/<key>)`);
@@ -126,7 +130,7 @@ export function parseSecret(entry: string): fn.Secret {
  * Object Storage: `name=<mount>,bucket=<bucket>[,prefix=<prefix>][,mode=ro|rw]`
  * Ephemeral disk: `name=<mount>,disk_size=<GB>`
  */
-export function parseMount(entry: string): fn.Mount {
+function parseMount(entry: string): fn.Mount {
     const fields = parseKeyValues(entry, ["name", "bucket", "prefix", "mode", "disk_size"], "mounts");
     if (!fields.name) {
         throw new Error(`Invalid mounts entry "${entry}": name is required`);
@@ -157,19 +161,15 @@ export function parseMount(entry: string): fn.Mount {
 }
 
 /** `gce_http_endpoint=enabled|disabled,aws_v1_http_endpoint=enabled|disabled` */
-export function parseMetadataOptions(value: string): fn.MetadataOptions | undefined {
+function parseMetadataOptions(value: string): fn.MetadataOptions | undefined {
     if (!value) {
         return undefined;
     }
     const fields = parseKeyValues(value, ["gce_http_endpoint", "aws_v1_http_endpoint"], "metadata_options");
     const option = (name: string, raw = ""): fn.MetadataOption => {
-        const options: Record<string, fn.MetadataOption> = {
-            "": fn.MetadataOption.METADATA_OPTION_UNSPECIFIED,
-            enabled: fn.MetadataOption.ENABLED,
-            disabled: fn.MetadataOption.DISABLED,
-        };
-        const parsed = options[raw.toLowerCase()];
-        if (parsed === undefined) {
+        if (!raw) return fn.MetadataOption.METADATA_OPTION_UNSPECIFIED;
+        const parsed = fn.metadataOptionFromJSON(raw.toUpperCase());
+        if (parsed !== fn.MetadataOption.ENABLED && parsed !== fn.MetadataOption.DISABLED) {
             throw new Error(`Invalid metadata_options: ${name} must be enabled or disabled`);
         }
         return parsed;
@@ -180,7 +180,7 @@ export function parseMetadataOptions(value: string): fn.MetadataOptions | undefi
     });
 }
 
-export function parseLogOptions(logGroupId: string, minLevel: string, disabled: string): fn.LogOptions | undefined {
+function parseLogOptions(logGroupId: string, minLevel: string, disabled: boolean): fn.LogOptions | undefined {
     if (!logGroupId && !minLevel && !disabled) {
         return undefined;
     }
@@ -194,7 +194,7 @@ export function parseLogOptions(logGroupId: string, minLevel: string, disabled: 
     }
 
     return fn.LogOptions.fromPartial({
-        disabled: disabled ? core.getBooleanInput("log_disabled") : false,
+        disabled,
         logGroupId: logGroupId || undefined,
         minLevel: level,
     });
@@ -203,12 +203,17 @@ export function parseLogOptions(logGroupId: string, minLevel: string, disabled: 
 function parseKeyValues(entry: string, allowed: string[], inputName: string): Record<string, string> {
     const fields: Record<string, string> = {};
     for (const pair of splitList(entry)) {
-        const eq = pair.indexOf("=");
-        const key = eq > 0 ? pair.slice(0, eq).trim() : pair;
+        const [key, value = ""] = splitPair(pair);
         if (!allowed.includes(key)) {
             throw new Error(`Invalid ${inputName} entry "${entry}": unknown key "${key}" (allowed: ${allowed.join(", ")})`);
         }
-        fields[key] = pair.slice(eq + 1).trim();
+        fields[key] = value;
     }
     return fields;
+}
+
+/** Splits `key=value` at the first `=`; value is undefined when there is no `=`. */
+function splitPair(pair: string): [string, string | undefined] {
+    const eq = pair.indexOf("=");
+    return eq < 0 ? [pair.trim(), undefined] : [pair.slice(0, eq).trim(), pair.slice(eq + 1).trim()];
 }

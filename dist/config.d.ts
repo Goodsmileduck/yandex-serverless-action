@@ -25,17 +25,3 @@ export interface IActionInputs extends IAuthInputs {
     metadataOptions: fn.MetadataOptions | undefined;
 }
 export declare function readInputs(): IActionInputs;
-/** Splits a list input on `separator` (comma by default), trimming and dropping empty entries. */
-export declare function splitList(value: string, separator?: string | RegExp): string[];
-/** `KEY=value,KEY2=value2`. Entries without `=` or with an empty key are skipped with a warning. */
-export declare function parseEnvironment(value: string): Record<string, string>;
-/** `ENV_VAR=<secret_id>/<version_id>/<key>` */
-export declare function parseSecret(entry: string): fn.Secret;
-/**
- * Object Storage: `name=<mount>,bucket=<bucket>[,prefix=<prefix>][,mode=ro|rw]`
- * Ephemeral disk: `name=<mount>,disk_size=<GB>`
- */
-export declare function parseMount(entry: string): fn.Mount;
-/** `gce_http_endpoint=enabled|disabled,aws_v1_http_endpoint=enabled|disabled` */
-export declare function parseMetadataOptions(value: string): fn.MetadataOptions | undefined;
-export declare function parseLogOptions(logGroupId: string, minLevel: string, disabled: string): fn.LogOptions | undefined;
