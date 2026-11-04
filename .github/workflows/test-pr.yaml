@@ -103,12 +103,11 @@ jobs:
         entrypoint: handler.hello
         execution_timeout: '5'
         description: "Large source regression (#37)"
-    - name: Deploy with all version options (keyless bucket upload)
+    - name: Deploy with all version options
       id: full
       uses: ./
       with:
         oidc_service_account_id: ${{ vars.YC_SA_ID }}
-        bucket: 'yandex-functions'
         source: 'example'
         include: '*.py'
         function_id: 'd4e9st6hefepjghdv67s'
@@ -122,7 +121,7 @@ jobs:
         tmpfs_size: '64'
         mounts: 'name=scratch,disk_size=1'
         metadata_options: 'gce_http_endpoint=disabled,aws_v1_http_endpoint=disabled'
-        description: "All options (keyless upload)"
+        description: "All version options"
     - name: Check version_id output
       run: test -n "${{ steps.full.outputs.version_id }}" && echo "version_id=${{ steps.full.outputs.version_id }}"
     - name: Package prebuilt zip
@@ -136,3 +135,14 @@ jobs:
         runtime: 'python312'
         entrypoint: handler.hello
         description: "Prebuilt zip"
+    - name: Deploy from Bucket without static keys
+      uses: ./
+      with:
+        oidc_service_account_id: ${{ vars.YC_SA_ID }}
+        bucket: 'yandex-functions'
+        source: 'example'
+        exclude: 'exclude.txt'
+        function_id: 'd4e9st6hefepjghdv67s'
+        runtime: 'python312'
+        entrypoint: handler.hello
+        description: "Keyless bucket upload"
