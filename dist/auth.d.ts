@@ -1,5 +1,5 @@
-import { Session } from "@yandex-cloud/nodejs-sdk";
 export declare const YC_TOKEN_EXCHANGE_URL = "https://auth.yandex.cloud/oauth/token";
+export declare const YC_IAM_TOKENS_URL = "https://iam.api.cloud.yandex.net/iam/v1/tokens";
 /**
  * Authentication inputs. Exactly one method must be provided.
  */
@@ -15,10 +15,20 @@ export interface IAuthInputs {
     /** Audience requested for the GitHub OIDC token. Empty means GitHub's default (https://github.com/<owner>). */
     oidcAudience: string;
 }
-export declare function createSession(inputs: IAuthInputs): Promise<Session>;
+/**
+ * Resolves the configured credentials to a Yandex Cloud IAM token. The same token is used for
+ * the Cloud API session and for Object Storage uploads.
+ */
+export declare function resolveIamToken(inputs: IAuthInputs): Promise<string>;
 export declare function parseAuthorizedKey(raw: string): {
     serviceAccountId: string;
-    accessKeyId: string;
+    keyId: string;
     privateKey: string;
 };
+/** PS256 JWT for exchanging an authorized key at the IAM tokens endpoint. */
+export declare function signServiceAccountJwt(key: {
+    serviceAccountId: string;
+    keyId: string;
+    privateKey: string;
+}): string;
 export declare function exchangeGithubOidcToken(serviceAccountId: string, audience: string): Promise<string>;
