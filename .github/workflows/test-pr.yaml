@@ -14,7 +14,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v7
       with:
-        node-version: 20
+        node-version: 22
 
     - name: Install dependencies
       run: npm ci
@@ -51,21 +51,6 @@ jobs:
         entrypoint: handler.hello
         environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
         execution_timeout: '600'
-    - name: Deploy from Bucket
-      uses: ./
-      with:
-        oidc_service_account_id: ${{ vars.YC_SA_ID }}
-        accessKeyId: ${{ secrets.ACCESS_KEY_ID }}
-        secretAccessKey: ${{ secrets.SECRET_ACCESS_KEY }}
-        bucket: 'yandex-functions'
-        source: 'example'
-        exclude: 'exclude.txt'
-        function_id: 'd4e9st6hefepjghdv67s'
-        runtime: 'python37'
-        memory: 256
-        entrypoint: handler.hello
-        environment: SOME=User Name <info@domain.com>,BOSS=1,NEW=true
-        execution_timeout: '5'
     - name: Deploy with SA
       uses: ./
       with:
@@ -83,3 +68,62 @@ jobs:
         execution_timeout: '5'
         service_account: ${{ secrets.SERVICE_ACCOUNT }}
         description: "Yandex function with bucket"
+    # Regression for #37: sources larger than the stream buffer used to produce a truncated zip
+    - name: Prepare large source
+      run: |
+        mkdir -p "$RUNNER_TEMP/large"
+        cp example/handler.py "$RUNNER_TEMP/large/"
+        head -c 2M /dev/urandom > "$RUNNER_TEMP/large/blob.bin"
+    - name: Deploy large source
+      uses: ./
+      with:
+        oidc_service_account_id: ${{ vars.YC_SA_ID }}
+        source: ${{ runner.temp }}/large
+        function_id: 'd4epc2gvqbaj72q6o2ug'
+        runtime: 'python312'
+        entrypoint: handler.hello
+        description: "Large source regression (#37)"
+    - name: Deploy with all version options
+      id: full
+      uses: ./
+      with:
+        oidc_service_account_id: ${{ vars.YC_SA_ID }}
+        source: 'example'
+        include: '*.py'
+        function_id: 'd4e9st6hefepjghdv67s'
+        runtime: 'python312'
+        memory: 1024
+        entrypoint: handler.hello
+        execution_timeout: '10'
+        service_account: ${{ secrets.SERVICE_ACCOUNT }}
+        tags: 'ci-test'
+        log_min_level: 'WARN'
+        concurrency: '2'
+        tmpfs_size: '512'
+        mounts: 'name=code,bucket=yandex-functions,mode=ro'
+        metadata_options: 'gce_http_endpoint=disabled,aws_v1_http_endpoint=disabled'
+        description: "All version options"
+    - name: Check version_id output
+      run: test -n "${{ steps.full.outputs.version_id }}" && echo "version_id=${{ steps.full.outputs.version_id }}"
+    - name: Package prebuilt zip
+      run: cd example && zip -q "$RUNNER_TEMP/prebuilt.zip" handler.py
+    - name: Deploy prebuilt zip
+      uses: ./
+      with:
+        oidc_service_account_id: ${{ vars.YC_SA_ID }}
+        source: ${{ runner.temp }}/prebuilt.zip
+        function_id: 'd4epc2gvqbaj72q6o2ug'
+        runtime: 'python312'
+        entrypoint: handler.hello
+        description: "Prebuilt zip"
+    - name: Deploy from Bucket without static keys
+      uses: ./
+      with:
+        oidc_service_account_id: ${{ vars.YC_SA_ID }}
+        bucket: 'yandex-functions'
+        source: 'example'
+        exclude: 'exclude.txt'
+        function_id: 'd4e9st6hefepjghdv67s'
+        runtime: 'python312'
+        entrypoint: handler.hello
+        description: "Keyless bucket upload"

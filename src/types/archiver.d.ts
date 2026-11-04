@@ -4,7 +4,8 @@ declare module "archiver" {
 
     export class ZipArchive extends Transform {
         constructor(options?: { zlib?: { level?: number } });
-        glob(pattern: string, options?: { cwd?: string; dot?: boolean; ignore?: string[] }): this;
+        glob(pattern: string | string[], options?: { cwd?: string; dot?: boolean; ignore?: string[] }): this;
         finalize(): Promise<void>;
+        pointer(): number;
     }
 }

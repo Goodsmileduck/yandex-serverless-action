@@ -1,7 +1,8 @@
 import * as core from "@actions/core";
-import { Session } from "@yandex-cloud/nodejs-sdk";
+import { IamTokenService } from "@yandex-cloud/nodejs-sdk/dist/token-service/iam-token-service";
 
-export const YC_TOKEN_EXCHANGE_URL = "https://auth.yandex.cloud/oauth/token";
+const YC_TOKEN_EXCHANGE_URL = "https://auth.yandex.cloud/oauth/token";
+const YC_IAM_TOKENS_URL = "https://iam.api.cloud.yandex.net/iam/v1/tokens";
 
 /**
  * Authentication inputs. Exactly one method must be provided.
@@ -25,7 +26,11 @@ interface IAuthorizedKey {
     private_key?: string;
 }
 
-export async function createSession(inputs: IAuthInputs): Promise<Session> {
+/**
+ * Resolves the configured credentials to a Yandex Cloud IAM token. The same token is used for
+ * the Cloud API session and for Object Storage uploads.
+ */
+export async function resolveIamToken(inputs: IAuthInputs): Promise<string> {
     const provided = [
         inputs.token && "token",
         inputs.iamToken && "iam_token",
@@ -44,29 +49,37 @@ export async function createSession(inputs: IAuthInputs): Promise<Session> {
 
     if (inputs.oidcServiceAccountId) {
         core.info(`Authenticating via GitHub OIDC as service account "${inputs.oidcServiceAccountId}"`);
-        const iamToken = await exchangeGithubOidcToken(inputs.oidcServiceAccountId, inputs.oidcAudience);
-        return new Session({ iamToken });
+        return exchangeGithubOidcToken(inputs.oidcServiceAccountId, inputs.oidcAudience);
     }
 
     if (inputs.serviceAccountKey) {
         const key = parseAuthorizedKey(inputs.serviceAccountKey);
         core.info(`Authenticating with authorized key of service account "${key.serviceAccountId}"`);
-        return new Session({ serviceAccountJson: key });
+        const iamToken = await new IamTokenService(key).getToken();
+        core.setSecret(iamToken);
+        return iamToken;
     }
 
     if (inputs.iamToken) {
         core.info("Authenticating with IAM token");
-        return new Session({ iamToken: inputs.iamToken });
+        return inputs.iamToken;
     }
 
     core.warning(
         "The `token` (OAuth) input is deprecated: Yandex Cloud no longer exchanges OAuth tokens issued after " +
         "2026-06-01. Switch to oidc_service_account_id or service_account_key."
     );
-    return new Session({ oauthToken: inputs.token });
+    const { iamToken } = await postForToken<{ iamToken?: string; message?: string }>(
+        YC_IAM_TOKENS_URL,
+        { "Content-Type": "application/json" },
+        JSON.stringify({ yandexPassportOauthToken: inputs.token }),
+        "iamToken",
+        (status, payload, text) => `Failed to obtain IAM token (HTTP ${status}): ${payload.message || text}`,
+    );
+    return iamToken!;
 }
 
-export function parseAuthorizedKey(raw: string): { serviceAccountId: string; accessKeyId: string; privateKey: string } {
+function parseAuthorizedKey(raw: string): { serviceAccountId: string; accessKeyId: string; privateKey: string } {
     let parsed: IAuthorizedKey;
     try {
         parsed = JSON.parse(raw);
@@ -83,14 +96,10 @@ export function parseAuthorizedKey(raw: string): { serviceAccountId: string; acc
     const pemStart = parsed.private_key.indexOf("-----BEGIN");
     const privateKey = pemStart >= 0 ? parsed.private_key.slice(pemStart) : parsed.private_key;
 
-    return {
-        serviceAccountId: parsed.service_account_id,
-        accessKeyId: parsed.id,
-        privateKey,
-    };
+    return { serviceAccountId: parsed.service_account_id, accessKeyId: parsed.id, privateKey };
 }
 
-export async function exchangeGithubOidcToken(serviceAccountId: string, audience: string): Promise<string> {
+async function exchangeGithubOidcToken(serviceAccountId: string, audience: string): Promise<string> {
     let githubToken: string;
     try {
         githubToken = await core.getIDToken(audience || undefined);
@@ -111,32 +120,46 @@ export async function exchangeGithubOidcToken(serviceAccountId: string, audience
         subject_token_type: "urn:ietf:params:oauth:token-type:id_token",
     });
 
-    const response = await fetch(YC_TOKEN_EXCHANGE_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: body.toString(),
-    });
+    const { access_token } = await postForToken<{ access_token?: string; error?: string; error_description?: string }>(
+        YC_TOKEN_EXCHANGE_URL,
+        { "Content-Type": "application/x-www-form-urlencoded" },
+        body.toString(),
+        "access_token",
+        (status, payload, text) =>
+            `Yandex Cloud token exchange failed (HTTP ${status}): ${payload.error_description || payload.error || text}. ` +
+            "Check that the workload identity federation trusts this repository and that a federated " +
+            `credential links service account "${serviceAccountId}" to this job's subject (likely "${subjectHint()}").`,
+    );
+    return access_token!;
+}
 
+/** POSTs `body`, requires `field` in the JSON response, masks it, and returns the payload. */
+async function postForToken<T extends object>(
+    url: string,
+    headers: Record<string, string>,
+    body: string,
+    field: keyof T & string,
+    describeError: (status: number, payload: T, text: string) => string,
+): Promise<T> {
+    const response = await fetch(url, { method: "POST", headers, body });
     const text = await response.text();
-    let payload: { access_token?: string; error?: string; error_description?: string } = {};
+    const payload = parseJson<T>(text);
+    const token = (payload as Record<string, unknown>)[field];
+
+    if (!response.ok || typeof token !== "string" || !token) {
+        throw new Error(describeError(response.status, payload, text.slice(0, 500)));
+    }
+    core.setSecret(token);
+    return payload;
+}
+
+function parseJson<T extends object>(text: string): T {
     try {
-        payload = JSON.parse(text);
+        return JSON.parse(text);
     }
     catch {
-        // fall through to the error below with the raw body
+        return {} as T;
     }
-
-    if (!response.ok || !payload.access_token) {
-        const detail = payload.error_description || payload.error || text.slice(0, 500);
-        throw new Error(
-            `Yandex Cloud token exchange failed (HTTP ${response.status}): ${detail}. ` +
-            "Check that the workload identity federation trusts this repository and that a federated " +
-            `credential links service account "${serviceAccountId}" to this job's subject (likely "${subjectHint()}").`
-        );
-    }
-
-    core.setSecret(payload.access_token);
-    return payload.access_token;
 }
 
 function subjectHint(): string {

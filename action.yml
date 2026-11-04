@@ -30,11 +30,11 @@ inputs:
     default: ''
     required: false
   accessKeyId:
-    description: 'Yandex AWS Access Key Id when s3 bucket used'
+    description: 'Static access key ID for the bucket upload. Optional: without it the package is uploaded with the IAM token (needs storage.uploader)'
     default: ''
     required: false
   secretAccessKey:
-    description: 'Yandex AWS Secret Access Key when s3 bucket used'
+    description: 'Static secret access key for the bucket upload (see accessKeyId)'
     default: ''
     required: false
   function_id:
@@ -54,15 +54,19 @@ inputs:
     default: ''
     required: true
   source:
-    description: 'Source directory for cloud function in git repo'
+    description: 'Source directory to zip, or path to a prebuilt .zip file to deploy as-is'
     default: '.'
     required: false
+  include:
+    description: 'Glob patterns (comma separated) of files to include from the source directory. Default: everything'
+    default: ''
+    required: false
   exclude:
-    description: 'Exclude patterns (comma separated) for source directory'
+    description: 'Glob patterns (comma separated) of files to exclude from the source directory'
     default: ''
     required: false
   memory:
-    description: 'Memory in Mb'
+    description: 'Memory in MB (128-8192)'
     default: '128'
     required: false
   environment:
@@ -70,13 +74,59 @@ inputs:
     default: ''
     required: false
   execution_timeout:
-    description: 'Execution timeout'
+    description: 'Execution timeout in seconds (1-3600)'
     default: '5'
     required: false
   service_account:
     description: 'Service account for function'
     default: ''
     required: false
+  tags:
+    description: 'Version tags (comma separated), e.g. `stable,v42`. `$latest` is always set by Yandex Cloud'
+    default: ''
+    required: false
+  secrets:
+    description: 'Lockbox secrets as environment variables, one per line or `;` separated: `ENV_VAR=<secret_id>/<version_id>/<key>`'
+    default: ''
+    required: false
+  log_group_id:
+    description: 'Cloud Logging group ID for function logs. Default: the folder default log group'
+    default: ''
+    required: false
+  log_min_level:
+    description: 'Minimum log level: TRACE, DEBUG, INFO, WARN, ERROR or FATAL'
+    default: ''
+    required: false
+  log_disabled:
+    description: 'Set to `true` to disable function logging'
+    default: ''
+    required: false
+  network_id:
+    description: 'VPC network ID to run the function in'
+    default: ''
+    required: false
+  concurrency:
+    description: 'Max concurrent requests per function instance (1-16)'
+    default: ''
+    required: false
+  tmpfs_size:
+    description: 'Size of /tmp in MB'
+    default: ''
+    required: false
+  mounts:
+    description: 'Mounts, one per line or `;` separated. Bucket: `name=<mount>,bucket=<bucket>[,prefix=<prefix>][,mode=ro|rw]`. Ephemeral disk: `name=<mount>,disk_size=<GB>`'
+    default: ''
+    required: false
+  metadata_options:
+    description: 'Metadata service access: `gce_http_endpoint=enabled|disabled,aws_v1_http_endpoint=enabled|disabled`'
+    default: ''
+    required: false
+
+outputs:
+  version_id:
+    description: 'ID of the created function version'
+  time:
+    description: 'Time the deployment finished'
 
 runs:
   using: 'node24'
