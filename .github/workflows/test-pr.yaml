@@ -40,7 +40,7 @@ jobs:
       id-token: write
     steps:
     - uses: actions/checkout@v7
-    - name: PROBE tmpfs+1024MB
+    - name: PROBE tmpfs 512/1024
       continue-on-error: true
       uses: ./
       with:
@@ -49,9 +49,9 @@ jobs:
         function_id: 'd4e9st6hefepjghdv67s'
         runtime: 'python312'
         entrypoint: handler.hello
-        tmpfs_size: '64'
+        tmpfs_size: '512'
         memory: 1024
-    - name: PROBE disk mount+SA
+    - name: PROBE bucket mount ro+SA
       continue-on-error: true
       uses: ./
       with:
@@ -60,20 +60,9 @@ jobs:
         function_id: 'd4e9st6hefepjghdv67s'
         runtime: 'python312'
         entrypoint: handler.hello
-        mounts: 'name=scratch,disk_size=1'
+        mounts: 'name=code,bucket=yandex-functions,mode=ro'
         memory: 256
         service_account: ${{ secrets.SERVICE_ACCOUNT }}
-    - name: PROBE disk mount ro
-      continue-on-error: true
-      uses: ./
-      with:
-        oidc_service_account_id: ${{ vars.YC_SA_ID }}
-        source: 'example'
-        function_id: 'd4e9st6hefepjghdv67s'
-        runtime: 'python312'
-        entrypoint: handler.hello
-        mounts: 'name=scratch,disk_size=1,mode=rw'
-        memory: 256
     - name: Deploy from Folder
       uses: ./
       with:
