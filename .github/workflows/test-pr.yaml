@@ -40,7 +40,7 @@ jobs:
       id-token: write
     steps:
     - uses: actions/checkout@v7
-    - name: PROBE tags
+    - name: PROBE tmpfs+1024MB
       continue-on-error: true
       uses: ./
       with:
@@ -48,43 +48,10 @@ jobs:
         source: 'example'
         function_id: 'd4e9st6hefepjghdv67s'
         runtime: 'python312'
-        memory: 256
-        entrypoint: handler.hello
-        tags: 'ci-test'
-    - name: PROBE log_min_level
-      continue-on-error: true
-      uses: ./
-      with:
-        oidc_service_account_id: ${{ vars.YC_SA_ID }}
-        source: 'example'
-        function_id: 'd4e9st6hefepjghdv67s'
-        runtime: 'python312'
-        memory: 256
-        entrypoint: handler.hello
-        log_min_level: 'WARN'
-    - name: PROBE concurrency
-      continue-on-error: true
-      uses: ./
-      with:
-        oidc_service_account_id: ${{ vars.YC_SA_ID }}
-        source: 'example'
-        function_id: 'd4e9st6hefepjghdv67s'
-        runtime: 'python312'
-        memory: 256
-        entrypoint: handler.hello
-        concurrency: '2'
-    - name: PROBE tmpfs_size
-      continue-on-error: true
-      uses: ./
-      with:
-        oidc_service_account_id: ${{ vars.YC_SA_ID }}
-        source: 'example'
-        function_id: 'd4e9st6hefepjghdv67s'
-        runtime: 'python312'
-        memory: 256
         entrypoint: handler.hello
         tmpfs_size: '64'
-    - name: PROBE mounts
+        memory: 1024
+    - name: PROBE disk mount+SA
       continue-on-error: true
       uses: ./
       with:
@@ -92,10 +59,11 @@ jobs:
         source: 'example'
         function_id: 'd4e9st6hefepjghdv67s'
         runtime: 'python312'
-        memory: 256
         entrypoint: handler.hello
         mounts: 'name=scratch,disk_size=1'
-    - name: PROBE metadata_options
+        memory: 256
+        service_account: ${{ secrets.SERVICE_ACCOUNT }}
+    - name: PROBE disk mount ro
       continue-on-error: true
       uses: ./
       with:
@@ -103,20 +71,9 @@ jobs:
         source: 'example'
         function_id: 'd4e9st6hefepjghdv67s'
         runtime: 'python312'
-        memory: 256
         entrypoint: handler.hello
-        metadata_options: 'gce_http_endpoint=disabled,aws_v1_http_endpoint=disabled'
-    - name: PROBE include
-      continue-on-error: true
-      uses: ./
-      with:
-        oidc_service_account_id: ${{ vars.YC_SA_ID }}
-        source: 'example'
-        function_id: 'd4e9st6hefepjghdv67s'
-        runtime: 'python312'
+        mounts: 'name=scratch,disk_size=1,mode=rw'
         memory: 256
-        entrypoint: handler.hello
-        include: '*.py'
     - name: Deploy from Folder
       uses: ./
       with:
