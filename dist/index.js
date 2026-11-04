@@ -580476,6 +580476,153 @@ ZipStream.prototype.finalize = function() {
 
 /***/ }),
 
+/***/ 29081:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.YC_TOKEN_EXCHANGE_URL = void 0;
+exports.createSession = createSession;
+exports.parseAuthorizedKey = parseAuthorizedKey;
+exports.exchangeGithubOidcToken = exchangeGithubOidcToken;
+const core = __importStar(__nccwpck_require__(37484));
+const nodejs_sdk_1 = __nccwpck_require__(6629);
+exports.YC_TOKEN_EXCHANGE_URL = "https://auth.yandex.cloud/oauth/token";
+async function createSession(inputs) {
+    const provided = [
+        inputs.token && "token",
+        inputs.iamToken && "iam_token",
+        inputs.serviceAccountKey && "service_account_key",
+        inputs.oidcServiceAccountId && "oidc_service_account_id",
+    ].filter(Boolean);
+    if (provided.length === 0) {
+        throw new Error("No credentials provided: set one of oidc_service_account_id, service_account_key, iam_token or token");
+    }
+    if (provided.length > 1) {
+        throw new Error(`Only one authentication method may be set, got: ${provided.join(", ")}`);
+    }
+    if (inputs.oidcServiceAccountId) {
+        core.info(`Authenticating via GitHub OIDC as service account "${inputs.oidcServiceAccountId}"`);
+        const iamToken = await exchangeGithubOidcToken(inputs.oidcServiceAccountId, inputs.oidcAudience);
+        return new nodejs_sdk_1.Session({ iamToken });
+    }
+    if (inputs.serviceAccountKey) {
+        const key = parseAuthorizedKey(inputs.serviceAccountKey);
+        core.info(`Authenticating with authorized key of service account "${key.serviceAccountId}"`);
+        return new nodejs_sdk_1.Session({ serviceAccountJson: key });
+    }
+    if (inputs.iamToken) {
+        core.info("Authenticating with IAM token");
+        return new nodejs_sdk_1.Session({ iamToken: inputs.iamToken });
+    }
+    core.warning("The `token` (OAuth) input is deprecated: Yandex Cloud no longer exchanges OAuth tokens issued after " +
+        "2026-06-01. Switch to oidc_service_account_id or service_account_key.");
+    return new nodejs_sdk_1.Session({ oauthToken: inputs.token });
+}
+function parseAuthorizedKey(raw) {
+    let parsed;
+    try {
+        parsed = JSON.parse(raw);
+    }
+    catch (_a) {
+        throw new Error("service_account_key is not valid JSON (expected the output of `yc iam key create`)");
+    }
+    if (!parsed.id || !parsed.service_account_id || !parsed.private_key) {
+        throw new Error("service_account_key must contain id, service_account_id and private_key");
+    }
+    // `yc iam key create` prefixes the PEM with a warning line; keep only the PEM block.
+    const pemStart = parsed.private_key.indexOf("-----BEGIN");
+    const privateKey = pemStart >= 0 ? parsed.private_key.slice(pemStart) : parsed.private_key;
+    return {
+        serviceAccountId: parsed.service_account_id,
+        accessKeyId: parsed.id,
+        privateKey,
+    };
+}
+async function exchangeGithubOidcToken(serviceAccountId, audience) {
+    let githubToken;
+    try {
+        githubToken = await core.getIDToken(audience || undefined);
+    }
+    catch (error) {
+        const reason = error instanceof Error ? error.message : String(error);
+        throw new Error(`Failed to get GitHub OIDC token (${reason}). The job needs \`permissions: id-token: write\`; ` +
+            "OIDC is not available for pull requests from forks or Dependabot.");
+    }
+    const body = new URLSearchParams({
+        grant_type: "urn:ietf:params:oauth:grant-type:token-exchange",
+        requested_token_type: "urn:ietf:params:oauth:token-type:access_token",
+        audience: serviceAccountId,
+        subject_token: githubToken,
+        subject_token_type: "urn:ietf:params:oauth:token-type:id_token",
+    });
+    const response = await fetch(exports.YC_TOKEN_EXCHANGE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: body.toString(),
+    });
+    const text = await response.text();
+    let payload = {};
+    try {
+        payload = JSON.parse(text);
+    }
+    catch (_a) {
+        // fall through to the error below with the raw body
+    }
+    if (!response.ok || !payload.access_token) {
+        const detail = payload.error_description || payload.error || text.slice(0, 500);
+        throw new Error(`Yandex Cloud token exchange failed (HTTP ${response.status}): ${detail}. ` +
+            "Check that the workload identity federation trusts this repository and that a federated " +
+            `credential links service account "${serviceAccountId}" to this job's subject (likely "${subjectHint()}").`);
+    }
+    core.setSecret(payload.access_token);
+    return payload.access_token;
+}
+function subjectHint() {
+    const repo = process.env.GITHUB_REPOSITORY || "<owner>/<repo>";
+    if (process.env.GITHUB_EVENT_NAME === "pull_request") {
+        return `repo:${repo}:pull_request`;
+    }
+    return `repo:${repo}:ref:${process.env.GITHUB_REF || "refs/heads/<branch>"}`;
+}
+
+
+/***/ }),
+
 /***/ 79407:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -580523,6 +580670,7 @@ const stream_1 = __nccwpck_require__(2203);
 const client_s3_1 = __nccwpck_require__(53711);
 const nodejs_sdk_1 = __nccwpck_require__(6629);
 const archiver_1 = __importDefault(__nccwpck_require__(99392));
+const auth_1 = __nccwpck_require__(29081);
 /**
  * Input validation utilities
  */
@@ -580558,7 +580706,11 @@ async function run() {
     try {
         const inputs = {
             functionId: validateRequiredInput(core.getInput("function_id", { required: true }), "function_id"),
-            token: validateRequiredInput(core.getInput("token", { required: true }), "token"),
+            token: sanitizeInput(core.getInput("token", { required: false })),
+            iamToken: sanitizeInput(core.getInput("iam_token", { required: false })),
+            serviceAccountKey: sanitizeInput(core.getInput("service_account_key", { required: false })),
+            oidcServiceAccountId: sanitizeInput(core.getInput("oidc_service_account_id", { required: false })),
+            oidcAudience: sanitizeInput(core.getInput("oidc_audience", { required: false })),
             accessKeyId: sanitizeInput(core.getInput("accessKeyId", { required: false })),
             secretAccessKey: sanitizeInput(core.getInput("secretAccessKey", { required: false })),
             runtime: validateRequiredInput(core.getInput("runtime", { required: true }), "runtime"),
@@ -580575,9 +580727,7 @@ async function run() {
         core.info("Function inputs set");
         const fileContents = await zipDirectory(inputs);
         core.info(`Buffer size: ${Buffer.byteLength(fileContents)}b`);
-        // OAuth token
-        // Initialize SDK with your token
-        const session = new nodejs_sdk_1.Session({ oauthToken: inputs.token });
+        const session = await (0, auth_1.createSession)(inputs);
         await tryStoreObjectInBucket(inputs, fileContents);
         const functionObject = await getFunctionById(session, inputs);
         await createFunctionVersion(session, functionObject, fileContents, inputs);

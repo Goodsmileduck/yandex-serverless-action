@@ -33,12 +33,17 @@ jobs:
 
   deploy_one_by_one:
     runs-on: ubuntu-latest
+    # OIDC tokens are not issued to Dependabot or fork PRs
+    if: github.actor != 'dependabot[bot]' && github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: read
+      id-token: write
     steps:
     - uses: actions/checkout@v4
     - name: Deploy from Folder
       uses: ./
       with:
-        token: ${{ secrets.TOKEN }}
+        oidc_service_account_id: ${{ vars.YC_SA_ID }}
         source: 'example'
         exclude: 'exclude.txt'
         function_id: 'd4epc2gvqbaj72q6o2ug'
@@ -49,7 +54,7 @@ jobs:
     - name: Deploy from Bucket
       uses: ./
       with:
-        token: ${{ secrets.TOKEN }}
+        oidc_service_account_id: ${{ vars.YC_SA_ID }}
         accessKeyId: ${{ secrets.ACCESS_KEY_ID }}
         secretAccessKey: ${{ secrets.SECRET_ACCESS_KEY }}
         bucket: 'yandex-functions'
@@ -64,7 +69,7 @@ jobs:
     - name: Deploy with SA
       uses: ./
       with:
-        token: ${{ secrets.TOKEN }}
+        oidc_service_account_id: ${{ vars.YC_SA_ID }}
         accessKeyId: ${{ secrets.ACCESS_KEY_ID }}
         secretAccessKey: ${{ secrets.SECRET_ACCESS_KEY }}
         bucket: 'yandex-functions'
