@@ -5,6 +5,7 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { Session, cloudApi, serviceClients, waitForOperation } from "@yandex-cloud/nodejs-sdk";
 
 import archiver from "archiver";
+import { IAuthInputs, createSession } from "./auth";
 
 /**
  * Input validation utilities
@@ -45,9 +46,8 @@ function validateRequiredInput(value: string, name: string): string {
 /**
  * Typed input parameters
  */
-interface IActionInputs {
+interface IActionInputs extends IAuthInputs {
     functionId: string;
-    token: string;
     accessKeyId: string;
     secretAccessKey: string;
     runtime: string;
@@ -68,7 +68,11 @@ async function run() {
     try {
         const inputs: IActionInputs = {
             functionId: validateRequiredInput(core.getInput("function_id", { required: true }), "function_id"),
-            token: validateRequiredInput(core.getInput("token", { required: true }), "token"),
+            token: sanitizeInput(core.getInput("token", { required: false })),
+            iamToken: sanitizeInput(core.getInput("iam_token", { required: false })),
+            serviceAccountKey: sanitizeInput(core.getInput("service_account_key", { required: false })),
+            oidcServiceAccountId: sanitizeInput(core.getInput("oidc_service_account_id", { required: false })),
+            oidcAudience: sanitizeInput(core.getInput("oidc_audience", { required: false })),
             accessKeyId: sanitizeInput(core.getInput("accessKeyId", { required: false })),
             secretAccessKey: sanitizeInput(core.getInput("secretAccessKey", { required: false })),
             runtime: validateRequiredInput(core.getInput("runtime", { required: true }), "runtime"),
@@ -89,9 +93,7 @@ async function run() {
 
         core.info(`Buffer size: ${Buffer.byteLength(fileContents)}b`);
 
-        // OAuth token
-        // Initialize SDK with your token
-        const session = new Session({ oauthToken: inputs.token });
+        const session = await createSession(inputs);
 
         await tryStoreObjectInBucket(inputs, fileContents);
 

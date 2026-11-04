@@ -8,12 +8,15 @@ on:
 jobs:
   deploy_one_by_one:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
     - uses: actions/checkout@v4
     - name: Deploy from Folder
       uses: goodsmileduck/yandex-serverless-action@master
       with:
-        token: ${{ secrets.TOKEN }}
+        oidc_service_account_id: ${{ vars.YC_SA_ID }}
         source: 'example'
         exclude: 'exclude.txt'
         function_id: 'd4epc2gvqbaj72q6o2ug'
@@ -24,7 +27,7 @@ jobs:
     - name: Deploy from Bucket
       uses: goodsmileduck/yandex-serverless-action@master
       with:
-        token: ${{ secrets.TOKEN }}
+        oidc_service_account_id: ${{ vars.YC_SA_ID }}
         accessKeyId: ${{ secrets.ACCESS_KEY_ID }}
         secretAccessKey: ${{ secrets.SECRET_ACCESS_KEY }}
         bucket: 'yandex-functions'

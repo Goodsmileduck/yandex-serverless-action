@@ -34,11 +34,14 @@ on: push
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write   # required for OIDC authentication
     steps:
     - uses: actions/checkout@v4
     - uses: goodsmileduck/yandex-serverless-action@v2
       with:
-        token: ${{ secrets.TOKEN }}
+        oidc_service_account_id: ${{ vars.YC_SA_ID }}
         bucket: ${{ secrets.BUCKET }}
         accessKeyId: ${{ secrets.ACCESS_KEY_ID }}
         secretAccessKey: ${{ secrets.SECRET_ACCESS_KEY }}
@@ -53,11 +56,15 @@ jobs:
 
 ## Configuration
 
-The following settings must be passed as variables as shown in the example. Sensitive information, especially `token`  should be [set as encrypted secrets](https://help.github.com/en/articles/virtual-environments-for-github-actions#creating-and-using-secrets-encrypted-variables) — otherwise, they'll be public to anyone browsing your repository.
+The following settings must be passed as variables as shown in the example. Sensitive information, especially `service_account_key`, `iam_token` and `token`, should be [set as encrypted secrets](https://help.github.com/en/articles/virtual-environments-for-github-actions#creating-and-using-secrets-encrypted-variables) — otherwise, they'll be public to anyone browsing your repository.
 
 | Key | Value | Suggested Type | Required |
 | ------------- | ------------- | ------------- | ------------- |
-| `token` | Token for access to yc cli. To get token visit [link](https://oauth.yandex.ru/authorize?response_type=token&client_id=1a6990aa636648e9b2ef855fa7bec2fb) | `secret` | **Yes** |
+| `oidc_service_account_id` | Service account ID to authenticate as via GitHub OIDC. See [Authentication](#authentication) | `env` | One auth method required |
+| `oidc_audience` | Audience for the GitHub OIDC token; must match the federation audience. Default: `https://github.com/<owner>` | `env` | No |
+| `service_account_key` | Service account authorized key JSON (`yc iam key create` output) | `secret` | One auth method required |
+| `iam_token` | Yandex Cloud IAM token | `secret` | One auth method required |
+| `token` | **Deprecated.** Yandex OAuth token. Yandex Cloud rejects OAuth tokens issued after 2026-06-01 | `secret` | One auth method required |
 | `function_id` | The ID of function in Yandex Cloud | `env` | **Yes** |
 | `runtime` | Runtime for function in Yandex Cloud. To get the list of allowed args visit [link](https://cloud.yandex.com/en-ru/docs/functions/concepts/runtime/#runtimes) | `env` | **Yes** |
 | `entrypoint` | Entry point of function | `env` | **Yes** |
@@ -76,11 +83,63 @@ The following settings must be passed as variables as shown in the example. Sens
 
 This action includes comprehensive input validation to ensure security and reliability:
 
-- **Required fields**: `token`, `function_id`, `runtime`, `entrypoint` are validated for presence
+- **Required fields**: exactly one auth input (`oidc_service_account_id`, `service_account_key`, `iam_token` or `token`), `function_id`, `runtime`, `entrypoint` are validated for presence
 - **Memory limits**: Must be between 128-4096 MB (defaults to 128 MB if invalid)
 - **Execution timeout**: Must be between 1-900 seconds (defaults to 5s if invalid)
 - **Environment variables**: Malformed KEY=VALUE pairs are skipped with warnings
 - **Exclude patterns**: Empty patterns are automatically filtered out
+
+## Authentication
+
+Set exactly one of the following inputs.
+
+> Yandex Cloud no longer exchanges OAuth tokens issued after 2026-06-01, so new setups cannot use `token`.
+
+### GitHub OIDC (recommended, no stored secrets)
+
+Uses [Workload Identity Federation](https://yandex.cloud/en/docs/iam/concepts/workload-identity): GitHub issues a short-lived JWT for the job, and the action exchanges it for a Yandex Cloud IAM token.
+
+1. Create a service account and allow it to deploy functions:
+   ```bash
+   yc iam service-account create --name github-deployer
+   SA_ID=$(yc iam service-account get github-deployer --format json | jq -r .id)
+   yc resource-manager folder add-access-binding <folder_id> \
+     --role functions.editor --subject serviceAccount:$SA_ID
+   ```
+   If you set `service_account` (the function's runtime service account), also grant the deployer `iam.serviceAccounts.user` on that account.
+2. Create a federation that trusts GitHub:
+   ```bash
+   yc iam workload-identity oidc federation create --name github \
+     --issuer "https://token.actions.githubusercontent.com" \
+     --audiences "https://github.com/<github_owner>" \
+     --jwks-url "https://token.actions.githubusercontent.com/.well-known/jwks"
+   ```
+3. Link the service account to the jobs allowed to use it. The subject must match the job's `sub` claim exactly, so add one credential per trigger:
+   ```bash
+   FED_ID=$(yc iam workload-identity oidc federation get github --format json | jq -r .id)
+   # pushes to master
+   yc iam workload-identity federated-credential create --service-account-id $SA_ID \
+     --federation-id $FED_ID --external-subject-id "repo:<owner>/<repo>:ref:refs/heads/master"
+   # pull requests (optional)
+   yc iam workload-identity federated-credential create --service-account-id $SA_ID \
+     --federation-id $FED_ID --external-subject-id "repo:<owner>/<repo>:pull_request"
+   ```
+   Jobs that use a GitHub environment get `repo:<owner>/<repo>:environment:<name>` instead.
+4. Store the service account ID (not secret) as a repository variable, e.g. `YC_SA_ID`, add `permissions: id-token: write` to the job, and pass `oidc_service_account_id: ${{ vars.YC_SA_ID }}`.
+
+OIDC tokens are not issued to workflows triggered by Dependabot or pull requests from forks.
+
+### Service account authorized key
+
+```bash
+yc iam key create --service-account-id $SA_ID -o key.json
+gh secret set YC_SA_KEY < key.json && rm key.json
+```
+Then pass `service_account_key: ${{ secrets.YC_SA_KEY }}`.
+
+### IAM token
+
+Pass a token you obtained in an earlier step (e.g. `yc iam create-token`) as `iam_token`. IAM tokens are valid for at most 12 hours.
 
 ## Node.js Runtime Requirements
 
@@ -100,7 +159,7 @@ This action includes comprehensive input validation to ensure security and relia
 ```yaml
 - uses: goodsmileduck/yandex-serverless-action@v2
   with:
-    token: ${{ secrets.TOKEN }}
+    oidc_service_account_id: ${{ vars.YC_SA_ID }}
     function_id: 'my_function_id'
     runtime: 'python39'
     memory: '256'
@@ -115,7 +174,7 @@ This action includes comprehensive input validation to ensure security and relia
 - uses: goodsmileduck/yandex-serverless-action@v2
   with:
     description: "Function with bucket"
-    token: ${{ secrets.TOKEN }}
+    oidc_service_account_id: ${{ vars.YC_SA_ID }}
     bucket: ${{ secrets.BUCKET }}
     accessKeyId: ${{ secrets.ACCESS_KEY_ID }}
     secretAccessKey: ${{ secrets.SECRET_ACCESS_KEY }}
@@ -132,7 +191,7 @@ This action includes comprehensive input validation to ensure security and relia
 ```yaml
 - uses: goodsmileduck/yandex-serverless-action@v2
   with:
-    token: ${{ secrets.TOKEN }}
+    oidc_service_account_id: ${{ vars.YC_SA_ID }}
     function_id: 'my_function_id'
     runtime: 'python39'
     memory: '256'
@@ -147,7 +206,7 @@ This action includes comprehensive input validation to ensure security and relia
 ```yaml
 - uses: goodsmileduck/yandex-serverless-action@v2
   with:
-    token: ${{ secrets.TOKEN }}
+    oidc_service_account_id: ${{ vars.YC_SA_ID }}
     function_id: 'my_function_id'
     runtime: 'python39'
     memory: '256'

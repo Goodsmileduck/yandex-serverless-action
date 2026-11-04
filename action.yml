@@ -9,10 +9,26 @@ inputs:
     description: 'Function description'
     default: ''
     required: false
-  token:
-    description: 'OAuth token'
+  oidc_service_account_id:
+    description: 'Service account ID to authenticate as via GitHub OIDC (Yandex Cloud Workload Identity Federation). Requires `permissions: id-token: write`.'
     default: ''
-    required: true
+    required: false
+  oidc_audience:
+    description: 'Audience for the GitHub OIDC token. Must match the federation audience. Defaults to GitHub default (https://github.com/<owner>).'
+    default: ''
+    required: false
+  service_account_key:
+    description: 'Service account authorized key JSON (output of `yc iam key create`)'
+    default: ''
+    required: false
+  iam_token:
+    description: 'Yandex Cloud IAM token'
+    default: ''
+    required: false
+  token:
+    description: 'DEPRECATED: Yandex OAuth token. Yandex Cloud rejects OAuth tokens issued after 2026-06-01; use oidc_service_account_id or service_account_key.'
+    default: ''
+    required: false
   accessKeyId:
     description: 'Yandex AWS Access Key Id when s3 bucket used'
     default: ''
