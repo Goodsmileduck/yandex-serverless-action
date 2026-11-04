@@ -2,22 +2,9 @@
 declare module "archiver" {
     import { Transform } from "stream";
 
-    interface ArchiverOptions {
-        zlib?: { level?: number };
-    }
-
-    interface GlobOptions {
-        cwd?: string;
-        dot?: boolean;
-        ignore?: string[];
-    }
-
-    class Archiver extends Transform {
-        glob(pattern: string, options?: GlobOptions): this;
+    export class ZipArchive extends Transform {
+        constructor(options?: { zlib?: { level?: number } });
+        glob(pattern: string, options?: { cwd?: string; dot?: boolean; ignore?: string[] }): this;
         finalize(): Promise<void>;
-    }
-
-    export class ZipArchive extends Archiver {
-        constructor(options?: ArchiverOptions);
     }
 }
