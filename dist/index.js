@@ -579844,7 +579844,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(37484));
-const stream_1 = __nccwpck_require__(2203);
+const events_1 = __nccwpck_require__(24434);
 const client_s3_1 = __nccwpck_require__(53711);
 const nodejs_sdk_1 = __nccwpck_require__(6629);
 const archiver_1 = __nccwpck_require__(53516);
@@ -579976,9 +579976,9 @@ async function createFunctionVersion(session, targetFunction, fileContents, inpu
     try {
         core.info(`Function ${inputs.functionId}`);
         // Convert and validate variables
-        const memory = validateNumericInput(inputs.memory, "memory", 128, 4096); // 128MB to 4GB
+        const memory = validateNumericInput(inputs.memory, "memory", 128, 8192); // 128MB to 8GB
         core.info(`Parsed memory: "${memory}MB"`);
-        const executionTimeout = validateNumericInput(inputs.executionTimeout, "execution_timeout", 1, 900); // 1s to 15min
+        const executionTimeout = validateNumericInput(inputs.executionTimeout, "execution_timeout", 1, 3600); // 1s to 1h
         core.info(`Parsed timeout: "${executionTimeout}s"`);
         const request = CreateFunctionVersionRequest.fromPartial({
             functionId: targetFunction.id,
@@ -580032,10 +580032,13 @@ function constructBucketObjectName(inputs) {
 async function zipDirectory(inputs) {
     core.startGroup("ZipDirectory");
     try {
-        const bufferStream = new stream_1.PassThrough();
         const archive = new archiver_1.ZipArchive({ zlib: { level: 9 } });
         core.info("Archive initialize");
-        archive.pipe(bufferStream);
+        // Consume the archive while it is being written: buffering it in an unread
+        // stream stalls archiver on large sources and truncated the zip (issue #37).
+        const chunks = [];
+        archive.on("data", (chunk) => chunks.push(chunk));
+        const ended = (0, events_1.once)(archive, "end");
         await archive
             .glob("**", {
             cwd: inputs.source,
@@ -580043,13 +580046,9 @@ async function zipDirectory(inputs) {
             ignore: parseIgnoreGlobPatterns(inputs.sourceIgnore)
         })
             .finalize();
+        await ended;
         core.info("Archive finalized");
-        bufferStream.end();
-        const buffer = await streamToBuffer(bufferStream);
-        if (!buffer)
-            throw new Error("Failed to initialize buffer from stream");
-        core.info("Buffer object created");
-        return buffer;
+        return Buffer.concat(chunks);
     }
     finally {
         core.endGroup();
@@ -580070,14 +580069,6 @@ function parseIgnoreGlobPatterns(ignoreString) {
     });
     core.info(`Source ignore patterns: "${JSON.stringify(result)}"`);
     return result;
-}
-function streamToBuffer(stream) {
-    const chunks = [];
-    return new Promise((resolve, reject) => {
-        stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
-        stream.on("error", (err) => reject(err));
-        stream.on("end", () => resolve(Buffer.concat(chunks)));
-    });
 }
 function parseEnvironmentVariables(env) {
     if (!env || env.trim() === '') {

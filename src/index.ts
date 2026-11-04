@@ -1,6 +1,6 @@
 import * as core from "@actions/core";
 
-import { PassThrough, Stream } from "stream";
+import { once } from "events";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { Session, cloudApi, serviceClients, waitForOperation } from "@yandex-cloud/nodejs-sdk";
 
@@ -185,10 +185,10 @@ async function createFunctionVersion(session: Session, targetFunction: cloudApi.
         core.info(`Function ${inputs.functionId}`);
 
         // Convert and validate variables
-        const memory = validateNumericInput(inputs.memory, "memory", 128, 4096); // 128MB to 4GB
+        const memory = validateNumericInput(inputs.memory, "memory", 128, 8192); // 128MB to 8GB
         core.info(`Parsed memory: "${memory}MB"`);
 
-        const executionTimeout = validateNumericInput(inputs.executionTimeout, "execution_timeout", 1, 900); // 1s to 15min
+        const executionTimeout = validateNumericInput(inputs.executionTimeout, "execution_timeout", 1, 3600); // 1s to 1h
         core.info(`Parsed timeout: "${executionTimeout}s"`);
 
         const request = CreateFunctionVersionRequest.fromPartial({
@@ -252,12 +252,14 @@ async function zipDirectory(inputs: IActionInputs): Promise<Buffer> {
     core.startGroup("ZipDirectory");
 
     try {
-        const bufferStream = new PassThrough();
-
         const archive = new ZipArchive({ zlib: { level: 9 } });
         core.info("Archive initialize");
 
-        archive.pipe(bufferStream);
+        // Consume the archive while it is being written: buffering it in an unread
+        // stream stalls archiver on large sources and truncated the zip (issue #37).
+        const chunks: Buffer[] = [];
+        archive.on("data", (chunk: Buffer) => chunks.push(chunk));
+        const ended = once(archive, "end");
 
         await archive
             .glob("**", {
@@ -266,18 +268,10 @@ async function zipDirectory(inputs: IActionInputs): Promise<Buffer> {
                 ignore: parseIgnoreGlobPatterns(inputs.sourceIgnore)
             })
             .finalize();
+        await ended;
 
         core.info("Archive finalized");
-
-        bufferStream.end();
-        const buffer = await streamToBuffer(bufferStream);
-
-        if (!buffer)
-            throw new Error("Failed to initialize buffer from stream");
-
-        core.info("Buffer object created");
-
-        return buffer;
+        return Buffer.concat(chunks);
     }
     finally {
         core.endGroup();
@@ -304,15 +298,6 @@ function parseIgnoreGlobPatterns(ignoreString: string): string[] {
     return result;
 }
 
-function streamToBuffer(stream: Stream): Promise<Buffer> {
-    const chunks: Uint8Array[] = [];
-
-    return new Promise((resolve, reject) => {
-        stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
-        stream.on("error", (err) => reject(err));
-        stream.on("end", () => resolve(Buffer.concat(chunks)));
-    });
-}
 
 function parseEnvironmentVariables(env: string): { [s: string]: string; } {
     if (!env || env.trim() === '') {

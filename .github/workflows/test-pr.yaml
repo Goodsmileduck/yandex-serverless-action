@@ -83,3 +83,23 @@ jobs:
         execution_timeout: '5'
         service_account: ${{ secrets.SERVICE_ACCOUNT }}
         description: "Yandex function with bucket"
+    # Regression for #37: sources larger than the stream buffer used to produce a truncated zip
+    - name: Prepare large source
+      run: |
+        mkdir -p "$RUNNER_TEMP/large"
+        cp example/handler.py "$RUNNER_TEMP/large/"
+        head -c 2M /dev/urandom > "$RUNNER_TEMP/large/blob.bin"
+    - name: Deploy large source from Bucket
+      uses: ./
+      with:
+        oidc_service_account_id: ${{ vars.YC_SA_ID }}
+        accessKeyId: ${{ secrets.ACCESS_KEY_ID }}
+        secretAccessKey: ${{ secrets.SECRET_ACCESS_KEY }}
+        bucket: 'yandex-functions'
+        source: ${{ runner.temp }}/large
+        function_id: 'd4e9st6hefepjghdv67s'
+        runtime: 'python37'
+        memory: 256
+        entrypoint: handler.hello
+        execution_timeout: '5'
+        description: "Large source regression (#37)"

@@ -11,7 +11,7 @@ This action uploads code to object storage and updates Serverless function in Ya
 
 - 🔒 **Enhanced Security**: Comprehensive input validation and sanitization
 - 🛡️ **Error Handling**: Proper exception handling with descriptive error messages  
-- 📊 **Input Validation**: Memory (128-4096MB) and timeout (1-900s) bounds checking
+- 📊 **Input Validation**: Memory (128-8192MB) and timeout (1-3600s) bounds checking
 - 🔧 **Environment Parsing**: Robust KEY=VALUE parsing with error recovery
 - 🔑 **GitHub OIDC**: Deploy without stored Yandex credentials (see [Authentication](#authentication))
 - ⚡ **Node.js 24**: Runs on the Node.js 24 Actions runtime
@@ -71,8 +71,8 @@ The following settings must be passed as variables as shown in the example. Sens
 | `entrypoint` | Entry point of function | `env` | **Yes** |
 | `description` | Description for version of function | `env` | No |
 | `environment` | Comma-separated list with env variables in format `KEY1=value1,KEY2=value2` | `env` | No |
-| `memory` | Memory limit in `megabytes` for function in Yandex Cloud. Valid range: 128-4096MB. Default: `128` | `env` | No |
-| `execution_timeout` | Execution timeout in seconds for function in Yandex Cloud. Valid range: 1-900s. Default: `5` | `env` | No |
+| `memory` | Memory limit in `megabytes` for function in Yandex Cloud. Valid range: 128-8192MB. Default: `128` | `env` | No |
+| `execution_timeout` | Execution timeout in seconds for function in Yandex Cloud. Valid range: 1-3600s. Default: `5` | `env` | No |
 | `service_account` | Service account id. | `secret` | No |
 | `bucket` | The name of the bucket you're syncing to. For example, `bucket`. If wasn't set action will try to upload code directly. Required if code bigger than 5Mb| `secret` | No |
 | `accessKeyId` | Yandex AWS Access Key Id when s3 bucket used. Required if code bigger than 5Mb| `secret` | No |
@@ -85,8 +85,8 @@ The following settings must be passed as variables as shown in the example. Sens
 This action includes comprehensive input validation to ensure security and reliability:
 
 - **Required fields**: exactly one auth input (`oidc_service_account_id`, `service_account_key`, `iam_token` or `token`), `function_id`, `runtime`, `entrypoint` are validated for presence
-- **Memory limits**: Must be between 128-4096 MB (defaults to 128 MB if invalid)
-- **Execution timeout**: Must be between 1-900 seconds (defaults to 5s if invalid)
+- **Memory limits**: Must be between 128-8192 MB (defaults to 128 MB if invalid)
+- **Execution timeout**: Must be between 1-3600 seconds (defaults to 5s if invalid)
 - **Environment variables**: Malformed KEY=VALUE pairs are skipped with warnings
 - **Exclude patterns**: Empty patterns are automatically filtered out
 
@@ -304,7 +304,7 @@ Pass a token you obtained in an earlier step (e.g. `yc iam create-token`) as `ia
 
 **❌ "Invalid memory: 'abc' is not a valid number"**
 - **Cause**: Non-numeric value provided for memory
-- **Solution**: Use numeric values between 128-4096 (e.g., `memory: '512'`)
+- **Solution**: Use numeric values between 128-8192 (e.g., `memory: '512'`)
 
 **❌ "Failed to find function with ID: xyz"**
 - **Cause**: Function doesn't exist or access denied
