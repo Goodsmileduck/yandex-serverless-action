@@ -13,7 +13,8 @@ This action uploads code to object storage and updates Serverless function in Ya
 - 🛡️ **Error Handling**: Proper exception handling with descriptive error messages  
 - 📊 **Input Validation**: Memory (128-4096MB) and timeout (1-900s) bounds checking
 - 🔧 **Environment Parsing**: Robust KEY=VALUE parsing with error recovery
-- ⚡ **Node.js 20**: Updated to latest Node.js runtime for better performance
+- 🔑 **GitHub OIDC**: Deploy without stored Yandex credentials (see [Authentication](#authentication))
+- ⚡ **Node.js 24**: Runs on the Node.js 24 Actions runtime
 - 🏗️ **Dependencies**: All dependencies updated to latest secure versions
 
 
@@ -38,8 +39,8 @@ jobs:
       contents: read
       id-token: write   # required for OIDC authentication
     steps:
-    - uses: actions/checkout@v4
-    - uses: goodsmileduck/yandex-serverless-action@v2
+    - uses: actions/checkout@v7
+    - uses: goodsmileduck/yandex-serverless-action@v3
       with:
         oidc_service_account_id: ${{ vars.YC_SA_ID }}
         bucket: ${{ secrets.BUCKET }}
@@ -176,8 +177,8 @@ jobs:
       contents: read
       id-token: write          # lets the job request a GitHub OIDC token
     steps:
-    - uses: actions/checkout@v4
-    - uses: goodsmileduck/yandex-serverless-action@v2
+    - uses: actions/checkout@v7
+    - uses: goodsmileduck/yandex-serverless-action@v3
       with:
         oidc_service_account_id: ${{ vars.YC_SA_ID }}
         function_id: '<function_id>'
@@ -216,9 +217,9 @@ Pass a token you obtained in an earlier step (e.g. `yc iam create-token`) as `ia
 
 ## Node.js Runtime Requirements
 
-- **Minimum Node.js version**: 20.x
-- **GitHub Actions runner**: Uses Node.js 20 runtime
-- **Compatibility**: Works with ubuntu-latest, ubuntu-20.04, ubuntu-22.04
+- **Actions runtime**: `node24` (since v3.2.0)
+- **GitHub-hosted runners**: supported on all current images
+- **Self-hosted runners**: need a runner version that supports `node24` actions
 
 # Scenarios
 
@@ -230,7 +231,7 @@ Pass a token you obtained in an earlier step (e.g. `yc iam create-token`) as `ia
 ## Zip and and deploy folder
 
 ```yaml
-- uses: goodsmileduck/yandex-serverless-action@v2
+- uses: goodsmileduck/yandex-serverless-action@v3
   with:
     oidc_service_account_id: ${{ vars.YC_SA_ID }}
     function_id: 'my_function_id'
@@ -244,7 +245,7 @@ Pass a token you obtained in an earlier step (e.g. `yc iam create-token`) as `ia
 ## Zip and upload to bucket and deploy
 
 ```yaml
-- uses: goodsmileduck/yandex-serverless-action@v2
+- uses: goodsmileduck/yandex-serverless-action@v3
   with:
     description: "Function with bucket"
     oidc_service_account_id: ${{ vars.YC_SA_ID }}
@@ -262,7 +263,7 @@ Pass a token you obtained in an earlier step (e.g. `yc iam create-token`) as `ia
 ## Exclude pattern from archive
 
 ```yaml
-- uses: goodsmileduck/yandex-serverless-action@v2
+- uses: goodsmileduck/yandex-serverless-action@v3
   with:
     oidc_service_account_id: ${{ vars.YC_SA_ID }}
     function_id: 'my_function_id'
@@ -277,7 +278,7 @@ Pass a token you obtained in an earlier step (e.g. `yc iam create-token`) as `ia
 ## Set service account id
 
 ```yaml
-- uses: goodsmileduck/yandex-serverless-action@v2
+- uses: goodsmileduck/yandex-serverless-action@v3
   with:
     oidc_service_account_id: ${{ vars.YC_SA_ID }}
     function_id: 'my_function_id'

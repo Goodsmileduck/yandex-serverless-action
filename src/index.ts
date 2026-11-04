@@ -4,7 +4,7 @@ import { PassThrough, Stream } from "stream";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { Session, cloudApi, serviceClients, waitForOperation } from "@yandex-cloud/nodejs-sdk";
 
-import archiver from "archiver";
+import { ZipArchive } from "archiver";
 import { IAuthInputs, createSession } from "./auth";
 
 /**
@@ -254,7 +254,7 @@ async function zipDirectory(inputs: IActionInputs): Promise<Buffer> {
     try {
         const bufferStream = new PassThrough();
 
-        const archive = archiver("zip", { zlib: { level: 9 } });
+        const archive = new ZipArchive({ zlib: { level: 9 } });
         core.info("Archive initialize");
 
         archive.pipe(bufferStream);
