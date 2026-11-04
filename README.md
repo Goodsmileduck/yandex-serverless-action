@@ -97,37 +97,110 @@ Set exactly one of the following inputs.
 
 ### GitHub OIDC (recommended, no stored secrets)
 
-Uses [Workload Identity Federation](https://yandex.cloud/en/docs/iam/concepts/workload-identity): GitHub issues a short-lived JWT for the job, and the action exchanges it for a Yandex Cloud IAM token.
+Uses Yandex Cloud [Workload Identity Federation](https://yandex.cloud/en/docs/iam/concepts/workload-identity). GitHub issues the job a short-lived JWT, and the action exchanges it at `https://auth.yandex.cloud/oauth/token` for an IAM token of your service account. No credentials are stored in GitHub.
 
-1. Create a service account and allow it to deploy functions:
-   ```bash
-   yc iam service-account create --name github-deployer
-   SA_ID=$(yc iam service-account get github-deployer --format json | jq -r .id)
-   yc resource-manager folder add-access-binding <folder_id> \
-     --role functions.editor --subject serviceAccount:$SA_ID
-   ```
-   If you set `service_account` (the function's runtime service account), also grant the deployer `iam.serviceAccounts.user` on that account.
-2. Create a federation that trusts GitHub:
-   ```bash
-   yc iam workload-identity oidc federation create --name github \
-     --issuer "https://token.actions.githubusercontent.com" \
-     --audiences "https://github.com/<github_owner>" \
-     --jwks-url "https://token.actions.githubusercontent.com/.well-known/jwks"
-   ```
-3. Link the service account to the jobs allowed to use it. The subject must match the job's `sub` claim exactly, so add one credential per trigger:
-   ```bash
-   FED_ID=$(yc iam workload-identity oidc federation get github --format json | jq -r .id)
-   # pushes to master
-   yc iam workload-identity federated-credential create --service-account-id $SA_ID \
-     --federation-id $FED_ID --external-subject-id "repo:<owner>/<repo>:ref:refs/heads/master"
-   # pull requests (optional)
-   yc iam workload-identity federated-credential create --service-account-id $SA_ID \
-     --federation-id $FED_ID --external-subject-id "repo:<owner>/<repo>:pull_request"
-   ```
-   Jobs that use a GitHub environment get `repo:<owner>/<repo>:environment:<name>` instead.
-4. Store the service account ID (not secret) as a repository variable, e.g. `YC_SA_ID`, add `permissions: id-token: write` to the job, and pass `oidc_service_account_id: ${{ vars.YC_SA_ID }}`.
+You need the [`yc` CLI](https://yandex.cloud/en/docs/cli/quickstart) logged in as a user who can manage IAM in the folder that contains your function. Each `create` command below prints the new resource's `id`; copy it into the next commands.
 
-OIDC tokens are not issued to workflows triggered by Dependabot or pull requests from forks.
+> Set the IDs explicitly, as below, rather than through `$(yc ... get ...)`. If that lookup times out, the variable silently ends up empty and later commands fail with confusing errors.
+
+**1. Create the deployer service account**
+
+```bash
+FOLDER_ID=<folder_id>        # folder containing the function
+yc iam service-account create --name github-deployer --folder-id $FOLDER_ID
+SA_ID=<id printed above>
+```
+
+**2. Grant it the roles it needs**
+
+| Role | Scope | Needed when |
+| --- | --- | --- |
+| `functions.editor` | folder | always (read the function, create versions) |
+| `storage.viewer` | folder or bucket | deploying via `bucket` (Yandex Cloud reads the uploaded zip as the deployer) |
+| `iam.serviceAccounts.user` | the runtime service account | setting `service_account` on the function |
+
+```bash
+yc resource-manager folder add-access-binding $FOLDER_ID \
+  --role functions.editor --subject serviceAccount:$SA_ID
+
+# only if you use `bucket`
+yc resource-manager folder add-access-binding $FOLDER_ID \
+  --role storage.viewer --subject serviceAccount:$SA_ID
+
+# only if you use `service_account` (name or ID of the function's runtime SA)
+yc iam service-account add-access-binding <runtime_sa_name_or_id> \
+  --role iam.serviceAccounts.user --subject serviceAccount:$SA_ID
+```
+
+Uploading to the bucket itself still uses the static `accessKeyId`/`secretAccessKey` keys.
+
+**3. Create a federation that trusts GitHub** (once per GitHub owner)
+
+```bash
+yc iam workload-identity oidc federation create --name github --folder-id $FOLDER_ID \
+  --issuer "https://token.actions.githubusercontent.com" \
+  --audiences "https://github.com/<github_owner>" \
+  --jwks-url "https://token.actions.githubusercontent.com/.well-known/jwks"
+FED_ID=<id printed above>
+```
+
+The audience must be `https://github.com/<github_owner>` (GitHub's default). If you choose a different value, pass the same one as `oidc_audience`.
+
+**4. Allow specific workflows to use the service account**
+
+Each federated credential matches one exact `sub` claim of the GitHub token. Create one per trigger that deploys:
+
+| Workflow trigger | Subject |
+| --- | --- |
+| push to a branch | `repo:<owner>/<repo>:ref:refs/heads/<branch>` |
+| push of a tag | `repo:<owner>/<repo>:ref:refs/tags/<tag>` |
+| pull request | `repo:<owner>/<repo>:pull_request` |
+| job with `environment:` | `repo:<owner>/<repo>:environment:<environment>` (takes precedence over the above) |
+
+```bash
+yc iam workload-identity federated-credential create --service-account-id $SA_ID \
+  --federation-id $FED_ID --external-subject-id "repo:<owner>/<repo>:ref:refs/heads/main"
+```
+
+**5. Configure the workflow**
+
+```bash
+gh variable set YC_SA_ID --body $SA_ID     # the ID is not secret
+```
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write          # lets the job request a GitHub OIDC token
+    steps:
+    - uses: actions/checkout@v4
+    - uses: goodsmileduck/yandex-serverless-action@v2
+      with:
+        oidc_service_account_id: ${{ vars.YC_SA_ID }}
+        function_id: '<function_id>'
+        runtime: 'python312'
+        entrypoint: 'main.handler'
+        source: '.'
+```
+
+GitHub does not issue OIDC tokens to workflows triggered by Dependabot or by pull requests from forks. Skip the deploy job there, e.g. `if: github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]'`.
+
+**Troubleshooting**
+
+| Error | Fix |
+| --- | --- |
+| `No credentials provided` | `vars.YC_SA_ID` is empty: the variable is missing or was set on another repo/environment. |
+| `Failed to get GitHub OIDC token` | Add `permissions: id-token: write` to the job. Fork and Dependabot runs can't get tokens. |
+| `No matching federated credentials for specified service account, issuer and external subject` | No federated credential matches this job's subject. The error shows the likely subject; add it (step 4). |
+| `FunctionService/Get ... PERMISSION_DENIED` or function not found | Grant `functions.editor` in the folder that contains the function. |
+| `CreateVersion PERMISSION_DENIED` when using `bucket` | Grant `storage.viewer` (step 2). |
+| `CreateVersion PERMISSION_DENIED` when using `service_account` | Grant `iam.serviceAccounts.user` on the runtime service account (step 2). |
+| `OAuth token ... issued after '2026-06-01', is not supported` | You are still using `token`; switch to OIDC. |
+
+**Migrating from `token`:** replace `token: ${{ secrets.TOKEN }}` with `oidc_service_account_id: ${{ vars.YC_SA_ID }}`, add the `permissions` block, then delete the `TOKEN` secret.
 
 ### Service account authorized key
 
